@@ -37,6 +37,7 @@ export const getMyProfile = async (req, res) => {
 // CREATE USER PROFILE
 export const createProfile = async (req, res) => {
   try {
+    // 1️⃣ Check if profile already exists
     const existingProfile = await UserProfile.findOne({
       user: req.user.id
     });
@@ -47,14 +48,34 @@ export const createProfile = async (req, res) => {
       });
     }
 
+    const {
+      phoneNumber,
+      age,
+      gender,
+      height,
+      weight,
+      healthCondition
+    } = req.body;
+
+    // 2️⃣ Basic validation
+    if (!phoneNumber || !age || !gender || !height || !weight) {
+      return res.status(400).json({
+        message: "All required fields must be provided"
+      });
+    }
+
+    // 3️⃣ Normalize gender (fix enum issues)
+    const normalizedGender = gender.toLowerCase();
+
+    // 4️⃣ Create profile
     const profile = await UserProfile.create({
       user: req.user.id,
-      phoneNumber: req.body.phoneNumber,
-      age: req.body.age,
-      gender: req.body.gender,
-      height: req.body.height,
-      weight: req.body.weight,
-      healthCondition: req.body.healthCondition
+      phoneNumber,
+      age,
+      gender: normalizedGender,
+      height,
+      weight,
+      healthCondition
     });
 
     res.status(201).json({
@@ -62,10 +83,10 @@ export const createProfile = async (req, res) => {
       profile
     });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
-
 
 // UPDATE USER PROFILE
 export const updateProfile = async (req, res) => {

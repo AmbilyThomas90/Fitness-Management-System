@@ -25,6 +25,7 @@ const userProfileSchema = new mongoose.Schema(
             type: String,
             enum: ["male", "female", "other"],
             required: true
+            
         },
 
         height: {

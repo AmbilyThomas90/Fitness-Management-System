@@ -9,7 +9,6 @@ const paymentSchema = new mongoose.Schema(
       required: true
     },
 
-  
     plan: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Plan",

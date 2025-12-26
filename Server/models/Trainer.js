@@ -18,7 +18,7 @@ const trainerSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true
+      
     },
 
     phoneNumber: {
@@ -36,6 +36,18 @@ const trainerSchema = new mongoose.Schema(
       type: Number, // years
       required: true,
       min: 0
+    },
+     status: {
+      type: String,
+      enum: ["active", "new", "inactive"],
+      default: "new",// until admin approves
+      lowercase: true,
+      
+    },
+
+    profileImage: {
+      type: String,
+      default: ""
     }
   },
   { timestamps: true }
