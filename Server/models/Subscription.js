@@ -12,6 +12,16 @@ const subscriptionSchema = new mongoose.Schema(
       ref: "Plan",
       required: true
     },
+        planType:{
+       type:String,
+        required:true,
+    },
+
+
+    planAmount:{
+        type:String,
+        required:true
+    },
 
     startDate: {
       type: Date,

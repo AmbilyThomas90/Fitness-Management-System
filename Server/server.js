@@ -8,6 +8,11 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import planRoutes from "./routes/planRoutes.js";
+import subscriptionRoutes from "./routes/subscriptionRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import goalRoutes from "./routes/goalRoutes.js";
+import   workoutRoutes from "./routes/workoutRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +26,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/trainer", trainerRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/plans", planRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/goal", goalRoutes);
+app.use("/api/workouts", workoutRoutes);
+
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

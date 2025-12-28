@@ -40,7 +40,7 @@ export const createTrainerProfile = async (req, res) => {
       phoneNumber,
       specialization,
       experience,
-      profileImage
+      profileImage: req.file?.filename
     });
 
     res.status(201).json({
