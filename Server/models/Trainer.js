@@ -3,52 +3,40 @@ import mongoose from "mongoose";
 const trainerSchema = new mongoose.Schema(
   {
     user: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-                required: true,
-                unique: true   // one profile per user
-            },
-    name: {
-      type: String,
-      required: true,
-      trim: true
-    },
-
-    email: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
       unique: true,
-      
     },
 
     phoneNumber: {
       type: String,
-      required: true
+      required: true,
     },
 
     specialization: {
       type: String,
-      enum: ["weight_loss", "muscle_gain", "endurance", "flexibility"],
-      required: true
+      enum: ["weight_loss", "muscle_gain", "yoga and endurance", "flexibility"],
+      required: true,
     },
 
     experience: {
-      type: Number, // years
+      type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
-     status: {
+
+    status: {
       type: String,
-      enum: ["active", "new", "inactive"],
-      default: "new",// until admin approves
+      enum: ["new", "active", "inactive"],
+      default: "new", // waiting for admin approval
       lowercase: true,
-      
     },
 
     profileImage: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   { timestamps: true }
 );

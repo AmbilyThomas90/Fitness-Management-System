@@ -1,43 +1,59 @@
 import User from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
 
-// user details
-// export const getProfile = async (req, res) => {
-//   const user = await User.findById(req.user.id).select("-password");
-//   res.json(user);
-// };
-
 // GET USER PROFILE + USER NAME & EMAIL
+
+
 export const getMyProfile = async (req, res) => {
   try {
     const profile = await UserProfile.findOne({
-      user: req.user.id
-    })
-      .populate("user", "name email role");
+      user: req.user.id,
+    }).populate("user", "name email role");
 
+    // ❌ Profile not created yet
     if (!profile) {
       return res.status(404).json({
-        message: "Profile not found"
+        message: "Profile not found",
       });
     }
 
+    //  Clean merged response
     res.status(200).json({
       message: "Profile fetched successfully",
-      profile
+      profile: {
+        _id: profile._id,
+
+        //  From User schema
+        name: profile.user.name,
+        email: profile.user.email,
+        role: profile.user.role,
+
+        //  From UserProfile schema
+        phoneNumber: profile.phoneNumber,
+        age: profile.age,
+        gender: profile.gender,
+        height: profile.height,
+        weight: profile.weight,
+        healthCondition: profile.healthCondition,
+        isActive: profile.isActive,
+
+        createdAt: profile.createdAt,
+        updatedAt: profile.updatedAt,
+      },
     });
   } catch (error) {
+    console.error("Get profile error:", error);
     res.status(500).json({
       message: "Server error",
-      error: error.message
+      error: error.message,
     });
   }
 };
 
-
-// CREATE USER PROFILE
+// CREATE USER PROFILE//
 export const createProfile = async (req, res) => {
   try {
-    // 1️⃣ Check if profile already exists
+    //  Check if profile already exists
     const existingProfile = await UserProfile.findOne({
       user: req.user.id
     });
@@ -57,17 +73,17 @@ export const createProfile = async (req, res) => {
       healthCondition
     } = req.body;
 
-    // 2️⃣ Basic validation
+    //  Basic validation
     if (!phoneNumber || !age || !gender || !height || !weight) {
       return res.status(400).json({
         message: "All required fields must be provided"
       });
     }
 
-    // 3️⃣ Normalize gender (fix enum issues)
+    //  Normalize gender (fix enum issues)
     const normalizedGender = gender.toLowerCase();
 
-    // 4️⃣ Create profile
+    //  Create profile
     const profile = await UserProfile.create({
       user: req.user.id,
       phoneNumber,
@@ -88,7 +104,7 @@ export const createProfile = async (req, res) => {
   }
 };
 
-// UPDATE USER PROFILE
+// UPDATE USER PROFILE//
 export const updateProfile = async (req, res) => {
   try {
     const profile = await UserProfile.findOneAndUpdate(

@@ -2,17 +2,29 @@ import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorizeRole } from "../middleware/roleMiddleware.js";
 
+
+// User Profile
 import {
   createProfile,
   updateProfile,
   getMyProfile
 } from "../controllers/userController.js";
-// import {
-//   createPayment,
-//   getMyPayments
-// } from "../controllers/paymentController.js";
+// GOAL setting
+import {
+  createGoal,
+  getMyGoals,
+  getGoalById,
+  updateGoal,
+  deleteGoal
+} from "../controllers/goalController.js";
+import { getAllTrainersForUser } from "../controllers/trainerController.js";
+import { getMySubscription } from "../controllers/subscriptionController.js";
+import { getUserDashboard } from "../controllers/dashboardController.js";
+import {getMyPayments} from "../controllers/paymentController.js";
+
 const router = express.Router();
 
+//-------------USER PROFILE---------------//
 // Create profile
 router.post("/create-profile", protect,authorizeRole("user"), createProfile);
 
@@ -22,14 +34,36 @@ router.put("/update-profile", protect, authorizeRole("user"), updateProfile);
 // View my profile
 router.get("/profile", protect, authorizeRole("user"), getMyProfile);
 
+//-------------USER PROFILE---------------//
 
+// Create goal
+router.post("/create-goal", protect,authorizeRole("user"), createGoal);
 export default router;
+// Get all goals of user
+router.get("/goal", protect, authorizeRole("user"), getMyGoals);
+// Get single goal
+router.get("goal/:id", protect, authorizeRole("user"),getGoalById);
+// Update goal
+router.put("goal/:id", protect, authorizeRole("user"),updateGoal);
+//// Delete goal
+router.delete("goal/:id", protect, authorizeRole("user"),deleteGoal);
 
-// // User buys a plan (payment)
-// router.post("/buy-plan/:planId", protect,  authorizeRole("user"), createPayment);
+//-------------USER Get all active Trainer---------------//
+// GET all active trainers
+router.get("/trainers", protect,authorizeRole("user"), getAllTrainersForUser);
+
+
+//------------- GET active subscription of logged-in user---------------//
+router.get("/my-subscription", protect, authorizeRole("user"), getMySubscription);
+
+//------------- user dashboard details---------------//
+router.get("/dashboard", protect, authorizeRole("user"), getUserDashboard);
+
+//--------------User buys a plan (payment)----------------//
+ router.get("/my-payments", protect,  authorizeRole("user"), getMyPayments);
 
 // // Get logged-in user's payments
-// router.get("/my-payments", protect,  authorizeRole("user"), getMyPayments);
+
 
 // router.post("/workout", protect, authorizeRole("user"), addWorkout);
 // router.get("/workout", protect, authorizeRole("user"), getWorkouts);

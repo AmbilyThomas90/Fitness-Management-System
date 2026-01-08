@@ -1,76 +1,36 @@
 import mongoose from "mongoose";
 
-const planSchema = new mongoose.Schema({
+const planSchema = new mongoose.Schema(
+  {
     planName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
+      trim: true,
     },
 
     monthlyPlanAmount: {
-        type: String,
-        required: true,
-        unique: true
+      type: Number,
+      required: true,
     },
 
     yearlyPlanAmount: {
-        type: String,
-        required: true,
-        unique: true
+      type: Number,
+      required: true,
     },
 
-    waterStations:{
-        type:String,
-        required:true
-    },
-
-    lockerRooms:{
-        type:String,
-        required:true
-    },
-
-    wifiService:{
-        type:String,
-        required:true
-    },
-
-    cardioClass:{
-        type:String,
-        required:true
-    },
-
-    refreshment:{
-        type:String,
-        required:true
-    },
-
-
-    groupFitnessClasses:{
-        type:String,
-        required:true
-    },
-
-
-    personalTrainer:{
-        type:String,
-        required:true
-    },
-
-
-    specialEvents:{
-        type:String,
-        required:true
-    },
-
-
-    cafeOrLounge:{
-        type:String,
-        required:true
-    },
-
-
-}, { timestamps: true });
+    waterStations: { type: Boolean, default: false },
+    lockerRooms: { type: Boolean, default: false },
+    wifiService: { type: Boolean, default: false },
+    cardioClass: { type: Boolean, default: false },
+    refreshment: { type: Boolean, default: false },
+    groupFitnessClasses: { type: Boolean, default: false },
+    personalTrainer: { type: Boolean, default: false },
+    specialEvents: { type: Boolean, default: false },
+    cafeOrLounge: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
 const Plan = mongoose.model("Plan", planSchema);
 
 export default Plan;
-

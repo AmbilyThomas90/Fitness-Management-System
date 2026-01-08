@@ -19,48 +19,18 @@ export const createPlan = async (req, res) => {
       cafeOrLounge
     } = req.body;
 
-    // ✅ Validation: check required fields
-    if (!planName)
+    //  Validate required fields
+    if (!planName || planName.trim() === "")
       return res.status(400).json({ message: "Plan name is required" });
 
-    if (!monthlyPlanAmount)
+    if (monthlyPlanAmount === undefined || monthlyPlanAmount === null)
       return res.status(400).json({ message: "Monthly plan amount is required" });
 
-    if (!yearlyPlanAmount)
+    if (yearlyPlanAmount === undefined || yearlyPlanAmount === null)
       return res.status(400).json({ message: "Yearly plan amount is required" });
 
-    if (!waterStations)
-      return res.status(400).json({ message: "Water stations info is required" });
-
-    if (!lockerRooms)
-      return res.status(400).json({ message: "Locker rooms info is required" });
-
-    if (!wifiService)
-      return res.status(400).json({ message: "WiFi service info is required" });
-
-    if (!cardioClass)
-      return res.status(400).json({ message: "Cardio class info is required" });
-
-    if (!refreshment)
-      return res.status(400).json({ message: "Refreshment info is required" });
-
-    if (!groupFitnessClasses)
-      return res.status(400).json({ message: "Group fitness classes info is required" });
-
-    if (!personalTrainer)
-      return res.status(400).json({ message: "Personal trainer info is required" });
-
-    if (!specialEvents)
-      return res.status(400).json({ message: "Special events info is required" });
-
-    if (!cafeOrLounge)
-      return res.status(400).json({ message: "Cafe or lounge info is required" });
-
-    // ✅ Create plan after validation
-    const plan = await Plan.create({
-      planName,
-      monthlyPlanAmount,
-      yearlyPlanAmount,
+    //  Booleans: just check they exist, allow false
+    const booleanFields = {
       waterStations,
       lockerRooms,
       wifiService,
@@ -69,26 +39,41 @@ export const createPlan = async (req, res) => {
       groupFitnessClasses,
       personalTrainer,
       specialEvents,
-      cafeOrLounge
+      cafeOrLounge,
+    };
+
+    for (const [key, value] of Object.entries(booleanFields)) {
+      if (value === undefined || value === null) {
+        return res.status(400).json({ message: `${key} info is required` });
+      }
+    }
+
+    //  Create the plan
+    const plan = await Plan.create({
+      planName,
+      monthlyPlanAmount,
+      yearlyPlanAmount,
+      ...booleanFields,
     });
 
     res.status(201).json({
       success: true,
       message: "Plan created successfully",
-      plan
+      plan,
     });
 
   } catch (error) {
     // Handle duplicate key error (unique fields)
     if (error.code === 11000) {
       return res.status(400).json({
-        message: "Monthly or yearly plan amount already exists"
+        message: "Monthly or yearly plan amount already exists",
       });
     }
 
     res.status(500).json({ message: error.message });
   }
 };
+
 
 //Get All Plans
 export const getAllPlans = async (req, res) => {

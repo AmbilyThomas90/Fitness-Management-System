@@ -1,17 +1,25 @@
 import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema(
-    {
-  
+  {
+
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
-
+    trainer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Trainer"
+    },
     plan: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Plan",
+      required: true
+    },
+  subscription: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subscription",
       required: true
     },
 
@@ -25,11 +33,21 @@ const paymentSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
+    platformFee: {
+      type: Number,
+      default: 0
+    },
+
+    trainerEarning: {
+      type: Number,
+      required: true
+    },
 
     // Payment method
     paymentMethod: {
       type: String,
-      enum: ["card", "upi", "netbanking", "cash"],
+      enum: ["card", "upi", "razorpay", "netbanking", "cash"],
+      lowercase: true,
       required: true
     },
 

@@ -1,9 +1,11 @@
+
+dotenv.config();
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
-
+import path from "path";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
@@ -12,11 +14,15 @@ import planRoutes from "./routes/planRoutes.js";
 import subscriptionRoutes from "./routes/subscriptionRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
-import   workoutRoutes from "./routes/workoutRoutes.js";
+import progressRoutes from"./routes/progressRoutes.js";
+import  trainerAssignmentRoutes from"./routes/trainerAssignmentRoutes.js";
+import workoutRoutes from "./routes/workoutRoutes.js";
+import nutritionRoutes from "./routes/nutritionRoutes.js";
 
-dotenv.config();
 
 const app = express();
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 app.use(cors());
 app.use(express.json());
 
@@ -29,8 +35,11 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/payment", paymentRoutes);
-app.use("/api/goal", goalRoutes);
-app.use("/api/workouts", workoutRoutes);
+app.use("/api/goals", goalRoutes);
+app.use("/api/progress", progressRoutes)
+app.use("/api/trainer-assignment", trainerAssignmentRoutes);
+app.use("/api/workout", workoutRoutes);
+app.use("/api/nutrition",nutritionRoutes);
 
 
 // Start server

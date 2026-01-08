@@ -1,18 +1,21 @@
 import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorizeRole } from "../middleware/roleMiddleware.js";
+import upload from "../middleware/uploadMiddleware.js";
 import {
   createTrainerProfile,
   updateTrainerProfile,
   getMyTrainerProfile
 } from "../controllers/trainerController.js";
 
+
 const router = express.Router();
+
 // Trainer create profile
 router.post(
   "/create-profile",
   protect,
-  authorizeRole("trainer"),
+  authorizeRole("trainer"),upload.single("profileImage"),
   createTrainerProfile
 );
 
