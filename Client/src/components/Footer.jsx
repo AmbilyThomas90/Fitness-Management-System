@@ -14,7 +14,7 @@ const Footer = () => {
 
         {/* -------- About Section -------- */}
         <div className="text-center md:text-left">
-          <h2 className="text-xl font-bold mb-4">FitHub</h2>
+          <h2 className="text-xl font-bold mb-4">Smart Fitness Suite</h2>
           <p className="text-gray-400">
             Your ultimate platform to connect with expert trainers, track your
             fitness goals, and stay healthy.
@@ -76,7 +76,7 @@ const Footer = () => {
 
       {/* -------- Bottom -------- */}
       <div className="mt-12 border-t border-gray-700 pt-6 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} FitHub. All rights reserved.
+        © {new Date().getFullYear()} Smart Fitness Suite. All rights reserved.
       </div>
     </footer>
   );

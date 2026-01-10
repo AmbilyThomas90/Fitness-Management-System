@@ -8,6 +8,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 // import Register from "./pages/auth/Register";
+import PlanCard from "./components/PlanCardModal";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 
@@ -64,8 +65,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
          {/* Public plans */}
-         <Route path="planview" element={< ViewPlans />} />
-         <Route path="/plans/:id" element={<PlanDetailsView />} />
+         <Route path="plancard" element={< PlanCard />} />
+         {/* <Route path="/plans/:id" element={<PlanDetailsView />} /> */}
          <Route path="/about" element={<About />} />
          <Route path="/contact" element={<Contact />} />
                

@@ -11,10 +11,10 @@ const About = () => {
       <section className="bg-gray-900 text-white py-16 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            About FitHub
+            About Smart Fitness Suite
           </h1>
           <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-            FitHub is your all-in-one fitness management platform designed to
+            Smart Fitness Suite is your all-in-one fitness management platform designed to
             connect users, trainers, and admins in one powerful ecosystem.
           </p>
         </div>
@@ -29,9 +29,9 @@ const About = () => {
               Who We Are
             </h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              FitHub was created to simplify fitness management. Whether you are
+              Smart Fitness Suite was created to simplify fitness management. Whether you are
               a fitness enthusiast, a professional trainer, or an administrator,
-              FitHub gives you the tools you need to track progress, manage plans,
+              Smart Fitness Suite gives you the tools you need to track progress, manage plans,
               and achieve goals efficiently.
             </p>
             <p className="text-gray-600 leading-relaxed">
@@ -68,7 +68,7 @@ const About = () => {
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed">
             Our mission is to empower individuals and fitness professionals
-            through technology. FitHub bridges the gap between trainers and
+            through technology. Smart Fitness Suite bridges the gap between trainers and
             users by offering structured plans, seamless communication, and
             real-time tracking in one unified platform.
           </p>
@@ -79,7 +79,7 @@ const About = () => {
       <section className="py-16 px-6">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
-            Why Choose FitHub?
+            Why Choose Smart Fitness Suite?
           </h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">

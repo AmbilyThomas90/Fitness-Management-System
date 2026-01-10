@@ -32,7 +32,7 @@ const Navbar = ({ openLogin, openRegister }) => {
     <nav className="bg-gray-900 text-white px-4 md:px-8 py-4 flex justify-between items-center">
       {/* Logo */}
       <Link to="/" className="text-2xl font-bold">
-      FitHub
+      Smart Fitness Suite
       </Link>
 
       {/* Hamburger */}

@@ -43,7 +43,7 @@ const Contact = () => {
       <section className="bg-gray-900 text-white py-16 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            Contact FitHub
+            Contact Smart Fitness Suite
           </h1>
           <p className="text-gray-300 text-lg">
             We’d love to hear from you. Get in touch with us anytime.
@@ -63,7 +63,7 @@ const Contact = () => {
             <div className="space-y-5">
               <div className="flex items-center gap-4 text-gray-700">
                 <FaEnvelope className="text-blue-500 text-xl" />
-                <span>support@fithub.com</span>
+                <span>support@smart-fitnes-suite.com</span>
               </div>
 
               <div className="flex items-center gap-4 text-gray-700">

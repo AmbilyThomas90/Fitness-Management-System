@@ -1,6 +1,6 @@
 import React from "react";
 
-const Hero = () => {
+const Hero = ({ openRegister, openPlanCard }) => {
   return (
     <section
       className="bg-cover bg-center h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-[90vh]"
@@ -13,16 +13,25 @@ const Hero = () => {
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
           Achieve Your Fitness Goals
         </h1>
+
         <p className="text-lg sm:text-xl md:text-2xl mb-6 px-2 sm:px-0">
           With Expert Trainers & Personalized Plans
         </p>
+
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <button className="bg-blue-500 px-6 py-2 rounded hover:bg-blue-600">
+          <button
+            onClick={openRegister}
+            className="bg-blue-500 px-6 py-2 rounded hover:bg-blue-600"
+          >
             Get Started
           </button>
-          <button className="bg-transparent border border-white px-6 py-2 rounded hover:bg-white hover:text-black">
-            View Trainers
-          </button>
+
+          {/* <button
+            onClick={openPlanCard}
+            className="bg-transparent border border-white px-6 py-2 rounded hover:bg-white hover:text-black"
+          >
+            View Plans
+          </button> */}
         </div>
       </div>
     </section>
