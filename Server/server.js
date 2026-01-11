@@ -23,7 +23,16 @@ import nutritionRoutes from "./routes/nutritionRoutes.js";
 const app = express();
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+    //   "http://localhost:5173",                // Local frontend (Vite)
+      "https://fitness-management-system-zeta.vercel.app"   // Deployed frontend
+    ],
+    credentials: true
+  })
+);
+
 app.use(express.json());
 
 connectDB(); // connect DB
