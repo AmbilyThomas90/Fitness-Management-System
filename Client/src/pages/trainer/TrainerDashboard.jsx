@@ -1,49 +1,87 @@
+// import React from "react";
+// import { useNavigate } from "react-router-dom";
+// import Navbar from "../../components/Navbar";
+//
+// pages/trainer/TrainerDashboard.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 const TrainerDashboard = () => {
-
-   const navigate = useNavigate();
-
- 
-
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="p-6 min-h-screen bg-gray-100">
+
       {/* Global Navbar */}
       <Navbar />
-        {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6">
+      {/* Header */}
+      <h1 className="text-3xl font-bold mb-8 text-center">
         Trainer Dashboard
       </h1>
 
-      
-      </div>
-      
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="font-semibold">Total Clients</h3>
-          <p className="text-blue-500 text-xl">18</p>
-        </div>
+      {/* Dashboard Cards pushed to bottom */}
+      <div className="mt-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="font-semibold">Monthly Earnings</h3>
-          <p className="text-green-500 text-xl">₹25,000</p>
-        </div>
+        {/* Update Profile */}
+        <Link
+          to="/trainer/profile"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">Update Profile</h2>
+          
+        </Link>
 
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="font-semibold">Active Plans</h3>
-          <p className="text-purple-500 text-xl">12</p>
-        </div>
+        {/* View Assigned Users */}
+        <Link
+          to="/trainer/users"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">View Assigned Clients</h2>
 
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="font-semibold">Messages</h3>
-          <p className="text-red-500 text-xl">5 New</p>
-        </div>
+        </Link>
+
+        {/* Assign Workout & Nutrition */}
+        <Link
+          to="/trainer/assign-plan"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">
+            Assign Workout & Nutrition
+          </h2>
+
+        </Link>
+
+        {/* Monitor Client Progress */}
+        <Link
+          to="/trainer/progress"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">Monitor Progress</h2>
+
+        </Link>
+
+        {/* Suggest Changes */}
+        <Link
+          to="/trainer/suggestions"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">Suggest Changes</h2>
+
+        </Link>
+
+        {/* Client Feedback */}
+        <Link
+          to="/trainer/feedback"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">Client Feedback</h2>
+
+        </Link>
+
       </div>
     </div>
+
   );
 };
 

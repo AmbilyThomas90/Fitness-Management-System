@@ -41,6 +41,9 @@ import MySubscription from "./pages/user/MySubscription";
 import SelectTrainer  from "./pages/user/SelectTrainer";
 import MyPayment from "./pages/user/UserPaymentDetails";
 
+/* USER TRAINER */
+import TrainerProfile from "./pages/trainer/TrainerProfile";
+
 // import Progress from "./pages/user/Progress";
 // import Workouts from "./pages/user/Workouts";
 // import Nutrition from "./pages/user/Nutrition";
@@ -90,14 +93,15 @@ function App() {
         </Route>
 
         {/* ================= TRAINER DASHBOARD ================= */}
-        <Route
-          path="/trainer/dashboard/*"
-          element={
-            <ProtectedRoute allowedRole="trainer">
-              <TrainerDashboard />
-            </ProtectedRoute>
-          }
-        />
+       <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
+        <Route path="/trainer/profile" element={<TrainerProfile />} />
+{/*
+<Route path="/trainer/users" element={<TrainerUsers />} />
+<Route path="/trainer/assign-plan" element={<AssignPlan />} />
+<Route path="/trainer/progress" element={<TrainerProgress />} />
+<Route path="/trainer/suggestions" element={<TrainerSuggestions />} />
+<Route path="/trainer/feedback" element={<TrainerFeedback />} /> */}
+
 
        {/* ================= USER DASHBOARD ================= */}
 <Route

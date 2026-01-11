@@ -19,21 +19,13 @@ router.post(
   createTrainerProfile
 );
 
-// Trainer update profile
-router.put(
-  "/update-profile",
-  protect,
-  authorizeRole("trainer"),
-  updateTrainerProfile
-);
-
 // Trainer get own profile
-router.get(
-  "/profile",
-  protect,
-  authorizeRole("trainer"),
-  getMyTrainerProfile
-);
+router.get( "/profile",protect,authorizeRole("trainer"),getMyTrainerProfile);
+
+// Trainer update profile
+router.put("/update-profile", protect, authorizeRole("trainer"), updateTrainerProfile);
+
+
 
 router.get("/dashboard",protect,authorizeRole("trainer"),
   (req, res) => {
