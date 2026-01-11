@@ -1,12 +1,16 @@
 import axios from "axios";
 
+
 const api = axios.create({
-  // baseURL: "http://localhost:5000/api",            // backend base URL
-  baseURL:"https://fitness-management-system-yl6n.onrender.com",
+   // baseURL: "http://localhost:5000/api", 
+  // Use environment variables or a conditional for local vs production
+  baseURL: "https://fitness-management-system-yl6n.onrender.com/api", 
+  
+  // FIXED: move withCredentials outside of headers
+  withCredentials: true, 
+  
   headers: {
     "Content-Type": "application/json",
-    withCredentials: true,
-   
   },
 });
 
