@@ -38,9 +38,9 @@ const Sidebar = () => {
           Payments
         </NavLink>
 
-        <NavLink to="/admin/dashboard/analytics" className={navLinkClasses}>
+        {/* <NavLink to="/admin/dashboard/analytics" className={navLinkClasses}>
           Analytics
-        </NavLink>
+        </NavLink> */}
       </nav>
 
       {/* Footer */}

@@ -63,7 +63,7 @@ const HomePage = () => {
       )}
 
       <Features />
-      <Trainers />
+      {/* <Trainers /> */}
       <Reviews />
       <Footer />
 
