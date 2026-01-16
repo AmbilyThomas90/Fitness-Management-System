@@ -107,7 +107,7 @@ const SelectTrainer = () => {
                     : "/default-avatar.png"
                 }
                 alt={trainer.user?.name || "Trainer"}
-                className="w-full h-40 object-cover rounded"
+                className="w-30 h-40 object-cover rounded"
               />
 
               <h3 className="font-semibold mt-3">
