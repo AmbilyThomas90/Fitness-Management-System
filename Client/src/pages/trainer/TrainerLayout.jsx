@@ -4,8 +4,8 @@ import Navbar from "../../components/Navbar";
 
 const TrainerLayout = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
-      
+<div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
+
       {/* Fixed Navbar */}
       <Navbar />
 

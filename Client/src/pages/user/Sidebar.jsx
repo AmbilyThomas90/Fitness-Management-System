@@ -33,7 +33,7 @@ const Sidebar = ({ role = "user" }) => {
        { name: "Plan Booking", path: "/user/planview", icon: <FaCalendarCheck /> },
     { name: "Goals", path: "/user/goals", icon: <FaBullseye /> },
     { name: "Progress", path: "/user/progress", icon: <FaChartLine /> },
-    { name: "Workouts", path: "/user/workouts", icon: <FaDumbbell /> },
+    { name: "Workout", path: "/user/workouts", icon: <FaDumbbell /> },
     { name: "Nutrition", path: "/user/nutrition", icon: <FaAppleAlt /> },
     { name: "Trainers", path: "/user/select-trainer", icon: <FaUserTie /> },
  

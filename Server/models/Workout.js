@@ -33,7 +33,7 @@ const workoutSchema = new mongoose.Schema(
     },
 category: {
   type: String,
-  enum: ["STRENGTH", "CARDIO", "CORE", "FLEXIBILITY", "BALANCE", "FUNCTIONAL", "RECOVERY"],
+  enum: ["GENERAL","STRENGTH", "CARDIO", "CORE", "FLEXIBILITY", "BALANCE", "FUNCTIONAL", "RECOVERY"],
   required: true
 },
     exercises: [

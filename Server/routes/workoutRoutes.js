@@ -10,6 +10,7 @@ import {
   // deleteWorkout
 } from "../controllers/workoutController.js";
 
+
 const router = express.Router();
 // Create a workout for a user
 router.post("/create-workouts", protect,authorizeRole("trainer"), createWorkout);

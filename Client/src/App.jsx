@@ -42,6 +42,7 @@ import PlanSubscription from "./pages/user/PlanSubscription";
 import MySubscription from "./pages/user/MySubscription";
 import SelectTrainer  from "./pages/user/SelectTrainer";
 import MyPayment from "./pages/user/UserPaymentDetails";
+import Workouts from "./pages/user/UserWorkouts";
 
 /*  TRAINER PAGES*/
 import TrainerLayout from "./pages/trainer/TrainerLayout";
@@ -148,11 +149,13 @@ function App() {
   <Route path="goals" element={<Goals />} />
   <Route path="progress" element={<Progress />} />
   <Route path="select-trainer" element={<SelectTrainer />} />
+   <Route path="workouts" element={<Workouts />} />
+
    <Route path="payments" element={<MyPayment />} />
 </Route>
   {/* Future pages */}
   {/*
-  <Route path="workouts" element={<Workouts />} />
+ 
   <Route path="nutrition" element={<Nutrition />} />
   <Route path="trainers" element={<Trainers />} />
   <Route path="messages" element={<Messages />} />

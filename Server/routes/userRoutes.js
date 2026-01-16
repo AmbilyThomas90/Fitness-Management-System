@@ -21,6 +21,7 @@ import { getAllTrainersForUser } from "../controllers/trainerController.js";
 import { getMySubscription } from "../controllers/subscriptionController.js";
 import { getUserDashboard } from "../controllers/dashboardController.js";
 import {getMyPayments} from "../controllers/paymentController.js";
+import { getUserWorkouts } from "../controllers/workoutController.js";
 
 const router = express.Router();
 
@@ -62,7 +63,8 @@ router.get("/dashboard", protect, authorizeRole("user"), getUserDashboard);
 //--------------User buys a plan (payment)----------------//
  router.get("/my-payments", protect,  authorizeRole("user"), getMyPayments);
 
- 
+ //--------------User- Workout ----------------//
+router.get("/workouts", protect, getUserWorkouts);
 
 // // Get logged-in user's payments
 

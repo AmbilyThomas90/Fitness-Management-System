@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Workout from "../models/Workout.js";
 import Trainer from "../models/Trainer.js";
 import User from "../models/User.js";
@@ -10,105 +11,75 @@ import Plan from "../models/Plan.js";
  */
 export const createWorkout = async (req, res) => {
   try {
-    // 1️⃣ Find trainer
+    console.log("📥 Incoming body:", req.body);
+
     const trainer = await Trainer.findOne({ user: req.user.id });
     if (!trainer) {
       return res.status(404).json({ message: "Trainer not found" });
     }
 
-    const {
-      userId,
-      planId,
-      goalId,
-      category,        // ✅ REQUIRED
-      startDate,
-      endDate,
-      exercises
-    } = req.body;
+    const { userId, goalId, category, startDate, exercises } = req.body;
 
-    // 2️⃣ Basic validation
-    if (
-      !userId ||
-      !goalId ||
-      !category ||
-      !startDate ||
-      !Array.isArray(exercises) ||
-      !exercises.length
-    ) {
+    if (!userId || !goalId || !exercises?.length) {
       return res.status(400).json({
-        message: "User, goal, category, startDate, and exercises are required",
+        message: "Missing required fields",
       });
     }
 
-    // 3️⃣ Validate exercises
-    for (const ex of exercises) {
-      if (!ex.name) {
-        return res.status(400).json({
-          message: "Each exercise must have a name",
-        });
-      }
-    }
-
-    // 4️⃣ Validate user
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // 5️⃣ Validate goal
-    const goal = await Goal.findById(goalId);
-    if (!goal) {
-      return res.status(404).json({ message: "Goal not found" });
-    }
-
-    // 6️⃣ Optional plan
-    const plan = planId ? await Plan.findById(planId) : null;
-
-    // 7️⃣ Create workout (✅ MATCHES SCHEMA)
     const workout = await Workout.create({
-      user: userId,
       trainer: trainer._id,
-      plan: plan?._id || null,
-      goal: goal._id,
-      category: category.toUpperCase(), // ✅ ENUM SAFE
-      startDate: new Date(startDate),
-      endDate: endDate ? new Date(endDate) : null,
-      exercises
+      user: userId,
+      goal: goalId,
+      category,
+      startDate,
+      exercises,
     });
 
-    return res.status(201).json({
+    console.log(" Workout created:", workout._id);
+
+    res.status(201).json({
       success: true,
-      message: "Workout created successfully",
       workout,
     });
-
   } catch (error) {
-    console.error("Create workout error:", error);
-    return res.status(500).json({
+    console.error("❌ CREATE WORKOUT ERROR:", error);
+
+    res.status(500).json({
       success: false,
       message: "Failed to create workout",
       error: error.message,
     });
   }
 };
-
-
-/**
- * Get all workouts for a user
- * GET /api/trainer/user-workouts/:userId
- */
+// Controller to get the logged-in user's workouts
 export const getUserWorkouts = async (req, res) => {
   try {
-    const workouts = await Workout.find({ user: req.params.userId })
-      .populate("goal", "goalName")
-      .populate("plan", "planName planType amount startDate endDate");
+    // Option 1: let Mongoose cast string to ObjectId automatically
+    const workouts = await Workout.find({ user: req.user.id })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    console.log("=== Fetched workouts for user:", req.user.id, "===");
+    if (workouts.length === 0) {
+      console.log("No workouts found for this user.");
+    } else {
+      workouts.forEach((w, index) => {
+        console.log(`Workout ${index + 1}:`);
+        console.log(JSON.stringify(w, null, 2));
+      });
+    }
 
     res.status(200).json({ success: true, workouts });
+
+    // Option 2 (if you want explicit ObjectId):
+    // const userId = new mongoose.Types.ObjectId(req.user.id);
+    // const workouts = await Workout.find({ user: userId }).sort({ createdAt: -1 }).lean();
   } catch (error) {
-    console.error("Get workouts error:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
+    console.error("Error fetching user workouts:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 
 // //Trainer creates a workout for a user
