@@ -27,8 +27,8 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use(
   cors({
     origin: [
-      "http://localhost:5174",
-      "http://localhost:5173",
+      // "http://localhost:5174",
+      // "http://localhost:5173",
       "https://fitness-management-system-yl6n.onrender.com",
     ],
     credentials: true,

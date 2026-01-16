@@ -2,17 +2,25 @@ import axios from "axios";
 
 
 // Use local for development, production URL for deployed site
-const BASE_URL = window.location.hostname === "localhost"
-  ? "http://localhost:5000/api"
-  : "https://fitness-management-system-yl6n.onrender.com/api";
 
 const api = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true,
+  baseURL: "https://fitness-management-system-yl6n.onrender.com/api", // backend base URL
   headers: {
     "Content-Type": "application/json",
+   
   },
 });
+// const BASE_URL = window.location.hostname === "localhost"
+//   ? "http://localhost:5000/api"
+//   : "https://fitness-management-system-yl6n.onrender.com/api";
+
+// const api = axios.create({
+//   baseURL: BASE_URL,
+//   withCredentials: true,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
 
 /* =========================
    REQUEST INTERCEPTOR
