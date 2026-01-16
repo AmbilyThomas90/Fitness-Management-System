@@ -6,35 +6,60 @@ import UserProfile from "../models/UserProfile.js";
 
 export const getMyProfile = async (req, res) => {
   try {
-    const profile = await UserProfile.findOne({
-      user: req.user.id,
-    }).populate("user", "name email role");
-
-    // ❌ Profile not created yet
-    if (!profile) {
-      return res.status(404).json({
-        message: "Profile not found",
+    //  Auth safety check
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Unauthorized",
       });
     }
 
-    //  Clean merged response
-    res.status(200).json({
+    console.log("👤 Authenticated user ID:", req.user._id);
+
+    const profile = await UserProfile.findOne({
+      user: req.user._id,
+    })
+      .populate("user", "name email role")
+      .select("-__v");
+
+    //  CASE 1: User has NO profile yet
+    if (!profile) {
+      console.log("⚠️ No profile found. Returning user basic info only.");
+
+      return res.status(200).json({
+        message: "User profile not created yet",
+        hasProfile: false,
+        user: {
+          _id: req.user._id,
+          name: req.user.name,
+          email: req.user.email,
+          role: req.user.role,
+        },
+      });
+
+    }
+
+    //  CASE 2: User HAS profile
+    console.log("✅ Profile found for user");
+
+    return res.status(200).json({
       message: "Profile fetched successfully",
+      hasProfile: true,
       profile: {
         _id: profile._id,
 
-        //  From User schema
+        // User
         name: profile.user.name,
         email: profile.user.email,
         role: profile.user.role,
 
-        //  From UserProfile schema
+        // Profile data
         phoneNumber: profile.phoneNumber,
         age: profile.age,
         gender: profile.gender,
         height: profile.height,
         weight: profile.weight,
         healthCondition: profile.healthCondition,
+        fitnessLevel: profile.fitnessLevel,
         isActive: profile.isActive,
 
         createdAt: profile.createdAt,
@@ -42,13 +67,13 @@ export const getMyProfile = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Get profile error:", error);
+    console.error("❌ Get profile error:", error);
     res.status(500).json({
       message: "Server error",
-      error: error.message,
     });
   }
 };
+
 
 // CREATE USER PROFILE//
 export const createProfile = async (req, res) => {
@@ -70,7 +95,8 @@ export const createProfile = async (req, res) => {
       gender,
       height,
       weight,
-      healthCondition
+      healthCondition,
+      fitnessLevel
     } = req.body;
 
     //  Basic validation
@@ -91,7 +117,8 @@ export const createProfile = async (req, res) => {
       gender: normalizedGender,
       height,
       weight,
-      healthCondition
+      healthCondition,
+      fitnessLevel
     });
 
     res.status(201).json({

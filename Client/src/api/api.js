@@ -1,14 +1,14 @@
 import axios from "axios";
 
 
+// Use local for development, production URL for deployed site
+const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:5000/api"
+  : "https://fitness-management-system-yl6n.onrender.com/api";
+
 const api = axios.create({
-   // baseURL: "http://localhost:5000/api", 
-  // Use environment variables or a conditional for local vs production
-  baseURL: "https://fitness-management-system-yl6n.onrender.com/api", 
-  
-  // FIXED: move withCredentials outside of headers
-  withCredentials: true, 
-  
+  baseURL: BASE_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -39,9 +39,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      
       localStorage.removeItem("token");
       localStorage.removeItem("role");
-      window.location.href = "/login";
+     
     }
     return Promise.reject(error);
   }

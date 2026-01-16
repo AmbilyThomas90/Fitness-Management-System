@@ -31,7 +31,11 @@ const workoutSchema = new mongoose.Schema(
     endDate: {
       type: Date
     },
-
+category: {
+  type: String,
+  enum: ["STRENGTH", "CARDIO", "CORE", "FLEXIBILITY", "BALANCE", "FUNCTIONAL", "RECOVERY"],
+  required: true
+},
     exercises: [
       {
         name: {

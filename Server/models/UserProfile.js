@@ -8,7 +8,7 @@ const userProfileSchema = new mongoose.Schema(
             required: true,
             unique: true   // one profile per user
         },
-        
+
         phoneNumber: {
             type: String,
             required: true
@@ -25,7 +25,7 @@ const userProfileSchema = new mongoose.Schema(
             type: String,
             enum: ["male", "female", "other"],
             required: true
-            
+
         },
 
         height: {
@@ -38,12 +38,21 @@ const userProfileSchema = new mongoose.Schema(
             required: true
         },
 
-        healthCondition: {
-            type: String,
-            enum: ["none", "diabetes", "bp", "asthma", "heart"],
-            default: "none"
-        },  
-          isActive: {
+       healthCondition: {
+    type: String,
+    enum: ["NONE", "DIABETES", "HYPERTENSION", "ASTHMA", "CARDIAC", "THYROID", "OTHER"],
+    default: "NONE",
+    set: value => value.toUpperCase() // automatically converts input to uppercase
+  },
+    fitnessLevel: {
+      type: String,
+      enum: ["BEGINNER", "INTERMEDIATE", "ADVANCED"], // options for the user
+      required: true,
+      default: "BEGINNER",
+      set: value => value ? value.toUpperCase() : value
+    },
+
+        isActive: {
             type: Boolean,
             default: true
         },

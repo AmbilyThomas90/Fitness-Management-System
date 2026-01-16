@@ -17,7 +17,7 @@ export const createGoal = async (req, res) => {
   }
 };
 
-// Get all gaol
+// Get all goal
 export const getMyGoals = async (req, res) => {
   try {
     const goals = await Goal.find({ user: req.user.id });

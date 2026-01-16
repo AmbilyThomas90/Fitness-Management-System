@@ -16,12 +16,12 @@ export const register = async (req, res) => {
       specialization
     } = req.body;
 
-    // 1️⃣ Check user exists
+    //  Check user exists
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ message: "Email already registered" });
 
-    // 2️⃣ Create User
+    //  Create User
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
       role
     });
 
-    // 3️⃣ If trainer → create trainer profile
+    //  If trainer → create trainer profile
 
     console.log("Trainer Payload:", {
   user: user._id,

@@ -38,7 +38,7 @@ router.get("/profile", protect, authorizeRole("user"), getMyProfile);
 
 // Create goal
 router.post("/create-goal", protect,authorizeRole("user"), createGoal);
-export default router;
+
 // Get all goals of user
 router.get("/goal", protect, authorizeRole("user"), getMyGoals);
 // Get single goal
@@ -62,9 +62,12 @@ router.get("/dashboard", protect, authorizeRole("user"), getUserDashboard);
 //--------------User buys a plan (payment)----------------//
  router.get("/my-payments", protect,  authorizeRole("user"), getMyPayments);
 
+ 
+
 // // Get logged-in user's payments
 
 
 // router.post("/workout", protect, authorizeRole("user"), addWorkout);
 // router.get("/workout", protect, authorizeRole("user"), getWorkouts);
 
+export default router;

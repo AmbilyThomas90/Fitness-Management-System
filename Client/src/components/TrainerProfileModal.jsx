@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../api/api";
 
 const TrainerProfileModal = ({ onClose }) => {
@@ -13,13 +13,33 @@ const TrainerProfileModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  //  Image validation handler
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    setImage(file);
-    setPreview(URL.createObjectURL(file));
-  };
+  //  Allow ALL image types
+  if (!file.type.startsWith("image/")) {
+    setError("Only image files are allowed.");
+    setImage(null);
+    setPreview("");
+    e.target.value = null;
+    return;
+  }
+
+  //  Valid image
+  setError("");
+  setImage(file);
+  setPreview(URL.createObjectURL(file));
+};
+
+
+  //  Cleanup preview URL
+  useEffect(() => {
+    return () => {
+      preview && URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,17 +80,39 @@ const TrainerProfileModal = ({ onClose }) => {
         {error && <p className="text-red-500 mb-3">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          {/* Image */}
-          <div className="mb-4">
+          {/* Image Upload */}
+          <div className="mb-4 flex flex-col items-center">
             {preview && (
               <img
                 src={preview}
                 alt="Preview"
-                className="w-28 h-28 rounded-full object-cover mb-3"
+                className="w-28 h-28 rounded-full object-cover mb-3 border"
               />
             )}
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+
+            {/* Hidden file input */}
+            <input
+              type="file"
+              id="profileImage"
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+
+            {/* Custom button */}
+            <label
+              htmlFor="profileImage"
+              className="cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition text-sm"
+            >
+              Select Your Profile Image
+            </label>
+
+            {/* Helper text */}
+            <p className="text-gray-500 text-xs mt-2">
+              JPG, PNG or WEBP • Max 2MB
+            </p>
           </div>
+
 
           <input
             type="text"
@@ -94,8 +136,9 @@ const TrainerProfileModal = ({ onClose }) => {
             <option value="">Select Specialization</option>
             <option value="weight_loss">Weight Loss</option>
             <option value="muscle_gain">Muscle Gain</option>
-            <option value="endurance">Endurance</option>
+            <option value="yoga and endurance">Yoga and Endurance</option>
             <option value="flexibility">Flexibility</option>
+          
           </select>
 
           <input

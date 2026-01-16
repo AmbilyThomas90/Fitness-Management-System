@@ -7,7 +7,12 @@ const trainerAssignmentSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
-
+userProfile: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "UserProfile",
+  required: true
+}
+,
     trainer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Trainer",
@@ -19,7 +24,11 @@ const trainerAssignmentSchema = new mongoose.Schema(
       ref: "Plan",
       required: true
     },
-
+ goal: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Goal",
+      required: true,
+    },
     assignDate: {
       type: Date,
       default: Date.now
@@ -31,11 +40,12 @@ const trainerAssignmentSchema = new mongoose.Schema(
       // example: "06:00 AM - 07:00 AM"
     },
 
-    status: {
-      type: String,
-      enum: ["active", "completed", "cancelled"],
-      default: "active"
-    }
+   status: {
+  type: String,
+  enum: ["active", "approved", "completed",  "rejected"],
+  default: "active",
+}
+
   },
   { timestamps: true }
 );

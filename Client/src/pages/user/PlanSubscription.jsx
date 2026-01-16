@@ -127,7 +127,11 @@ const PlanSubscription = () => {
     }
   };
 
-  if (loading) return <p className="p-6 text-center">Loading plan details...</p>;
+  if (loading) {return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
+
   if (!plan) return <p className="p-6 text-center">Plan not found.</p>;
 
   return (

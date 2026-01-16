@@ -3,7 +3,8 @@ dotenv.config();
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import cors from "cors";
+import cors from "cors"; 
+console.log("CORS module loaded");
 import { connectDB } from "./config/db.js";
 import path from "path";
 import authRoutes from "./routes/authRoutes.js";
@@ -26,13 +27,15 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use(
   cors({
     origin: [
-    //   "http://localhost:5173",                // Local frontend (Vite)
-      "https://fitness-management-system-zeta.vercel.app"   // Deployed frontend
+      "http://localhost:5174",
+      "http://localhost:5173",
+      "https://fitness-management-system-yl6n.onrender.com",
     ],
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 app.use(express.json());
 
 connectDB(); // connect DB
@@ -47,7 +50,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/progress", progressRoutes)
 app.use("/api/trainer-assignment", trainerAssignmentRoutes);
-app.use("/api/workout", workoutRoutes);
+app.use("/api", workoutRoutes);
 app.use("/api/nutrition",nutritionRoutes);
 
 

@@ -1,6 +1,7 @@
 import Trainer from "../models/Trainer.js"
 import User from "../models/User.js";
-
+import fs from "fs";
+import path from "path";
 /**
  * CREATE TRAINER PROFILE
  */
@@ -8,7 +9,7 @@ export const createTrainerProfile = async (req, res) => {
   try {
     const { phoneNumber, specialization, experience } = req.body;
 
-    // 🔥 req.user MUST exist
+    //  req.user MUST exist
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -44,29 +45,50 @@ console.log("BODY:", req.body);
 /**
  * UPDATE TRAINER PROFILE
  */
+
+// Update trainer profile including profile image
 export const updateTrainerProfile = async (req, res) => {
   try {
-    const trainer = await Trainer.findOneAndUpdate(
-      { user: req.user.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-
+    // Find the trainer by logged-in user
+    const trainer = await Trainer.findOne({ user: req.user.id });
     if (!trainer) {
-      return res
-        .status(404)
-        .json({ message: "Trainer profile not found" });
+      return res.status(404).json({ message: "Trainer profile not found" });
     }
 
+    // Update fields from req.body
+    const { phoneNumber, specialization, experience, bio } = req.body;
+    if (phoneNumber !== undefined) trainer.phoneNumber = phoneNumber;
+    if (specialization !== undefined) trainer.specialization = specialization;
+    if (experience !== undefined) trainer.experience = experience;
+    if (bio !== undefined) trainer.bio = bio;
+
+    // Handle profile image if uploaded
+    if (req.file) {
+      // Delete old image if exists
+      if (trainer.profileImage) {
+        const oldImagePath = path.join(
+          process.cwd(),
+          "uploads",
+          trainer.profileImage
+        );
+        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
+      }
+
+      // Save new image filename
+      trainer.profileImage = req.file.filename;
+    }
+
+    await trainer.save();
+
     res.json({
-      message: "Trainer profile updated",
-      trainer
+      message: "Trainer profile updated successfully",
+      trainer,
     });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
-
 /**
  * GET MY TRAINER PROFILE
  */
@@ -150,28 +172,28 @@ export const getAllTrainersForUser = async (req, res) => {
 /**
  * SELECT/ASSIGN TRAINER
  */
-export const selectTrainer = async (req, res) => {
-  try {
-    const { trainerId, planId, timeSlot } = req.body;
+// export const selectTrainer = async (req, res) => {
+//   try {
+//     const { trainerId, planId, timeSlot } = req.body;
 
-    // Create the assignment record
-    const assignment = await TrainerAssignment.create({
-      user: req.user._id, // From auth middleware
-      trainer: trainerId,
-      plan: planId,
-      timeSlot: timeSlot,
-      status: "active"
-    });
+//     // Create the assignment record
+//     const assignment = await TrainerAssignment.create({
+//       user: req.user._id, // From auth middleware
+//       trainer: trainerId,
+//       plan: planId,
+//       timeSlot: timeSlot,
+//       status: "active"
+//     });
 
-    res.status(201).json({
-      success: true,
-      message: "Trainer assigned successfully!",
-      assignment
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
+//     res.status(201).json({
+//       success: true,
+//       message: "Trainer assigned successfully!",
+//       assignment
+//     });
+//   } catch (error) {
+//     res.status(400).json({ success: false, message: error.message });
+//   }
+// };
 
 // export const createTrainer = async (req, res) => {
 //   const trainer = await Trainer.create({

@@ -80,7 +80,12 @@ const Goals = () => {
     }
   };
 
-  if (loading) return <div className="p-6 text-center">Loading goals...</div>;
+  if (loading) 
+  {return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
+
 
   return (
     <div className="max-w-xl mx-auto bg-white p-6 rounded shadow-lg mt-10">

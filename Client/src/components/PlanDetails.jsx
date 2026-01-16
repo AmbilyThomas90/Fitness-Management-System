@@ -14,54 +14,54 @@ const PlanDetails = () => {
   const [subscription, setSubscription] = useState(null);
   const [isExpired, setIsExpired] = useState(true);
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-
-      // ✅ CORRECT URL → /api/plans/:id
-      const planRes = await api.get(`/plans/${id}`);
-      setPlan(planRes.data);
-
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const subRes = await api.get("/subscriptions/my-subscription");
-        const sub = subRes.data?.subscription;
+        setLoading(true);
 
-        if (!sub?.endDate) {
-          setSubscription(null);
-          setIsExpired(true);
-          return;
-        }
+        // ✅ CORRECT URL → /api/plans/:id
+        const planRes = await api.get(`/plans/${id}`);
+        setPlan(planRes.data);
 
-        const today = new Date();
-        const endDate = new Date(sub.endDate);
+        const token = localStorage.getItem("token");
+        if (!token) return;
 
-        if (endDate >= today) {
-          setSubscription(sub);
-          setIsExpired(false);
-        } else {
+        try {
+          const subRes = await api.get("/subscriptions/my-subscription");
+          const sub = subRes.data?.subscription;
+
+          if (!sub?.endDate) {
+            setSubscription(null);
+            setIsExpired(true);
+            return;
+          }
+
+          const today = new Date();
+          const endDate = new Date(sub.endDate);
+
+          if (endDate >= today) {
+            setSubscription(sub);
+            setIsExpired(false);
+          } else {
+            setSubscription(null);
+            setIsExpired(true);
+          }
+        } catch (err) {
+          if (err.response?.status !== 404) {
+            console.error("Subscription error:", err);
+          }
           setSubscription(null);
           setIsExpired(true);
         }
       } catch (err) {
-        if (err.response?.status !== 404) {
-          console.error("Subscription error:", err);
-        }
-        setSubscription(null);
-        setIsExpired(true);
+        console.error("Plan fetch error:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Plan fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchData();
-}, [id]);
+    fetchData();
+  }, [id]);
 
 
   const handleBuyPlan = () => {
@@ -92,8 +92,11 @@ useEffect(() => {
   };
 
   if (loading)
-    return <p className="p-10 text-center">Loading...</p>;
-
+    return (
+     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+    );
   if (!plan)
     return (
       <p className="p-10 text-center text-red-500">
@@ -102,8 +105,8 @@ useEffect(() => {
     );
 
   return (
-  <div className="max-w-3xl mx-auto my-10 p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-    <h1 className="text-4xl font-extrabold text-gray-900">{plan.planName}</h1>
+    <div className="max-w-3xl mx-auto my-10 p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
+      <h1 className="text-4xl font-extrabold text-gray-900">{plan.planName}</h1>
 
       {/* Duration */}
       <div className="mt-8 bg-blue-50 p-6 rounded-xl">
@@ -133,31 +136,30 @@ useEffect(() => {
       </div>
 
       {/* Button */}
-     <button
-  onClick={handleBuyPlan}
-  disabled={subscription && !isExpired}
-  className={`mt-8 w-full py-4 font-bold rounded ${
-    subscription && !isExpired
-      ? "bg-gray-300 cursor-not-allowed"
-      : "bg-green-600 text-white hover:bg-green-700"
-  }`}
->
-  {subscription && !isExpired ? (
-    <span>
-      Your current subscription plan{" "}
-      <span className="font-semibold">
-        {subscription.plan?.planName}
-      </span>{" "}
-      (Valid up to : {" "}
-      <span className="text-red-600 font-bold">
-        {new Date(subscription.endDate).toLocaleDateString()}
-      </span>
-      )
-    </span>
-  ) : (
-    "Proceed to Payment"
-  )}
-</button>
+      <button
+        onClick={handleBuyPlan}
+        disabled={subscription && !isExpired}
+        className={`mt-8 w-full py-4 font-bold rounded ${subscription && !isExpired
+            ? "bg-gray-300 cursor-not-allowed"
+            : "bg-green-600 text-white hover:bg-green-700"
+          }`}
+      >
+        {subscription && !isExpired ? (
+          <span>
+            Your current subscription plan{" "}
+            <span className="font-semibold">
+              {subscription.plan?.planName}
+            </span>{" "}
+            (Valid up to : {" "}
+            <span className="text-red-600 font-bold">
+              {new Date(subscription.endDate).toLocaleDateString()}
+            </span>
+            )
+          </span>
+        ) : (
+          "Proceed to Payment"
+        )}
+      </button>
 
 
     </div>

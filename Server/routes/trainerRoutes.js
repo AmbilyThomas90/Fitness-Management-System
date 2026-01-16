@@ -6,8 +6,9 @@ import {
   createTrainerProfile,
   updateTrainerProfile,
   getMyTrainerProfile
+ 
 } from "../controllers/trainerController.js";
-
+import { getTrainerUsersFullDetails,approveTrainerAssignment} from "../controllers/appointmentController.js";
 
 const router = express.Router();
 
@@ -23,14 +24,25 @@ router.post(
 router.get( "/profile",protect,authorizeRole("trainer"),getMyTrainerProfile);
 
 // Trainer update profile
-router.put("/update-profile", protect, authorizeRole("trainer"), updateTrainerProfile);
+router.put("/update-profile", protect, authorizeRole("trainer"),upload.single("profileImage"), updateTrainerProfile);
+
+// Trainer get users full detail
+
+router.get("/my-users-details", protect, authorizeRole("trainer"), getTrainerUsersFullDetails);
+
+// Trainer approve/reject // Trainer approve assignment
+
+router.put("/assignments/:id/action",protect,authorizeRole("trainer"),approveTrainerAssignment);
 
 
+// Trainer dashboard
 
 router.get("/dashboard",protect,authorizeRole("trainer"),
   (req, res) => {
     res.json({ message: "Trainer dashboard" });
   }
 );
+
+
 
 export default router;

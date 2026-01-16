@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/api";
-import plan3 from "../../images/plan3.jpg";
+import api from "../../api/api"; // Axios instance for API calls
+import plan3 from "../../images/plan3.jpg"; // Default plan image
 
+// Default state for a plan (used when creating or resetting a plan)
 const defaultPlanState = {
   planName: "",
   monthlyPlanAmount: "",
@@ -20,26 +21,28 @@ const defaultPlanState = {
 
 const Plans = () => {
   const navigate = useNavigate();
-  const [plans, setPlans] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [planData, setPlanData] = useState(defaultPlanState);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState(null);
-  //  refresh trigger
-  const [refresh, setRefresh] = useState(false);
 
+  // State variables
+  const [plans, setPlans] = useState([]); // List of all plans
+  const [showForm, setShowForm] = useState(false); // Show/hide create/edit plan form
+  const [showDetails, setShowDetails] = useState(false); // Show/hide plan details
+  const [loading, setLoading] = useState(false); // Loading indicator for API requests
+  const [planData, setPlanData] = useState(defaultPlanState); // Current plan being created/edited/viewed
+  const [isEditMode, setIsEditMode] = useState(false); // True when editing a plan, false for creating
+  const [selectedPlanId, setSelectedPlanId] = useState(null); // Holds the plan ID being edited
+  const [refresh, setRefresh] = useState(false); // Trigger to refetch plans after add/update/delete
 
+  // Fetch plans when component mounts or refresh state changes
   useEffect(() => {
     fetchPlans();
   }, [refresh]);
 
- const fetchPlans = async () => {
+  // Fetch all plans from backend
+  const fetchPlans = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/admin/plans");
-      setPlans(res.data);
+      const res = await api.get("/admin/plans"); // API GET request
+      setPlans(res.data); // Store fetched plans in state
     } catch (error) {
       console.error("Failed to fetch plans", error);
     } finally {
@@ -47,70 +50,113 @@ const Plans = () => {
     }
   };
 
+  // Handle input changes for text fields and checkboxes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     if (type === "checkbox") {
+      // Update boolean features
       setPlanData(prev => ({ ...prev, [name]: checked }));
       return;
     }
+
     if (value === "") {
-      setPlanData(prev => ({ ...prev, [name]: "", ...(name === "monthlyPlanAmount" && { yearlyPlanAmount: "" }) }));
+      // If input cleared, also clear yearlyPlanAmount if monthlyPlanAmount cleared
+      setPlanData(prev => ({
+        ...prev,
+        [name]: "",
+        ...(name === "monthlyPlanAmount" && { yearlyPlanAmount: "" }),
+      }));
       return;
     }
+
+    // Only allow numbers for numeric fields (except planName)
     if (!/^\d+$/.test(value) && name !== "planName") return;
+
+    // Automatically calculate yearlyPlanAmount from monthlyPlanAmount
     if (name === "monthlyPlanAmount") {
-      setPlanData(prev => ({ ...prev, monthlyPlanAmount: value, yearlyPlanAmount: Number(value) * 12 }));
+      setPlanData(prev => ({ ...prev, monthlyPlanAmount: value, yearlyPlanAmount: Number(value) * 11}));
       return;
     }
+
+    // Update other fields normally
     setPlanData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const payload = { ...planData, monthlyPlanAmount: Number(planData.monthlyPlanAmount), yearlyPlanAmount: Number(planData.monthlyPlanAmount) * 12 };
+  // Handle form submission to create or update a plan
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      if (isEditMode) {
-        const res = await api.put(`/admin/plans/${selectedPlanId}`, payload);
-        setPlans(prev => prev.map(p => p._id === selectedPlanId ? res.data : p));
-      } else {
-        const res = await api.post("/admin/create-plan", payload);
-        setPlans(prev => [res.data, ...prev]);
-      }
-        setRefresh(prev => !prev);
-      resetForm();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to save plan");
-    } finally { setLoading(false); }
+  // Prepare payload
+  const payload = {
+    planName: planData.planName,
+    monthlyPlanAmount: Number(planData.monthlyPlanAmount),
+    yearlyPlanAmount: Number(planData.monthlyPlanAmount) * 11,
+    waterStations: planData.waterStations,
+    lockerRooms: planData.lockerRooms,
+    wifiService: planData.wifiService,
+    cardioClass: planData.cardioClass,
+    refreshment: planData.refreshment,
+    groupFitnessClasses: planData.groupFitnessClasses,
+    personalTrainer: planData.personalTrainer,
+    specialEvents: planData.specialEvents,
+    cafeOrLounge: planData.cafeOrLounge,
   };
 
+  try {
+    let res;
+    if (isEditMode) {
+      res = await api.put(`/admin/plans/${selectedPlanId}`, payload);
+      setPlans(prev => prev.map(p => p._id === selectedPlanId ? res.data : p));
+    } else {
+      res = await api.post("/admin/create-plan", payload);
+      setPlans(prev => [res.data, ...prev]);
+    }
+
+    resetForm();
+    setRefresh(prev => !prev);
+  } catch (error) {
+    console.error("Failed to save plan:", error.response?.data || error.message);
+    alert(error.response?.data?.error || "Failed to save plan");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // Populate form with existing plan for editing
   const handleEdit = (plan) => {
-    setPlanData({ ...plan, monthlyPlanAmount: plan.monthlyPlanAmount.toString(), yearlyPlanAmount: plan.yearlyPlanAmount.toString() });
+    setPlanData({
+      ...plan,
+      monthlyPlanAmount: plan.monthlyPlanAmount.toString(),
+      yearlyPlanAmount: plan.yearlyPlanAmount.toString(),
+    });
     setSelectedPlanId(plan._id);
     setIsEditMode(true);
-    setShowForm(true);
+    setShowForm(true); // Show form with plan data
   };
 
+  // Delete a plan
   const handleDelete = async (planId) => {
     if (!window.confirm("Are you sure you want to delete this plan?")) return;
     try {
       await api.delete(`/admin/plans/${planId}`);
-      setPlans(prev => prev.filter(p => p._id !== planId));
+      setPlans(prev => prev.filter(p => p._id !== planId)); // Remove plan from list
     } catch (error) {
       console.error(error);
       alert("Failed to delete plan");
     }
   };
 
+  // Show plan details
   const handleView = (plan) => {
     setPlanData(plan);
     setShowDetails(true);
   };
 
+  // Reset form and modal states
   const resetForm = () => {
-    setPlanData(defaultPlanState);
+    setPlanData(defaultPlanState); // Reset all fields
     setIsEditMode(false);
     setSelectedPlanId(null);
     setShowForm(false);
@@ -119,7 +165,7 @@ const Plans = () => {
 
   return (
     <div className="p-4 md:p-6">
-      {/* Header */}
+      {/* Header with title and "Create Plan" button */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
         <h2 className="text-2xl font-bold">Plans</h2>
         <button
@@ -130,31 +176,81 @@ const Plans = () => {
         </button>
       </div>
 
-      {/* Form */}
+      {/* Create/Edit Plan Form */}
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded shadow mb-6 w-full max-w-lg mx-auto">
           <h3 className="font-semibold mb-4 text-lg">{isEditMode ? "Edit Plan" : "Create New Plan"}</h3>
-          <input type="text" name="planName" placeholder="Plan Name" value={planData.planName} onChange={handleChange} className="w-full border p-2 rounded mb-3" required />
+
+          {/* Plan Name */}
+          <input
+            type="text"
+            name="planName"
+            placeholder="Plan Name"
+            value={planData.planName}
+            onChange={handleChange}
+            className="w-full border p-2 rounded mb-3"
+            required
+          />
+
+          {/* Monthly & Yearly Amount */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <input type="text" name="monthlyPlanAmount" placeholder="Monthly Amount" value={planData.monthlyPlanAmount} onChange={handleChange} className="border p-2 rounded" required />
-            <input type="text" name="yearlyPlanAmount" placeholder="Yearly Amount" value={planData.yearlyPlanAmount} readOnly className="border p-2 rounded bg-gray-100" />
+            <input
+              type="text"
+              name="monthlyPlanAmount"
+              placeholder="Monthly Amount"
+              value={planData.monthlyPlanAmount}
+              onChange={handleChange}
+              className="border p-2 rounded"
+              required
+            />
+            <input
+              type="text"
+              name="yearlyPlanAmount"
+              placeholder="Yearly Amount"
+              value={planData.yearlyPlanAmount}
+              readOnly
+              className="border p-2 rounded bg-gray-100"
+            />
           </div>
+
+          {/* Feature checkboxes */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
-            {Object.keys(defaultPlanState).filter(k => !["planName","monthlyPlanAmount","yearlyPlanAmount"].includes(k)).map(feature => (
-              <label key={feature} className="flex items-center gap-2 text-sm">
-                <input type="checkbox" name={feature} checked={planData[feature]} onChange={handleChange} />
-                {feature.replace(/([A-Z])/g, " $1")}
-              </label>
-            ))}
+            {Object.keys(defaultPlanState)
+              .filter(k => !["planName", "monthlyPlanAmount", "yearlyPlanAmount"].includes(k))
+              .map(feature => (
+                <label key={feature} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    name={feature}
+                    checked={planData[feature]}
+                    onChange={handleChange}
+                  />
+                  {feature.replace(/([A-Z])/g, " $1")} {/* Format camelCase to readable */}
+                </label>
+              ))}
           </div>
+
+          {/* Form buttons */}
           <div className="flex flex-col sm:flex-row gap-3">
-            <button type="submit" disabled={loading} className="bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto">{loading ? "Saving..." : isEditMode ? "Update Plan" : "Save Plan"}</button>
-            <button type="button" onClick={resetForm} className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto">Cancel</button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto"
+            >
+              {loading ? "Saving..." : isEditMode ? "Update Plan" : "Save Plan"}
+            </button>
+            <button
+              type="button"
+              onClick={resetForm}
+              className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       )}
 
-      {/* Details */}
+      {/* Plan Details Modal */}
       {showDetails && (
         <div className="bg-white p-4 md:p-6 rounded shadow mb-6 w-full max-w-md mx-auto">
           <h3 className="font-semibold mb-4 text-lg">Plan Details</h3>
@@ -162,16 +258,30 @@ const Plans = () => {
           <p><strong>Monthly:</strong> ₹{planData.monthlyPlanAmount}</p>
           <p><strong>Yearly:</strong> ₹{planData.yearlyPlanAmount}</p>
           <ul className="ml-5 mt-2 space-y-1">
-            {Object.keys(defaultPlanState).filter(k => !["planName","monthlyPlanAmount","yearlyPlanAmount"].includes(k)).map(f => planData[f] && <li key={f}>✔ {f.replace(/([A-Z])/g, " $1")}</li>)}
+            {Object.keys(defaultPlanState)
+              .filter(k => !["planName", "monthlyPlanAmount", "yearlyPlanAmount"].includes(k))
+              .map(f => planData[f] && <li key={f}>✔ {f.replace(/([A-Z])/g, " $1")}</li>)}
           </ul>
+
+          {/* Detail buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mt-4">
-            <button onClick={() => { setShowForm(true); setIsEditMode(true); setSelectedPlanId(planData._id); }} className="bg-yellow-500 text-white px-4 py-2 rounded w-full sm:w-auto">Edit</button>
-            <button onClick={resetForm} className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto">Close</button>
+            <button
+              onClick={() => { setShowForm(true); setIsEditMode(true); setSelectedPlanId(planData._id); }}
+              className="bg-yellow-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+            >
+              Edit
+            </button>
+            <button
+              onClick={resetForm}
+              className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
 
-      {/* Plans List */}
+      {/* List of all plans */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {plans.map(plan => (
           <div key={plan._id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
@@ -184,6 +294,7 @@ const Plans = () => {
               <p className="text-sm text-gray-500 mb-4">
                 ₹{plan.yearlyPlanAmount} / year
               </p>
+              {/* Buttons for each plan */}
               <div className="flex flex-col sm:flex-row gap-2">
                 <button onClick={() => handleView(plan)} className="flex-1 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">View</button>
                 <button onClick={() => handleEdit(plan)} className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600">Edit</button>
@@ -198,6 +309,7 @@ const Plans = () => {
 };
 
 export default Plans;
+
 
 
 

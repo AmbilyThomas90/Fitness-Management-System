@@ -13,92 +13,96 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ------------------ CHANGE HANDLER ------------------
+  // ---------------- CHANGE HANDLER ----------------
   const handleChange = (e) => {
-    setError(""); // clear error on typing
+    setError("");
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  // ------------------ FORM SUBMIT ------------------
+  // ---------------- SUBMIT HANDLER ----------------
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    if (loading) return;
 
-  if (loading) return; // prevent multiple clicks
-  const { email, password } = formData;
+    const { email, password } = formData;
 
-  // ---------------- FRONTEND VALIDATION ----------------
-  if (!email || !password) {
-    setError("Email and password are required");
-    return; // stay on login
-  }
+    // ---------- FRONTEND VALIDATION ----------
+    if (!email || !password) {
+      setError("Email and password are required");
+      return;
+    }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    setError("Please enter a valid email address");
-    return; // stay on login
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
 
-  setLoading(true);
-  setError("");
+    setLoading(true);
+    setError("");
 
-  try {
-    // ---------------- API LOGIN ----------------
-    const res = await api.post("/auth/login", formData);
-    const { token, user, trainerStatus } = res.data;
-
-    // ---------------- TRAINER APPROVAL CHECK ----------------
-    if (user?.role === "trainer" && trainerStatus !== "active") {
-      setError(
-        trainerStatus === "new"
-          ? "Your trainer profile is under admin review."
-          : "Your trainer account is inactive. Please contact support."
+    try {
+      const res = await api.post(
+        "/auth/login",
+        formData,
+        {
+          validateStatus: (status) => status < 500, // prevents console error
+        }
       );
+
+      // ---------- INVALID LOGIN ----------
+      if (res.status === 401) {
+        setError("Invalid email or password");
+        return;
+      }
+
+      // ---------- OTHER CLIENT ERRORS ----------
+      if (res.status !== 200) {
+        setError(res.data?.message || "Login failed");
+        return;
+      }
+
+      // ---------- SUCCESS ----------
+      const { token, user, trainerStatus } = res.data;
+
+      if (user?.role === "trainer" && trainerStatus !== "active") {
+        setError(
+          trainerStatus === "new"
+            ? "Your trainer profile is under admin review."
+            : "Your trainer account is inactive. Please contact support."
+        );
+        return;
+      }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("name", user.name);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      if (user.role === "admin") navigate("/admin/dashboard");
+      else if (user.role === "trainer") navigate("/trainer/dashboard");
+      else navigate("/user/dashboard");
+
+      if (isModal && closeModal) closeModal();
+
+    } catch {
+      setError("Server error. Please try again later.");
+    } finally {
       setLoading(false);
-      return; // stay on login
     }
+  };
 
-    // ---------------- SUCCESS: SAVE AUTH INFO ----------------
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", user.role);
-    localStorage.setItem("name", user.name);
-    localStorage.setItem("user", JSON.stringify(user));
-
-    // ---------------- NAVIGATE BY ROLE ----------------
-    if (user.role === "admin") navigate("/admin/dashboard");
-    else if (user.role === "trainer") navigate("/trainer/dashboard");
-    else navigate("/user/dashboard");
-
-    if (isModal && closeModal) closeModal();
-
-  } catch (err) {
-    // ---------------- WRONG EMAIL OR PASSWORD ----------------
-    if (err.response?.status === 401) {
-      setError("Invalid email or password"); // only show error
-    } else {
-      setError(err.response?.data?.message || "Login failed. Please try again.");
-    }
-
-    // Remove any leftover auth info
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user");
-  } finally {
-    setLoading(false); // always stop loading
-  }
-};
-
-
-  // ------------------ STYLES ------------------
+  // ---------------- UI ----------------
   const modalWrapperClass = isModal
     ? "fixed inset-0 flex items-center justify-center z-50"
     : "min-h-screen flex items-center justify-center bg-gray-100 px-4";
 
   const modalContentClass = isModal
-    ? "bg-white w-full max-w-md p-6 sm:p-8 rounded-lg shadow-lg relative"
-    : "w-full max-w-md bg-white p-6 sm:p-8 rounded-lg shadow-lg";
+    ? "bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative"
+    : "w-full max-w-md bg-white p-6 rounded-lg shadow-lg";
 
   return (
     <div className={modalWrapperClass}>
@@ -106,17 +110,14 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
         {isModal && closeModal && (
           <button
             onClick={closeModal}
-            className="absolute top-2 right-3 text-xl font-bold text-gray-600 hover:text-black"
+            className="absolute top-2 right-3 text-xl font-bold"
           >
             ✕
           </button>
         )}
 
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
-          Login
-        </h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
 
-        {/* ✅ Error Message */}
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded text-sm text-center mb-4">
             {error}
@@ -130,7 +131,7 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded"
           />
 
           <input
@@ -139,22 +140,19 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded"
           />
 
           <div className="text-right">
             {switchView ? (
               <span
                 onClick={() => switchView("forgot")}
-                className="text-sm text-blue-500 cursor-pointer hover:underline"
+                className="text-sm text-blue-500 cursor-pointer"
               >
                 Forgot password?
               </span>
             ) : (
-              <Link
-                to="/forgot-password"
-                className="text-sm text-blue-500 hover:underline"
-              >
+              <Link to="/forgot-password" className="text-sm text-blue-500">
                 Forgot password?
               </Link>
             )}
@@ -163,23 +161,23 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
+            className="w-full bg-blue-500 text-white py-2 rounded disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-gray-600 text-sm">
+        <p className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
           {switchView ? (
             <span
               onClick={() => switchView("register")}
-              className="text-blue-500 cursor-pointer hover:underline"
+              className="text-blue-500 cursor-pointer"
             >
               Sign Up
             </span>
           ) : (
-            <Link to="/register" className="text-blue-500 hover:underline">
+            <Link to="/register" className="text-blue-500">
               Sign Up
             </Link>
           )}

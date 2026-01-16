@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../../api/api";
 
-const BACKEND_URL = "https://fitness-management-system-yl6n.onrender.com";
+const BACKEND_URL =import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
 const Trainers = () => {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,12 +65,15 @@ const Trainers = () => {
           >
             {/* Trainer Info */}
             <div className="flex items-start gap-4">
-                 <img
-          //  src={`http://localhost:5000/uploads/${trainer.profileImage}`}
-          src={`${BACKEND_URL}/uploads/${trainer.profileImage}`}
-            alt={trainer.name}
-            className="w-20 h-20 rounded-full object-cover border"
-          />
+                <img
+  src={`${BACKEND_URL}/uploads/${trainer.profileImage}`}
+  alt={trainer.name}
+  className="w-20 h-20 rounded-full object-cover border"
+  onError={(e) => {
+    e.currentTarget.src = "/default-avatar.png"; // public image
+  }}
+/>
+
 
 
                 {/* className="w-20 h-20 rounded-full object-cover border"

@@ -9,7 +9,7 @@ const AdminDashboard = () => {
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-6">
-        <Outlet /> {/* 👈 admin pages load here */}
+        <Outlet /> {/*  admin pages load here */}
       </main>
     </div>
     </div>

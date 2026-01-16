@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 /* COMMON */
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-// import Login from "./pages/auth/Login";
-import Login from "./pages/auth/Login";
+ //import Login from "./pages/auth/Login";
+import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
-// import Register from "./pages/auth/Register";
+//import Register from "./pages/auth/Register";
 import PlanCard from "./components/PlanCardModal";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -16,12 +16,11 @@ import Contact from "./pages/Contact";
 import ViewPlans from "./components/PlanForm";
 import PlanDetailsView  from "./components/PlanDetails";
 
-/* DASHBOARDS */
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import TrainerDashboard from "./pages/trainer/TrainerDashboard";
-import UserDashboard from "./pages/user/UserDashboard";
+
+
 
 /* ADMIN PAGES */
+import AdminDashboard from "./pages/admin/AdminDashboard"; /* DASHBOARDS */
 import DashboardHome from "./pages/admin/DashboardHome";
 import Users from "./pages/admin/Users";
 import Trainers from "./pages/admin/Trainers";
@@ -30,9 +29,12 @@ import PlanDetail from "./pages/admin/PlanDetail";
 import Payments from "./pages/admin/Payments";
 import Analytics from "./pages/admin/Analytics";
 import AdminPayments from "./pages/admin/AdminPayments";
+
 /* USER PAGES */
-import UserHome from "./pages/user/UserHome";
+
 import UserLayout from "./pages/user/UserLayout";
+import UserDashboard from "./pages/user/UserDashboard";/* DASHBOARDS */
+import UserHome from "./pages/user/UserHome";
 import Profile from "./pages/user/Profile";
 import Goals from "./pages/user/Goals";
 import Progress from "./pages/user/ProgressTracker";
@@ -41,8 +43,13 @@ import MySubscription from "./pages/user/MySubscription";
 import SelectTrainer  from "./pages/user/SelectTrainer";
 import MyPayment from "./pages/user/UserPaymentDetails";
 
-/* USER TRAINER */
-import TrainerProfile from "./pages/trainer/TrainerProfile";
+/*  TRAINER PAGES*/
+import TrainerLayout from "./pages/trainer/TrainerLayout";
+import TrainerDashboard from "./pages/trainer/TrainerDashboard";   /* DASHBOARDS */
+import TrainerProfile from "./pages/trainer/TrainerProfile"; // Trainer Profile
+ import TrainerUsers from "./pages/trainer/TrainerUsers";
+import TrainerUsersApprove from "./pages/trainer/TrainerUsersApprove";
+import TrainerUsersWorkout from "./pages/trainer/TrainerUserWorkout";
 
 // import Progress from "./pages/user/Progress";
 // import Workouts from "./pages/user/Workouts";
@@ -93,8 +100,19 @@ function App() {
         </Route>
 
         {/* ================= TRAINER DASHBOARD ================= */}
-       <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
-        <Route path="/trainer/profile" element={<TrainerProfile />} />
+
+          <Route path="/trainer" element={<TrainerLayout />}>
+  <Route path="dashboard" element={<TrainerDashboard />}>
+    <Route index element={<p>Select an option above</p>} />
+    <Route path="profile" element={<TrainerProfile />} />
+    <Route path="trainer-users" element={<TrainerUsers />} />
+    <Route path="users-approve" element={<TrainerUsersApprove />} />
+    <Route path="workout" element={<TrainerUsersWorkout />} />
+    
+    {/* etc */}
+  </Route>
+</Route>
+
 {/*
 <Route path="/trainer/users" element={<TrainerUsers />} />
 <Route path="/trainer/assign-plan" element={<AssignPlan />} />

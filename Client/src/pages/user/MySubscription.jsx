@@ -15,7 +15,7 @@ const MySubscription = () => {
           return;
         }
 
-        // ✅ Corrected URL to match backend route
+        //  Corrected URL to match backend route
         const res = await api.get("/subscriptions/my-subscription", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -33,7 +33,11 @@ const MySubscription = () => {
     fetchSubscription();
   }, []);
 
-  if (loading) return <p className="p-6">Loading subscription...</p>;
+  if (loading) {return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
+
 
   if (!subscription) {
     return (

@@ -123,8 +123,8 @@ export const verifyPayment = async (req, res) => {
       subscription: subscription._id, // Added this to match your required schema field
       planName: planDetails.planName,
       planAmount: planAmount,
-      platformFee: planAmount * 0.2, // 20% example
-      trainerEarning: planAmount * 0.8, // 80% example
+      platformFee: planAmount * 0.6, // 20% example
+      trainerEarning: planAmount * 0.4, // 80% example
       paymentMethod: "razorpay",
       status: "success"
     });

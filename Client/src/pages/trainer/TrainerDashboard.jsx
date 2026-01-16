@@ -1,86 +1,145 @@
-// import React from "react";
-// import { useNavigate } from "react-router-dom";
-// import Navbar from "../../components/Navbar";
-//
-// pages/trainer/TrainerDashboard.jsx
-import React from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+import api from "../../api/api";
+
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const TrainerDashboard = () => {
+  const [trainer, setTrainer] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchTrainerProfile = async () => {
+  try {
+    setLoading(true);
+    setError(false);
+
+    const res = await api.get("/trainer/profile");
+
+    if (!res?.data?.trainer) {
+      throw new Error("Trainer not found");
+    }
+
+    setTrainer(res.data.trainer);
+  } catch (err) {
+    console.error("Trainer profile fetch failed:", err);
+    setError(true);
+    setTrainer(null);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+    fetchTrainerProfile();
+  }, []);
+
+  // =====================
+  // Error UI
+  // =====================
+  if (error) {
+    return (
+      <div className="text-center text-red-600 font-semibold">
+        Failed to load trainer dashboard
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 min-h-screen bg-gray-100">
+  <>
+  {/* ===================== */}
+  {/* DASHBOARD HEADER */}
+  {/* ===================== */}
+  <div className="mb-10 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-[1px] shadow-lg">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white px-6 py-5">
 
-      {/* Global Navbar */}
-      <Navbar />
-      {/* Header */}
-      <h1 className="text-3xl font-bold mb-8 text-center">
-        Trainer Dashboard
-      </h1>
+      {/* Profile */}
+      <div className="flex items-center gap-5">
+        <div className="relative">
+          <img
+            src={
+              trainer?.profileImage
+                ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+                : "/default-avatar.png"
+            }
+            alt="Trainer"
+            className="h-16 w-16 rounded-full object-cover ring-2 ring-blue-500"
+            onError={(e) => {
+              e.target.src = "/default-avatar.png";
+            }}
+          />
 
+          {/* Online status */}
+          <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full bg-green-500 ring-2 ring-white" />
+        </div>
 
-      {/* Dashboard Cards pushed to bottom */}
-      <div className="mt-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900">
+            Welcome back,{" "}
+            <span className="text-blue-600">
+              {trainer?.user?.name || "Trainer"}
+            </span>
+          </h1>
+          <p className="text-sm text-gray-500">
+              Manage Your clients & workouts
+          </p>
+        </div>
+      </div>
 
-        {/* Update Profile */}
-        <Link
-          to="/trainer/profile"
-          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
-        >
-          <h2 className="text-xl font-semibold mb-2">Update Profile</h2>
-          
-        </Link>
-
-        {/* View Assigned Users */}
-        <Link
-          to="/trainer/users"
-          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
-        >
-          <h2 className="text-xl font-semibold mb-2">View Assigned Clients</h2>
-
-        </Link>
-
-        {/* Assign Workout & Nutrition */}
-        <Link
-          to="/trainer/assign-plan"
-          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
-        >
-          <h2 className="text-xl font-semibold mb-2">
-            Assign Workout & Nutrition
-          </h2>
-
-        </Link>
-
-        {/* Monitor Client Progress */}
-        <Link
-          to="/trainer/progress"
-          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
-        >
-          <h2 className="text-xl font-semibold mb-2">Monitor Progress</h2>
-
-        </Link>
-
-        {/* Suggest Changes */}
-        <Link
-          to="/trainer/suggestions"
-          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
-        >
-          <h2 className="text-xl font-semibold mb-2">Suggest Changes</h2>
-
-        </Link>
-
-        {/* Client Feedback */}
-        <Link
-          to="/trainer/feedback"
-          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
-        >
-          <h2 className="text-xl font-semibold mb-2">Client Feedback</h2>
-
-        </Link>
-
+      {/* Role Badge */}
+      <div className="hidden sm:flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
+        <span className="h-2 w-2 rounded-full bg-blue-600" />
+        Active Trainer
       </div>
     </div>
+  </div>
+
+  {/* ===================== */}
+  {/* DASHBOARD ACTION CARDS */}
+  {/* ===================== */}
+  <div className="mb-10 mx-auto max-w-5xl grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+  {[
+    { to: "profile", label: "Update Profile" },
+    { to: "users-approve", label: "Clients Approvals" },
+    { to: "trainer-users", label: "All Clients" },
+    { to: "workout", label: "Assign Workout" },
+    { to: "progress", label: "Monitor Progress" },
+    { to: "suggestions", label: "Suggestions" },
+    { to: "feedback", label: "Feedback" }
+  ].map((item) => (
+    <Link
+      key={item.to}
+      to={item.to}
+      className="group rounded-lg border bg-white p-1 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+    >
+      <h3 className="text-base font-semibold text-gray-800 group-hover:text-blue-600">
+        {item.label}
+      </h3>
+
+      <p className="mt-0.5 text-xs text-gray-500">
+        Manage {item.label.toLowerCase()}
+      </p>
+    </Link>
+  ))}
+</div>
+
+
+  {/* ===================== */}
+  {/* DYNAMIC CONTENT AREA */}
+  {/* ===================== */}
+  <div className="min-h-[300px] rounded-2xl bg-white p-6 shadow">
+    {loading ? (
+      <div className="flex items-center justify-center py-20 text-gray-500">
+        Loading dashboard content...
+      </div>
+    ) : (
+      <Outlet />
+    )}
+  </div>
+</>
 
   );
 };

@@ -109,27 +109,79 @@ const UserHome = () => {
           )}
         </div>
 
-        {/* Trainer Details */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4 border-b pb-2">Trainer Profile</h2>
-          {trainer ? (
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Name:</span>
-                <span className="font-medium">{trainer.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Specialization:</span>
-                <span className="font-medium">{trainer.specialization}</span>
-              </div>
-              <button className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700">
-                Contact Trainer
-              </button>
-            </div>
-          ) : (
-            <p className="text-gray-500 italic">No trainer assigned to your profile yet.</p>
-          )}
-        </div>
+       {/* Trainer Details */}
+<div className="bg-white p-6 rounded-lg shadow">
+  <h2 className="text-xl font-bold mb-4 border-b pb-2">
+    Trainer Profile
+  </h2>
+
+  {trainer ? (
+    <div className="space-y-4">
+      {/* Name */}
+      <div className="flex justify-between">
+        <span className="text-gray-600">Name:</span>
+        <span className="font-medium">
+          {trainer.name || "N/A"}
+        </span>
+      </div>
+
+      {/* Specialization */}
+      <div className="flex justify-between">
+        <span className="text-gray-600">Specialization:</span>
+        <span className="font-medium">
+          {trainer.specialization || "General Fitness"}
+        </span>
+      </div>
+
+      {/* Status Badge */}
+      <div className="flex justify-between items-center">
+        <span className="text-gray-600">Status:</span>
+
+        {trainer.status === "active" && (
+          <span className="px-3 py-1 text-sm rounded-full bg-yellow-100 text-yellow-700">
+            Waiting for Trainer Approval
+          </span>
+        )}
+
+        {trainer.status === "approved" && (
+          <span className="px-3 py-1 text-sm rounded-full bg-green-100 text-green-700">
+            Approved
+          </span>
+        )}
+
+        {trainer.status === "rejected" && (
+          <span className="px-3 py-1 text-sm rounded-full bg-red-100 text-red-700">
+            Rejected
+          </span>
+        )}
+
+        {trainer.status === "completed" && (
+          <span className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700">
+            Completed
+          </span>
+        )}
+      </div>
+
+      {/* Action Button */}
+      <button
+        disabled={trainer.status !== "approved"}
+        className={`w-full mt-4 py-2 rounded text-white transition ${
+          trainer.status === "approved"
+            ? "bg-green-600 hover:bg-green-700"
+            : "bg-gray-400 cursor-not-allowed"
+        }`}
+      >
+        Contact Trainer
+      </button>
+    </div>
+  ) : (
+    <p className="text-gray-500 italic">
+      No trainer assigned to your profile yet.
+    </p>
+  )}
+</div>
+
+
       </div>
     </div>
   );

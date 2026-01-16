@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../api/api";
+// For-Automatically shows only enabled features
+const planFeatureLabels = {
+  waterStations: "Free Water Stations",
+  lockerRooms: "Locker Rooms Available",
+  wifiService: "Free Gym Wi-Fi",
+  cardioClass: "Cardio Classes",
+  refreshment: "Refreshments Available",
+  groupFitnessClasses: "Group Fitness Classes",
+  personalTrainer: "Personal Trainer Support",
+  specialEvents: "Access to Special Events",
+  cafeOrLounge: "Café / Lounge Access",
+};
+
 
 const PlanForm = () => {
   const [plans, setPlans] = useState([]);
@@ -33,25 +46,32 @@ const PlanForm = () => {
     }
   };
 
-  if (loading) return <div className="p-10 text-center font-semibold">Loading plans...</div>;
-
+  if (loading) 
+    {
+return (
+   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+);
+    }
+    
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <h2 className="text-3xl font-extrabold mb-10 text-center text-gray-900 tracking-tight">
         Choose Your Fitness Journey
       </h2>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {plans.map((plan) => (
-          <div 
-            key={plan._id} 
+          <div
+            key={plan._id}
             className="group flex flex-col justify-between border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-2xl transition-all duration-300 bg-white border-t-4 border-t-indigo-500"
           >
             <div>
               <h3 className="text-2xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
                 {plan.planName}
               </h3>
-              
+
               <div className="mt-6 space-y-3">
                 <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
                   <span className="text-gray-500 text-sm">Monthly</span>
@@ -65,11 +85,19 @@ const PlanForm = () => {
 
               {/* Optional: Short list of perks */}
               <ul className="mt-6 space-y-2 text-sm text-gray-600">
-                {plan.personalTrainer && <li>• Personal Training Included</li>}
-                {plan.wifiService && <li>• Free Gym Wi-Fi</li>}
+                {Object.entries(planFeatureLabels).map(
+                  ([key, label]) =>
+                    plan[key] && (
+                      <li key={key} className="flex items-center gap-2">
+                        <span className="text-green-600 font-bold">✓</span>
+                        {label}
+                      </li>
+                    )
+                )}
               </ul>
+
             </div>
-            
+
             <button
               onClick={() => handleViewDetails(plan._id)}
               className="mt-8 w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 shadow-md hover:shadow-indigo-200 transition-all active:scale-95"

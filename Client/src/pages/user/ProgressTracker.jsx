@@ -80,7 +80,7 @@ const ProgressTracker = () => {
         <div>
           <label className="block text-sm font-medium mb-1">Current Value (kg/km/reps)</label>
           <input 
-            type="number" 
+            type="string" 
             required 
             value={currentValue} 
             onChange={(e) => setCurrentValue(e.target.value)}
