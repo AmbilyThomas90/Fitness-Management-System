@@ -29,13 +29,11 @@ app.use(
   cors({
     origin: "https://fitness-management-system-zeta.vercel.app",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization",
   })
 );
 
-// handle preflight
-app.options("*", cors());
 // app.use(
 //   cors({
 //     origin: [
