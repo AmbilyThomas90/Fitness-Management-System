@@ -1,5 +1,22 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
+import {
+  UserCircle,
+  Pencil,
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  Users,
+  Ruler,
+  Scale,
+  HeartPulse,
+  Activity,
+  CheckCircle,
+  AlertCircle,
+  Save,
+  X
+} from "lucide-react";
 
 /** Default empty profile */
 const emptyProfile = {
@@ -150,128 +167,159 @@ const handleSubmit = async (e) => {
   }
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded shadow-lg mt-10">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">My Fitness Profile</h2>
-        {hasProfile && !editMode && (
+ <div className="mx-auto mt-10 max-w-xl rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
+  {/* Header */}
+  <div className="mb-6 flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <div className="rounded-lg bg-indigo-50 p-2 ring-1 ring-indigo-100">
+        <UserCircle className="h-6 w-6 text-indigo-600" />
+      </div>
+      <h2 className="text-2xl font-semibold text-slate-800">
+        My Fitness Profile
+      </h2>
+    </div>
+
+    {hasProfile && !editMode && (
+      <button
+        onClick={handleEditClick}
+        className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+      >
+        <Pencil className="h-4 w-4" />
+        Update Profile
+      </button>
+    )}
+  </div>
+
+  {/* Message */}
+  {message && (
+    <div
+      className={`mb-4 flex items-center gap-2 rounded-lg p-3 text-sm ${
+        message.includes("✅")
+          ? "bg-emerald-50 text-emerald-700"
+          : "bg-rose-50 text-rose-700"
+      }`}
+    >
+      {message.includes("✅") ? (
+        <CheckCircle className="h-4 w-4" />
+      ) : (
+        <AlertCircle className="h-4 w-4" />
+      )}
+      {message}
+    </div>
+  )}
+
+  {/* View Mode */}
+  {hasProfile && !editMode && (
+    <div className="grid gap-4 rounded-lg bg-slate-50 p-4">
+      <ProfileRow icon={User} label="Name" value={profile.name} />
+      <ProfileRow icon={Mail} label="Email" value={profile.email} />
+      <ProfileRow icon={Phone} label="Phone" value={profile.phoneNumber} />
+      <ProfileRow icon={Calendar} label="Age" value={profile.age} />
+      <ProfileRow icon={Users} label="Gender" value={profile.gender} />
+      <ProfileRow icon={Ruler} label="Height" value={`${profile.height} cm`} />
+      <ProfileRow icon={Scale} label="Weight" value={`${profile.weight} kg`} />
+      <ProfileRow
+        icon={HeartPulse}
+        label="Health Condition"
+        value={profile.healthCondition}
+      />
+      <ProfileRow
+        icon={Activity}
+        label="Fitness Level"
+        value={profile.fitnessLevel}
+      />
+    </div>
+  )}
+
+  {/* Edit / Create Mode */}
+  {editMode && (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Input icon={User} label="Name" name="name" value={profile.name} readOnly={isReadOnly} />
+      <Input icon={Mail} label="Email" name="email" value={profile.email} readOnly={isReadOnly} />
+
+      <Input icon={Phone} label="Phone Number" name="phoneNumber" value={profile.phoneNumber} onChange={handleChange} />
+      <Input icon={Calendar} label="Age" name="age" type="number" value={profile.age} onChange={handleChange} />
+
+      <div>
+        <label className="mb-1 block text-sm font-medium">Gender</label>
+        <select
+          name="gender"
+          value={profile.gender}
+          onChange={handleChange}
+          className="w-full rounded border border-slate-300 p-2"
+        >
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <Input icon={Ruler} label="Height (cm)" name="height" type="number" value={profile.height} onChange={handleChange} />
+      <Input icon={Scale} label="Weight (kg)" name="weight" type="number" value={profile.weight} onChange={handleChange} />
+
+      <div>
+        <label className="mb-1 block text-sm font-medium">Health Condition</label>
+        <select
+          name="healthCondition"
+          value={profile.healthCondition}
+          onChange={handleChange}
+          className="w-full rounded border border-slate-300 p-2"
+        >
+          <option value="NONE">None</option>
+          <option value="DIABETES">Diabetes</option>
+          <option value="HYPERTENSION">Hypertension</option>
+          <option value="ASTHMA">Asthma</option>
+          <option value="CARDIAC">Heart Condition</option>
+          <option value="THYROID">Thyroid</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium">Fitness Level</label>
+        <select
+          name="fitnessLevel"
+          value={profile.fitnessLevel}
+          onChange={handleChange}
+          className="w-full rounded border border-slate-300 p-2"
+        >
+          <option value="BEGINNER">Beginner</option>
+          <option value="INTERMEDIATE">Intermediate</option>
+          <option value="ADVANCED">Advanced</option>
+        </select>
+      </div>
+
+      {/* Buttons */}
+      <div className="mt-6 flex gap-3">
+        <button
+          type="submit"
+          disabled={!hasChanges()}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-white ${
+            hasChanges()
+              ? "bg-emerald-600 hover:bg-emerald-700"
+              : "cursor-not-allowed bg-slate-400"
+          }`}
+        >
+          <Save className="h-4 w-4" />
+          {hasProfile ? "Update Profile" : "Create Profile"}
+        </button>
+
+        {hasProfile && (
           <button
-            onClick={handleEditClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            type="button"
+            onClick={() => setEditMode(false)}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-400 py-2 text-slate-700 hover:bg-slate-300"
           >
-            Update Profile
+            <X className="h-4 w-4" />
+            Cancel
           </button>
         )}
       </div>
+    </form>
+  )}
+</div>
 
-      {/* Message */}
-      {message && (
-        <div
-          className={`p-3 mb-4 rounded ${
-            message.includes("✅") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-          }`}
-        >
-          {message}
-        </div>
-      )}
-
-      {/* View Mode */}
-      {hasProfile && !editMode && (
-        <div className="grid gap-4 bg-gray-100 p-4 rounded">
-          <ProfileRow label="Name" value={profile.name} />
-          <ProfileRow label="Email" value={profile.email} />
-          <ProfileRow label="Phone" value={profile.phoneNumber} />
-          <ProfileRow label="Age" value={profile.age} />
-          <ProfileRow label="Gender" value={profile.gender} />
-          <ProfileRow label="Height" value={`${profile.height} cm`} />
-          <ProfileRow label="Weight" value={`${profile.weight} kg`} />
-          <ProfileRow label="Health Condition" value={profile.healthCondition} />
-          <ProfileRow label="Fitness Level" value={profile.fitnessLevel} /> {/* added */}
-        </div>
-      )}
-
-      {/* Edit/Create Mode */}
-      {editMode && (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name & Email */}
-          <Input label="Name" name="name" value={profile.name} readOnly={isReadOnly} />
-          <Input label="Email" name="email" value={profile.email} readOnly={isReadOnly} />
-
-          {/* Other Fields */}
-          <Input label="Phone Number" name="phoneNumber" value={profile.phoneNumber} onChange={handleChange} />
-          <Input label="Age" name="age" type="number" value={profile.age} onChange={handleChange} />
-
-          <div>
-            <label className="block mb-1 text-sm font-medium">Gender</label>
-            <select name="gender" value={profile.gender} onChange={handleChange} className="w-full border p-2 rounded">
-              <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <Input label="Height (cm)" name="height" type="number" value={profile.height} onChange={handleChange} />
-          <Input label="Weight (kg)" name="weight" type="number" value={profile.weight} onChange={handleChange} />
-
-          <div>
-            <label className="block mb-1 text-sm font-medium">Health Condition</label>
-            <select
-              name="healthCondition"
-              value={profile.healthCondition}
-              onChange={handleChange}
-              className="w-full border p-2 rounded"
-            >
-              <option value="NONE">None</option>
-              <option value="DIABETES">Diabetes</option>
-              <option value="HYPERTENSION">Hypertension</option>
-              <option value="ASTHMA">Asthma</option>
-              <option value="CARDIAC">Heart Condition</option>
-              <option value="THYROID">Thyroid</option>
-              <option value="OTHER">Other</option>
-            </select>
-          </div>
-
-          {/* Fitness Level Dropdown */}
-          <div>
-            <label className="block mb-1 text-sm font-medium">Fitness Level</label>
-            <select
-              name="fitnessLevel"
-              value={profile.fitnessLevel}
-              onChange={handleChange}
-              className="w-full border p-2 rounded"
-            >
-              <option value="BEGINNER">Beginner</option>
-              <option value="INTERMEDIATE">Intermediate</option>
-              <option value="ADVANCED">Advanced</option>
-            </select>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex gap-3 mt-6">
-            <button
-              type="submit"
-              className={`flex-1 py-2 rounded text-white ${
-                hasChanges() ? "bg-green-600 hover:bg-green-700" : "bg-gray-400 cursor-not-allowed"
-              }`}
-              disabled={!hasChanges()}
-            >
-              {hasProfile ? "Update Profile" : "Create Profile"}
-            </button>
-
-            {hasProfile && (
-              <button
-                type="button"
-                onClick={() => setEditMode(false)}
-                className="flex-1 bg-blue-400 text-white py-2 rounded"
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-        </form>
-      )}
-    </div>
   );
 };
 

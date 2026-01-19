@@ -9,7 +9,10 @@ import {
  
 } from "../controllers/trainerController.js";
 import { getTrainerUsersFullDetails,approveTrainerAssignment} from "../controllers/appointmentController.js";
+import {
+getUserWorkoutsForTrainer
 
+} from "../controllers/workoutController.js";
 const router = express.Router();
 
 // Trainer create profile
@@ -34,6 +37,9 @@ router.get("/my-users-details", protect, authorizeRole("trainer"), getTrainerUse
 
 router.put("/assignments/:id/action",protect,authorizeRole("trainer"),approveTrainerAssignment);
 
+
+// Fetch workouts of a specific user (Trainer view)
+router.get("/user-workout/:userId", protect, getUserWorkoutsForTrainer);
 
 // Trainer dashboard
 

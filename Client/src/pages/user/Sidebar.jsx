@@ -17,10 +17,10 @@ import {
 
 const Sidebar = ({ role = "user" }) => {
   const navigate = useNavigate();
- // Get logged-in user
+  // Get logged-in user
   const user = JSON.parse(localStorage.getItem("user"));
   const name = localStorage.getItem("name");
-  
+
   const logoutHandler = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -30,13 +30,13 @@ const Sidebar = ({ role = "user" }) => {
   const userMenu = [
     { name: "Dashboard", path: "/user/dashboard", icon: <FaHome /> },
     { name: "Profile", path: "/user/profile", icon: <FaUser /> },
-       { name: "Plan Booking", path: "/user/planview", icon: <FaCalendarCheck /> },
+    { name: "Plan Booking", path: "/user/planview", icon: <FaCalendarCheck /> },
     { name: "Goals", path: "/user/goals", icon: <FaBullseye /> },
-    { name: "Progress", path: "/user/progress", icon: <FaChartLine /> },
+    { name: "Trainers", path: "/user/select-trainer", icon: <FaUserTie /> },
     { name: "Workout", path: "/user/workouts", icon: <FaDumbbell /> },
     { name: "Nutrition", path: "/user/nutrition", icon: <FaAppleAlt /> },
-    { name: "Trainers", path: "/user/select-trainer", icon: <FaUserTie /> },
- 
+    { name: "Progress", path: "/user/progress", icon: <FaChartLine /> },
+
     //{ name: "Messages", path: "/user/messages", icon: <FaComments /> },
     { name: "Payments", path: "/user/payments", icon: <FaCreditCard /> },
     { name: "Feedback", path: "/user/feedback", icon: <FaStar /> }
@@ -46,13 +46,13 @@ const Sidebar = ({ role = "user" }) => {
 
   return (
     <aside className="w-64 min-h-screen bg-gray-900 text-white flex flex-col">
-      
+
       {/* Logo */}
       <div className="p-6 text-2xl font-bold border-b border-gray-700">
         {/* User name  */}
         {/* Hi,<span className="text-blue-400">{name || "Profile"}</span> */}
-        
-        
+
+
       </div>
 
       {/* Menu */}
@@ -63,10 +63,9 @@ const Sidebar = ({ role = "user" }) => {
             to={item.path}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-2 rounded-lg transition
-              ${
-                isActive
-                  ? "bg-blue-600"
-                  : "text-gray-300 hover:bg-gray-800"
+              ${isActive
+                ? "bg-blue-600"
+                : "text-gray-300 hover:bg-gray-800"
               }`
             }
           >

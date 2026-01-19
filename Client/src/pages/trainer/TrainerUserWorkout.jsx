@@ -40,26 +40,44 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
   useEffect(() => {
     fetchTrainerUsers();
   }, []);
+ // ================= FETCH USER WORKOUTS =================
+const fetchUserWorkouts = async (assignment) => {
+  try {
+    // Correct backend route for trainer fetching a user's workouts
+    // Make sure your backend has: router.get("/trainer/user-workout/:userId", protect, getUserWorkouts);
+    const res = await api.get(`/trainer/user-workout/${assignment.user._id}`);
+    return res.data?.workouts || [];
+  } catch (err) {
+    console.error("❌ Fetch user workouts error:", err);
+    return [];
+  }
+};
 
-  // ================= SELECT USER =================
-  const selectAssignment = (a) => {
-    setSelectedAssignmentId(a._id);
+// ================= SELECT USER =================
+const selectAssignment = async (assignment) => {
+  setSelectedAssignmentId(assignment._id);
 
-    setPageData({
-      user: a.user || {},
-      userProfile: a.userProfile || {},
-      goal: {
-        _id: a.goal?._id,
-        goalType: a.goal?.goalType,
-        goalName: a.plan?.planName,
-        planType: a.plan?.planType,
-        amount: a.plan?.amount,
-        startDate: a.startDate,
-        endDate: a.endDate,
-      },
-      workouts: a.workouts || [],
-    });
-  };
+  // Fetch workouts of selected user
+  const workouts = await fetchUserWorkouts(assignment);
+
+  setPageData({
+    user: assignment.user || {},
+    userProfile: assignment.userProfile || {},
+    goal: {
+      _id: assignment.goal?._id,
+      goalType: assignment.goal?.goalType,
+      goalName: assignment.plan?.planName,
+      planType: assignment.plan?.planType,
+      amount: assignment.plan?.amount,
+      startDate: assignment.startDate,
+      endDate: assignment.endDate,
+    },
+    workouts: workouts, // <-- set workouts here
+  });
+};
+
+
+
 
   // ================= HELPERS =================
   const addExercise = () => {
@@ -133,6 +151,14 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
   if (error) {
     return <div className="p-6 text-center text-red-500">{error}</div>;
   }
+
+
+  // ================= NORMALIZED WORKOUTS =================
+const validWorkouts = Array.isArray(workouts)
+  ? workouts.filter(
+      (w) => w.status === "ACTIVE" || w.status === "COMPLETED"
+    )
+  : [];
 
   // ================= UI =================
   return (
@@ -255,30 +281,52 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
         <p className="text-2xl font-bold">{goal.goalType || "No Goal Assigned"}</p>
       </div>
 
-      {/* ===== WORKOUTS ===== */}
-      <div className="bg-white rounded-2xl shadow-md p-6">
-        <div className="flex justify-between mb-4">
-          <h3 className="text-xl font-semibold">🏋️ Workout Plan</h3>
-          <button
-            onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-2 rounded-lg"
+    {/* ===== WORKOUTS ===== */}
+
+<div className="bg-white rounded-2xl shadow-md p-6">
+  <div className="flex justify-between mb-4">
+    <h3 className="text-xl font-semibold">🏋️ Workout Plan</h3>
+    <button
+      onClick={() => setShowModal(true)}
+      className="bg-blue-600 text-white px-2 py-2 rounded-lg"
+    >
+      + Add Workout
+    </button>
+  </div>
+
+  {Array.isArray(validWorkouts) && validWorkouts.length > 0 ? (
+    validWorkouts.map((w, i) => (
+      <div key={w._id} className="mb-4 border-b border-gray-200 pb-3">
+        <div className="flex justify-between items-center mb-2">
+          <span className="font-semibold">{w.category}</span>
+          <span
+            className={`text-xs font-medium px-2 py-1 rounded-full ${
+              w.status === "COMPLETED"
+                ? "bg-green-100 text-green-700"
+                : "bg-blue-100 text-blue-700"
+            }`}
           >
-            + Add Workout
-          </button>
+            {w.status}
+          </span>
         </div>
 
-        {workouts.length === 0 ? (
-          <p className="text-gray-500">*****************</p>
+        {Array.isArray(w.exercises) && w.exercises.length > 0 ? (
+          w.exercises.map((ex, j) => (
+            <p key={`${i}-${j}`} className="text-sm">
+              • {ex.name} ({ex.category}) — Sets: {ex.sets || "-"}, Reps: {ex.reps || "-"}
+            </p>
+          ))
         ) : (
-          workouts.map((w, i) =>
-            w.exercises.map((ex, j) => (
-              <p key={`${i}-${j}`} className="text-sm">
-                • {ex.name} ({ex.category})
-              </p>
-            ))
-          )
+          <p className="text-gray-500 text-sm italic">No exercises added for this workout.</p>
         )}
       </div>
+    ))
+  ) : (
+    <p className="text-gray-500 text-sm italic">No workouts assigned yet.</p>
+  )}
+</div>
+
+
 
       {/* ===== ADD WORKOUT MODAL ===== */}
       {showModal && (

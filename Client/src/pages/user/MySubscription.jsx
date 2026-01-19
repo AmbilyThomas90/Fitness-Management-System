@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
+import { useNavigate } from "react-router-dom";
+import { Target, CalendarCheck } from "lucide-react";
+
 
 const MySubscription = () => {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchSubscription = async () => {
       try {
@@ -54,33 +57,58 @@ const MySubscription = () => {
     subscription;
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow rounded">
-      <h1 className="text-2xl font-bold mb-4">My Subscription</h1>
+<div className="mx-auto max-w-xl rounded-xl bg-white p-6 shadow">
+  <h1 className="mb-4 text-2xl font-semibold text-slate-800">
+    My Subscription
+  </h1>
 
-      <div className="space-y-2 text-gray-700">
-        <p>
-          <strong>Plan:</strong> {plan.planName}
-        </p>
-        <p>
-          <strong>Plan Type:</strong> {planType}
-        </p>
-        <p>
-          <strong>Amount:</strong> ₹{planAmount}
-        </p>
-        <p>
-          <strong>Status:</strong>{" "}
-          <span className="text-green-600 font-semibold">{status}</span>
-        </p>
-        <p>
-          <strong>Start Date:</strong>{" "}
-          {new Date(startDate).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>End Date:</strong>{" "}
-          {new Date(endDate).toLocaleDateString()}
-        </p>
-      </div>
-    </div>
+  {/* Subscription Details */}
+  <div className="space-y-2 text-slate-700">
+    <p>
+      <strong>Plan:</strong> {plan.planName}
+    </p>
+    <p>
+      <strong>Plan Type:</strong> {planType}
+    </p>
+    <p>
+      <strong>Amount:</strong> ₹{planAmount}
+    </p>
+    <p>
+      <strong>Status:</strong>{" "}
+      <span className="font-semibold text-emerald-600">
+        {status}
+      </span>
+    </p>
+    <p>
+      <strong>Start Date:</strong>{" "}
+      {new Date(startDate).toLocaleDateString()}
+    </p>
+    <p>
+      <strong>End Date:</strong>{" "}
+      {new Date(endDate).toLocaleDateString()}
+    </p>
+  </div>
+
+  {/* Action Buttons */}
+  <div className="mt-6 flex gap-3">
+    <button
+      onClick={() => navigate("/user/goals")}
+      className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+    >
+      <Target className="h-4 w-4" />
+      Set Goal
+    </button>
+
+    <button
+      onClick={() => navigate("/user/select-trainer")}
+      className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+    >
+      <CalendarCheck className="h-4 w-4" />
+      Trainer Appointment
+    </button>
+  </div>
+</div>
+
   );
 };
 

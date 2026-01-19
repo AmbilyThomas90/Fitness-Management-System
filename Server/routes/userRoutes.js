@@ -21,7 +21,7 @@ import { getAllTrainersForUser } from "../controllers/trainerController.js";
 import { getMySubscription } from "../controllers/subscriptionController.js";
 import { getUserDashboard } from "../controllers/dashboardController.js";
 import {getMyPayments} from "../controllers/paymentController.js";
-import { getUserWorkouts } from "../controllers/workoutController.js";
+import { getUserWorkouts,updateWorkoutStatus } from "../controllers/workoutController.js";
 
 const router = express.Router();
 
@@ -64,7 +64,11 @@ router.get("/dashboard", protect, authorizeRole("user"), getUserDashboard);
  router.get("/my-payments", protect,  authorizeRole("user"), getMyPayments);
 
  //--------------User- Workout ----------------//
-router.get("/workouts", protect, getUserWorkouts);
+router.get("/workouts", protect, authorizeRole("user"), getUserWorkouts);
+
+// Update status of a specific workout  --By User
+router.patch("/work/:workoutId/status", protect, authorizeRole("user"), updateWorkoutStatus);
+
 
 // // Get logged-in user's payments
 

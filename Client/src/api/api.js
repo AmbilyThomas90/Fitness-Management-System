@@ -1,27 +1,27 @@
 import axios from "axios";
 
 
-// ------ production URL for deployed site------------/
-
-const api = axios.create({
-  baseURL: "https://fitness-management-system-yl6n.onrender.com/api", // backend base URL
-  headers: {
-    "Content-Type": "application/json",
-   
-  },
-});
-// --------------Use local for development---------//
-// const BASE_URL = window.location.hostname === "localhost"
-//   ? "http://localhost:5000/api"
-//   : "https://fitness-management-system-yl6n.onrender.com/api";
+// // ------ production URL for deployed site------------//
 
 // const api = axios.create({
-//   baseURL: BASE_URL,
-//   withCredentials: true,
+//   baseURL: "https://fitness-management-system-yl6n.onrender.com/api", // backend base URL
 //   headers: {
 //     "Content-Type": "application/json",
+   
 //   },
 // });
+//--------------Use local for development---------//
+const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:5000/api"
+  : "https://fitness-management-system-yl6n.onrender.com/api";
+
+const api = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 /* =========================
    REQUEST INTERCEPTOR
