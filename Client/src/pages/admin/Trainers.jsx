@@ -64,40 +64,42 @@ const Trainers = () => {
             className="flex justify-between items-center border p-4 rounded-lg"
           >
             {/* Trainer Info */}
-            <div className="flex items-start gap-4">
-                <img
-  src={`${BACKEND_URL}/uploads/${trainer.profileImage}`}
-  alt={trainer.name}
-  className="w-20 h-20 rounded-full object-cover border"
-  onError={(e) => {
-    e.currentTarget.src = "/default-avatar.png"; // public image
-  }}
-/>
+          <div className="flex items-start gap-4">
+  <img
+    src={
+      trainer?.profileImage
+        ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+        : "/default-avatar.png"
+    }
+    alt={trainer?.user?.name || "Trainer"}
+    className="w-20 h-20 rounded-full object-cover border"
+    onError={(e) => {
+      e.currentTarget.onerror = null; // 🔒 prevent infinite loop
+      e.currentTarget.src = "/default-avatar.png";
+    }}
+  />
 
+  <div>
+    <p className="font-semibold">Name: {trainer.user?.name}</p>
+    <p>Email: {trainer.user?.email}</p>
+    <p>Phone: {trainer.phoneNumber}</p>
+    <p>Specialization: {trainer.specialization}</p>
+    <p>Experience: {trainer.experience} yrs</p>
 
+    <span
+      className={`inline-block mt-2 px-2 py-1 text-xs rounded ${
+        trainer.status === "active"
+          ? "bg-green-100 text-green-700"
+          : trainer.status === "inactive"
+          ? "bg-red-100 text-red-700"
+          : "bg-yellow-100 text-yellow-700"
+      }`}
+    >
+      {trainer.status?.toUpperCase()}
+    </span>
+  </div>
+</div>
 
-                {/* className="w-20 h-20 rounded-full object-cover border"
-              /> */}
-
-              <div>
-                <p className="font-semibold">Name: {trainer.user?.name}</p>
-                <p>Email: {trainer.user?.email}</p>
-                <p>Phone: {trainer.phoneNumber}</p>
-                <p>Specialization: {trainer.specialization}</p>
-                <p>Experience: {trainer.experience} yrs</p>
-
-                <span
-                  className={`inline-block mt-2 px-2 py-1 text-xs rounded ${trainer.status === "active"
-                      ? "bg-green-100 text-green-700"
-                      : trainer.status === "inactive"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                >
-                  {trainer.status.toUpperCase()}
-                </span>
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex gap-2">
