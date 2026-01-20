@@ -65,19 +65,20 @@ const Trainers = () => {
           >
             {/* Trainer Info */}
           <div className="flex items-start gap-4">
-  <img
-    src={
-      trainer?.profileImage
-        ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
-        : "/default-avatar.png"
-    }
-    alt={trainer?.user?.name || "Trainer"}
-    className="w-20 h-20 rounded-full object-cover border"
-    onError={(e) => {
-      e.currentTarget.onerror = null; // 🔒 prevent infinite loop
-      e.currentTarget.src = "/default-avatar.png";
-    }}
-  />
+const avatarSrc = trainer?.profileImage
+  ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+  : "/default-avatar.png";
+
+<img
+  src={avatarSrc}
+  alt={trainer?.user?.name || "Trainer"}
+  className="w-20 h-20 rounded-full object-cover border"
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = "/default-avatar.png";
+  }}
+/>
+
 
   <div>
     <p className="font-semibold">Name: {trainer.user?.name}</p>
