@@ -48,15 +48,16 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      
+      console.warn("Session expired. Logging out...");
       localStorage.removeItem("token");
       localStorage.removeItem("role");
-     
+      
+      // ✅ Optional: Force redirect to login page
+      window.location.href = "/login"; 
     }
     return Promise.reject(error);
   }
 );
-
 
 // see exactly what URL the frontend is hitting and the response from the backend.
 api.interceptors.request.use((config) => {
