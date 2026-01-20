@@ -9,7 +9,7 @@ const UserNutrition = () => {
   // ================= FETCH USER NUTRITION =================
   const fetchNutrition = async () => {
     try {
-      const res = await api.get("/nutrition/nutrition");
+      const res = await api.get("/nutrition/usernutrition");
       setNutritionList(res.data.nutrition || []);
     } catch (err) {
       console.error("Error fetching nutrition:", err);
