@@ -26,14 +26,14 @@ const app = express();
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // url vercel
-app.use(
-  cors({
-    origin: "https://fitness-management-system-zeta.vercel.app",
-    credentials: true,
-   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://fitness-management-system-zeta.vercel.app",
+//     credentials: true,
+//    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
 
 // url localhost and render.com 
 // app.use(
@@ -48,7 +48,7 @@ app.use(
 //     allowedHeaders: ["Content-Type", "Authorization"],
 //   })
 // );
-// app.use(express.json());
+app.use(express.json());
 
 connectDB(); // connect DB
 
