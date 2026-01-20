@@ -2,7 +2,7 @@ import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorizeRole } from "../middleware/roleMiddleware.js";
 import {
-  createNutrition, 
+  createNutrition,getUserNutrition 
 } from "../controllers/nutritionController.js";
 
 const router = express.Router();
@@ -14,7 +14,8 @@ router.post(
   authorizeRole("trainer"),
   createNutrition
 );
-
+// Get user nutrition --By User
+router.get("/nutrition", protect, authorizeRole("user"),getUserNutrition);
 // // User / Trainer get nutrition by user
 // router.get(
 //   "/user-nutrition/:userId",
