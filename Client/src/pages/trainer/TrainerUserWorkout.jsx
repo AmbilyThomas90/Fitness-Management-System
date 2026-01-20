@@ -294,36 +294,95 @@ const validWorkouts = Array.isArray(workouts)
     </button>
   </div>
 
-  {Array.isArray(validWorkouts) && validWorkouts.length > 0 ? (
-    validWorkouts.map((w, i) => (
-      <div key={w._id} className="mb-4 border-b border-gray-200 pb-3">
-        <div className="flex justify-between items-center mb-2">
-          <span className="font-semibold">{w.category}</span>
-          <span
-            className={`text-xs font-medium px-2 py-1 rounded-full ${
-              w.status === "COMPLETED"
-                ? "bg-green-100 text-green-700"
-                : "bg-blue-100 text-blue-700"
-            }`}
-          >
-            {w.status}
-          </span>
+{Array.isArray(validWorkouts) && validWorkouts.length > 0 ? (
+  <div className="space-y-6">
+    {validWorkouts.map((w, i) => (
+      <div
+        key={w._id}
+        className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
+      >
+        {/* Workout Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide">
+              Workout Category
+            </p>
+            <p className="text-base font-semibold text-gray-900">
+              {w.category}
+            </p>
+          </div>
+
+          <div className="text-right  ">
+            <p className="text-xs font-medium  text-gray-500 uppercase tracking-wide">
+              Status
+            </p>
+            <span
+              className={`inline-block mt-1 text-xs font-medium px-3 py-1 rounded-full ${
+                w.status === "COMPLETED"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-blue-100 text-blue-700"
+              }`}
+            >
+              {w.status}
+            </span>
+          </div>
         </div>
 
+        {/* Exercises Table */}
         {Array.isArray(w.exercises) && w.exercises.length > 0 ? (
-          w.exercises.map((ex, j) => (
-            <p key={`${i}-${j}`} className="text-sm">
-              • {ex.name} ({ex.category}) — Sets: {ex.sets || "-"}, Reps: {ex.reps || "-"}
-            </p>
-          ))
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-gray-200 rounded-lg">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left px-4 py-2 font-medium text-gray-600">
+                    Exercise Name
+                  </th>
+                  <th className="text-left px-4 py-2 font-medium text-gray-600">
+                    Category
+                  </th>
+                  <th className="text-center px-4 py-2 font-medium text-gray-600">
+                    Sets
+                  </th>
+                  <th className="text-center px-4 py-2 font-medium text-gray-600">
+                    Reps
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {w.exercises.map((ex, j) => (
+                  <tr key={`${i}-${j}`} className="border-t">
+                    <td className="px-4 py-2 text-gray-900 font-medium">
+                      {ex.name}
+                    </td>
+                    <td className="px-4 py-2 text-gray-600">
+                      {ex.category || w.category}
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      {ex.sets || "-"}
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      {ex.reps || "-"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
-          <p className="text-gray-500 text-sm italic">No exercises added for this workout.</p>
+          <p className="text-gray-400 text-sm italic mt-3">
+            No exercises added for this workout.
+          </p>
         )}
       </div>
-    ))
-  ) : (
-    <p className="text-gray-500 text-sm italic">No workouts assigned yet.</p>
-  )}
+    ))}
+  </div>
+) : (
+  <p className="text-gray-400 text-sm italic text-center">
+    No workouts assigned yet.
+  </p>
+)}
+
 </div>
 
 

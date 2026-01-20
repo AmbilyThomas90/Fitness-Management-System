@@ -26,11 +26,11 @@ const nutritionSchema = new mongoose.Schema(
       required: true
     },
 
-    meal: {
-      type: String,
-      required: true
-    },
-
+   meal: {
+  type: String,
+  enum: ["BREAKFAST", "LUNCH", "DINNER", "SNACK"],
+  required: true
+},
     calories: {
       type: Number,
       required: true

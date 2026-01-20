@@ -19,34 +19,35 @@ import progressRoutes from"./routes/progressRoutes.js";
 import  trainerAssignmentRoutes from"./routes/trainerAssignmentRoutes.js";
 import workoutRoutes from "./routes/workoutRoutes.js";
 import nutritionRoutes from "./routes/nutritionRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
 
 
 const app = express();
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // url vercel
-app.use(
-  cors({
-    origin: "https://fitness-management-system-zeta.vercel.app",
-    credentials: true,
-   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// url localhost and render.com 
 // app.use(
 //   cors({
-//     origin: [
-//        "http://localhost:5174",
-//        "http://localhost:5173",
-//       "https://fitness-management-system-yl6n.onrender.com",
-//     ],
+//     origin: "https://fitness-management-system-zeta.vercel.app",
 //     credentials: true,
-//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 //     allowedHeaders: ["Content-Type", "Authorization"],
 //   })
 // );
+
+// url localhost and render.com 
+app.use(
+  cors({
+    origin: [
+       "http://localhost:5174",
+       "http://localhost:5173",
+      "https://fitness-management-system-yl6n.onrender.com",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 connectDB(); // connect DB
@@ -63,7 +64,7 @@ app.use("/api/progress", progressRoutes)
 app.use("/api/trainer-assignment", trainerAssignmentRoutes);
 app.use("/api/work", workoutRoutes);
 app.use("/api/nutrition",nutritionRoutes);
-
+app.use("/api/feedback", feedbackRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;

@@ -57,7 +57,14 @@ return (
     
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-extrabold mb-10 text-center text-gray-900 tracking-tight">
+       {/* 🔙 Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-6 text-sm font-semibold text-gray-100 hover:text-green-200 flex items-center gap-1"
+      >
+        ← Back
+      </button>
+      <h2 className="text-3xl font-extrabold mb-10 text-center text-gray-200 tracking-tight">
         Choose Your Fitness Journey
       </h2>
 

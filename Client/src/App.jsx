@@ -43,6 +43,8 @@ import MySubscription from "./pages/user/MySubscription";
 import SelectTrainer  from "./pages/user/SelectTrainer";
 import MyPayment from "./pages/user/UserPaymentDetails";
 import Workouts from "./pages/user/UserWorkouts";
+import Nutrition from "./pages/user/UserNutrition";
+import Feedback from "./pages/user/UserFeedback";
 
 /*  TRAINER PAGES*/
 import TrainerLayout from "./pages/trainer/TrainerLayout";
@@ -51,6 +53,9 @@ import TrainerProfile from "./pages/trainer/TrainerProfile"; // Trainer Profile
  import TrainerUsers from "./pages/trainer/TrainerUsers";
 import TrainerUsersApprove from "./pages/trainer/TrainerUsersApprove";
 import TrainerUsersWorkout from "./pages/trainer/TrainerUserWorkout";
+import TrainerUsersNutrition from "./pages/trainer/TrainerUserNutrition";
+import TrainerFeedback from "./pages/trainer/TrainerFeedback";
+import TrainerUserProgress from "./pages/trainer/TrainerApprovedUsersProgress";
 
 // import Progress from "./pages/user/Progress";
 // import Workouts from "./pages/user/Workouts";
@@ -109,7 +114,9 @@ function App() {
     <Route path="trainer-users" element={<TrainerUsers />} />
     <Route path="users-approve" element={<TrainerUsersApprove />} />
     <Route path="workout" element={<TrainerUsersWorkout />} />
-    
+    <Route path="nutrition" element={<TrainerUsersNutrition />} />
+    <Route path="trainer-feedback" element={<TrainerFeedback />} />
+    <Route path="user-progress" element={<TrainerUserProgress />} />
     {/* etc */}
   </Route>
 </Route>
@@ -119,7 +126,7 @@ function App() {
 <Route path="/trainer/assign-plan" element={<AssignPlan />} />
 <Route path="/trainer/progress" element={<TrainerProgress />} />
 <Route path="/trainer/suggestions" element={<TrainerSuggestions />} />
-<Route path="/trainer/feedback" element={<TrainerFeedback />} /> */}
+ */}
 
 
        {/* ================= USER DASHBOARD ================= */}
@@ -150,17 +157,18 @@ function App() {
   <Route path="progress" element={<Progress />} />
   <Route path="select-trainer" element={<SelectTrainer />} />
    <Route path="workouts" element={<Workouts />} />
-
+  <Route path="nutrition" element={<Nutrition />} />
    <Route path="payments" element={<MyPayment />} />
+     <Route path="feedback" element={<Feedback />} />
 </Route>
   {/* Future pages */}
   {/*
  
-  <Route path="nutrition" element={<Nutrition />} />
+
   <Route path="trainers" element={<Trainers />} />
   <Route path="messages" element={<Messages />} />
  
-  <Route path="feedback" element={<Feedback />} />
+
   */}
 
 

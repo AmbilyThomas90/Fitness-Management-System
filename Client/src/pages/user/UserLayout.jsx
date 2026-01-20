@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar";
 
 const UserLayout = () => {
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-800 overflow-hidden">
       <Sidebar role="user" />
 
       <div className="flex-1 flex flex-col overflow-hidden">

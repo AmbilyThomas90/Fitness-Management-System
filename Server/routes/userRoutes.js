@@ -22,6 +22,7 @@ import { getMySubscription } from "../controllers/subscriptionController.js";
 import { getUserDashboard } from "../controllers/dashboardController.js";
 import {getMyPayments} from "../controllers/paymentController.js";
 import { getUserWorkouts,updateWorkoutStatus } from "../controllers/workoutController.js";
+import {getUserNutrition} from "../controllers/nutritionController.js";
 
 const router = express.Router();
 
@@ -53,6 +54,7 @@ router.delete("goal/:id", protect, authorizeRole("user"),deleteGoal);
 // GET all active trainers
 router.get("/trainers", protect,authorizeRole("user"), getAllTrainersForUser);
 
+//-------------USER Get Aproved  Trainer---------------//
 
 //------------- GET active subscription of logged-in user---------------//
 router.get("/my-subscription", protect, authorizeRole("user"), getMySubscription);
@@ -68,6 +70,8 @@ router.get("/workouts", protect, authorizeRole("user"), getUserWorkouts);
 
 // Update status of a specific workout  --By User
 router.patch("/work/:workoutId/status", protect, authorizeRole("user"), updateWorkoutStatus);
+// Get user nutrition --By User
+router.get("/nutrition", protect, authorizeRole("user"),getUserNutrition);
 
 
 // // Get logged-in user's payments

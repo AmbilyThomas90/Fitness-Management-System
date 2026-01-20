@@ -10,7 +10,16 @@ export const getUserDashboard = async (req, res) => {
     const userId = req.user._id || req.user.id;
 
     // =====================
-    // 1️⃣ Subscription
+    //  USER INFO ( FIX)
+    // =====================
+    const userData = {
+      id: userId,
+      name: req.user.name,
+      email: req.user.email,
+    };
+
+    // =====================
+    //  Subscription
     // =====================
     const subscription = await Subscription.findOne({
       user: userId,
@@ -21,7 +30,7 @@ export const getUserDashboard = async (req, res) => {
       .lean();
 
     // =====================
-    // 2️⃣ Trainer Assignment (LATEST)
+    //  Trainer Assignment (LATEST)
     // =====================
     const trainerAssignment = await TrainerAssignment.findOne({
       user: userId,
@@ -30,14 +39,14 @@ export const getUserDashboard = async (req, res) => {
         path: "trainer",
         populate: {
           path: "user",
-          select: "name email",
+          select: "name email phoneNumber",
         },
       })
       .sort({ createdAt: -1 })
       .lean();
 
     // =====================
-    // 3️⃣ Trainer Data (WITH STATUS)
+    //  Trainer Data
     // =====================
     let trainerData = null;
 
@@ -45,18 +54,17 @@ export const getUserDashboard = async (req, res) => {
       trainerData = {
         name: trainerAssignment.trainer?.user?.name || null,
         email: trainerAssignment.trainer?.user?.email || null,
+        phoneNumber: trainerAssignment.trainer?.phoneNumber || null,
         specialization:
           trainerAssignment.trainer?.specialization || "General Fitness",
-
-        // 🔥 IMPORTANT: status exposed to frontend
-        status: trainerAssignment.status, // active | approve | rejected | completed
+        status: trainerAssignment.status, // active | approved | rejected | completed
         timeSlot: trainerAssignment.timeSlot,
         assignedAt: trainerAssignment.createdAt,
       };
     }
 
     // =====================
-    // 4️⃣ Subscription Data
+    //  Subscription Data
     // =====================
     let subscriptionData = null;
 
@@ -75,13 +83,14 @@ export const getUserDashboard = async (req, res) => {
     }
 
     // =====================
-    // 5️⃣ Response
+    //  FINAL RESPONSE 
     // =====================
     res.status(200).json({
+      user: userData,          //  REQUIRED FOR WELCOME MESSAGE
       subscription: subscriptionData,
       trainer: trainerData,
-      workoutsCompleted: 24, // mock / future logic
-      unreadMessages: 3,     // mock / future logic
+      workoutsCompleted: 24,   // mock
+      unreadMessages: 3,       // mock
     });
   } catch (error) {
     console.error("User dashboard error:", error);
@@ -91,3 +100,4 @@ export const getUserDashboard = async (req, res) => {
     });
   }
 };
+

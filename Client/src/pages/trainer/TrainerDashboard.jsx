@@ -106,9 +106,10 @@ const TrainerDashboard = () => {
     { to: "users-approve", label: "Clients Approvals" },
     { to: "trainer-users", label: "All Clients" },
     { to: "workout", label: "Assign Workout" },
-    { to: "progress", label: "Monitor Progress" },
-    { to: "suggestions", label: "Suggestions" },
-    { to: "feedback", label: "Feedback" }
+    { to: "nutrition", label: "Assign Nutrition" },
+    { to: "user-progress", label: "Monitor Progress" },
+    // { to: "suggestions", label: "Suggestions" },
+    { to: "trainer-feedback", label: "Feedback" }
   ].map((item) => (
     <Link
       key={item.to}

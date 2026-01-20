@@ -80,7 +80,7 @@ const SelectTrainer = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto bg-gray-100">
       <h2 className="text-2xl font-bold mb-6 text-center">
         Select Your Trainer
       </h2>

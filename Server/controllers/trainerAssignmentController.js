@@ -3,7 +3,7 @@ import Trainer from "../models/Trainer.js";
 import User from "../models/User.js";
 import UserProfile from "../models/UserProfile.js";
 import Goal from "../models/Goal.js";
-// User  select and appointment for trainer
+// User<----  select and appointment for trainer
 export const assignTrainer = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -95,7 +95,7 @@ export const assignTrainer = async (req, res) => {
 };
 
 
-// Get all users assigned to logged-in trainer
+// Get all users assigned to logged-in trainer---->Trainer
 // Triner approved users  // view all Users approved by trainer  and trainer'sClient
 export const getMyAssignedUsers = async (req, res) => {
   try {
@@ -142,6 +142,82 @@ export const getMyAssignedUsers = async (req, res) => {
       success: false,
       message: "Server error",
       error: error.message,
+    });
+  }
+};
+// GET logged-in user's approved trainer--->User
+export const getMyApprovedTrainer = async (req, res) => {
+  try {
+    console.log("➡️ getMyApprovedTrainer called");
+
+    const userId = req.user?._id;
+    console.log("👤 Logged-in User ID:", userId);
+
+    if (!userId) {
+      console.log("❌ User not authenticated");
+      return res.status(401).json({
+        success: false,
+        message: "User not authenticated",
+      });
+    }
+
+    console.log("🔍 Searching for approved trainer assignment...");
+
+    // Find approved trainer assignment + populate trainer -> user
+    const trainerAssignment = await TrainerAssignment.findOne({
+      user: userId,
+      status: "approved",
+    })
+      .populate({
+        path: "trainer",
+        populate: {
+          path: "user",
+          select: "name email",
+        },
+      })
+      .lean();
+
+    console.log("📦 Trainer Assignment Result:", trainerAssignment);
+
+    if (!trainerAssignment) {
+      console.log("⚠️ No approved trainer assignment found");
+      return res.status(404).json({
+        success: false,
+        message: "No approved trainer found for this user",
+      });
+    }
+
+    console.log("🧑‍🏫 Trainer Object:", trainerAssignment.trainer);
+    console.log("👤 Trainer User Object:", trainerAssignment.trainer?.user);
+
+    // =====================
+    // Trainer Data
+    // =====================
+    const trainerData = {
+      trainerId: trainerAssignment.trainer?._id || null,
+      name: trainerAssignment.trainer?.user?.name || null,
+      email: trainerAssignment.trainer?.user?.email || null,
+      phoneNumber: trainerAssignment.trainer?.phoneNumber || null,
+      specialization:
+        trainerAssignment.trainer?.specialization || "General Fitness",
+      status: trainerAssignment.status,
+      timeSlot: trainerAssignment.timeSlot,
+      assignedAt: trainerAssignment.createdAt,
+      planName: trainerAssignment.plan,
+      goal: trainerAssignment.goal,
+    };
+
+    console.log("✅ Final Trainer Data Sent to Frontend:", trainerData);
+
+    res.status(200).json({
+      success: true,
+      trainerAssignment: trainerData,
+    });
+  } catch (error) {
+    console.error("🔥 Get approved trainer error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
 };

@@ -169,9 +169,6 @@ export const getAllTrainers = async (req, res) => {
   }
 };
 
-
-
-
 // export const getAllTrainers = async (req, res) => {
 //   try {
 //     const trainers = await Trainer.find()
