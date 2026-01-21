@@ -45,71 +45,78 @@ useEffect(() => {
   if (loading) return <div className="p-6 text-center">Loading payment records...</div>;
 
   return (
-    <div className="p-6">
-  <h2 className="text-2xl font-bold mb-4">All Payments</h2>
+ <div className="p-4 md:p-6">
+  {/* Section Header */}
+  <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+    All Payments
+  </h2>
 
-  <div className="overflow-x-auto shadow rounded-lg">
-    <table className="w-full border-collapse bg-white">
-      <thead className="bg-gray-200">
+  {/* Table Container */}
+  <div className="overflow-x-auto shadow-lg rounded-lg">
+    <table className="w-full min-w-[800px] border-collapse bg-white dark:bg-slate-800">
+      <thead className="bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-200">
         <tr>
-          <th className="p-3 border">User</th>
-          <th className="p-3 border">Plan</th>
-          <th className="p-3 border">Amount</th>
-          <th className="p-3 border">Start</th>
-          <th className="p-3 border">End</th>
-          <th className="p-3 border">Plan Status</th>
-          <th className="p-3 border">Payment Status</th>
-          <th className="p-3 border">Method</th>
+          <th className="p-3 text-left">User</th>
+          <th className="p-3 text-left">Plan</th>
+          <th className="p-3 text-left">Amount</th>
+          <th className="p-3 text-left">Service Fee</th>
+          <th className="p-3 text-left">Trainer Income</th>
+          <th className="p-3 text-left">Start</th>
+          <th className="p-3 text-left">End</th>
+          <th className="p-3 text-left">Plan Status</th>
+          <th className="p-3 text-left">Payment Status</th>
+          <th className="p-3 text-left">Method</th>
         </tr>
       </thead>
 
       <tbody>
         {payments.length === 0 ? (
           <tr>
-            <td colSpan="8" className="p-4 text-center">
+            <td colSpan="10" className="p-4 text-center text-gray-500 dark:text-gray-300">
               No payment history found.
             </td>
           </tr>
         ) : (
           payments.map((p) => (
-            <tr
-              key={p._id}
-              className="border-t text-center hover:bg-gray-50"
-            >
+            <tr key={p._id} className="border-t hover:bg-gray-50 dark:hover:bg-slate-700 transition">
               {/* USER */}
-              <td className="p-3 border">
-                {p.userName || "Deleted User"}
-              </td>
+              <td className="p-3">{p.userName || "Deleted User"}</td>
 
               {/* PLAN */}
-              <td className="p-3 border">{p.planName}</td>
+              <td className="p-3">{p.planName}</td>
 
               {/* AMOUNT */}
-              <td className="p-3 border">₹{p.planAmount}</td>
+              <td className="p-3">₹{p.planAmount}</td>
+
+              {/* SERVICE FEE */}
+              <td className="p-3">₹{p.platformFee}</td>
+
+              {/* TRAINER INCOME */}
+              <td className="p-3">₹{p.trainerEarning}</td>
 
               {/* START DATE */}
-              <td className="p-3 border">
+              <td className="p-3">
                 {p.subscriptionStartDate
                   ? new Date(p.subscriptionStartDate).toLocaleDateString()
                   : "-"}
               </td>
 
               {/* END DATE */}
-              <td className="p-3 border">
+              <td className="p-3">
                 {p.subscriptionEndDate
                   ? new Date(p.subscriptionEndDate).toLocaleDateString()
                   : "-"}
               </td>
 
               {/* PLAN STATUS */}
-              <td className="p-3 border">
+              <td className="p-3">
                 <span
-                  className={`px-2 py-1 rounded text-xs font-bold ${
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
                     p.subscriptionStatus === "active"
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-green-100 text-green-700 dark:bg-green-600/20 dark:text-green-400"
                       : p.subscriptionStatus === "expired"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-gray-100 text-gray-700"
+                      ? "bg-red-100 text-red-700 dark:bg-red-600/20 dark:text-red-400"
+                      : "bg-gray-100 text-gray-700 dark:bg-gray-600/20 dark:text-gray-300"
                   }`}
                 >
                   {p.subscriptionStatus?.toUpperCase() || "N/A"}
@@ -117,14 +124,14 @@ useEffect(() => {
               </td>
 
               {/* PAYMENT STATUS */}
-              <td className="p-3 border">
+              <td className="p-3">
                 <span
-                  className={`px-2 py-1 rounded text-xs font-bold ${
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
                     p.paymentStatus === "success"
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-green-100 text-green-700 dark:bg-green-600/20 dark:text-green-400"
                       : p.paymentStatus === "pending"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-red-100 text-red-700"
+                      ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-600/20 dark:text-yellow-400"
+                      : "bg-red-100 text-red-700 dark:bg-red-600/20 dark:text-red-400"
                   }`}
                 >
                   {p.paymentStatus?.toUpperCase()}
@@ -132,9 +139,7 @@ useEffect(() => {
               </td>
 
               {/* PAYMENT METHOD */}
-              <td className="p-3 border uppercase text-xs font-bold">
-                {p.paymentMethod}
-              </td>
+              <td className="p-3 uppercase text-xs font-semibold">{p.paymentMethod}</td>
             </tr>
           ))
         )}
@@ -142,6 +147,7 @@ useEffect(() => {
     </table>
   </div>
 </div>
+
 
   );
 };

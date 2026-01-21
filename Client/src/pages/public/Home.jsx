@@ -8,7 +8,7 @@ import Footer from "../../components/Footer";
 
 import Login from "../../pages/auth/Login";
 import ForgotPassword from "../../pages/auth/ForgotPassword";
-import Register from "../../pages/Register";
+import Register from "../../pages/auth/Register";
 import TrainerRegister from "../../pages/auth/TrainerRegister";
 import PlanListModal from "../../components/PlanListModal";
 

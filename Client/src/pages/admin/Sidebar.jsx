@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { FaTachometerAlt, FaUsers, FaUserTie, FaClipboardList, FaDollarSign } from "react-icons/fa";
 
 const Sidebar = () => {
   const navLinkClasses = ({ isActive }) =>
-    `flex items-center px-4 py-3 rounded-lg transition-all duration-200
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
      ${
        isActive
          ? "bg-indigo-600 text-white shadow-lg"
@@ -10,32 +11,33 @@ const Sidebar = () => {
      }`;
 
   return (
-    <aside className="w-64 h-screen bg-gray-900 p-4 flex flex-col">
+<aside className="w-64 min-h-[120vh] max-h-[1600px] overflow-y-auto bg-gray-900 p-4 flex flex-col">
+
       {/* Logo */}
-      <h2 className="text-2xl font-bold text-white mb-8 text-center">
+      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center tracking-tight">
         Admin Panel
       </h2>
 
       {/* Navigation */}
-      <nav className="space-y-2">
+      <nav className="flex flex-col gap-2">
         <NavLink to="/admin/dashboard" end className={navLinkClasses}>
-          Dashboard
+          <FaTachometerAlt className="w-5 h-5" /> Dashboard
         </NavLink>
 
-        <NavLink to="/admin/dashboard/users" className={navLinkClasses} >
-          Users
+        <NavLink to="/admin/dashboard/users" className={navLinkClasses}>
+          <FaUsers className="w-5 h-5" /> Users
         </NavLink>
 
         <NavLink to="/admin/dashboard/trainers" className={navLinkClasses}>
-          Trainers
+          <FaUserTie className="w-5 h-5" /> Trainers
         </NavLink>
 
         <NavLink to="/admin/dashboard/plans" className={navLinkClasses}>
-          Plans
+          <FaClipboardList className="w-5 h-5" /> Plans
         </NavLink>
 
         <NavLink to="/admin/dashboard/adminpayments" className={navLinkClasses}>
-          Payments
+          <FaDollarSign className="w-5 h-5" /> Payments
         </NavLink>
 
         {/* <NavLink to="/admin/dashboard/analytics" className={navLinkClasses}>
@@ -45,7 +47,7 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className="mt-auto text-sm text-gray-400 text-center">
-        © 2025 Admin
+        © {new Date().getFullYear()} Admin
       </div>
     </aside>
   );

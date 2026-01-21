@@ -4,15 +4,38 @@ import Navbar from "../../components/Navbar";
 
 const AdminDashboard = () => {
   return (
-    <div className="min-h-screen bg-gray-100">     {/* Global Navbar */}
-     <Navbar />
-    <div className="flex">
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex flex-col">
+
+  {/* Global Navbar */}
+  <Navbar />
+
+  {/* Main content area */}
+  <div className="flex flex-1 overflow-hidden">
+
+    {/* Sidebar */}
+    <aside className="
+        hidden md:block
+        w-64
+        bg-white dark:bg-slate-800
+        border-r border-gray-200 dark:border-slate-700
+        h-full
+        flex-shrink-0
+      "
+    >
       <Sidebar />
-      <main className="flex-1 p-6">
-        <Outlet /> {/*  admin pages load here */}
-      </main>
-    </div>
-    </div>
+    </aside>
+
+    {/* Mobile Sidebar (optional drawer) */}
+    {/* You can add a toggle for small screens here if needed */}
+
+    {/* Main Content */}
+    <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
+      <Outlet />
+    </main>
+
+  </div>
+</div>
+
   );
 };
 

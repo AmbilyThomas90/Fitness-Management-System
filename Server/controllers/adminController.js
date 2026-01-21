@@ -3,6 +3,7 @@ import Trainer from "../models/Trainer.js";
 import Payment from "../models/Payment.js";
 import UserProfile from "../models/UserProfile.js";
 import Goal from "../models/Goal.js";
+import Subscription from "../models/Subscription.js";
 /* =========================
    DASHBOARD STATUS
 ========================= */
@@ -41,62 +42,81 @@ export const getDashboardStatus = async (req, res) => {
 ========================= */
 export const getAllUsersWithProfile = async (req, res) => {
   try {
-    //  Fetch all users (exclude password)
+    console.log("Fetching all users...");
+    // 1. Fetch all users
     const users = await User.find({ role: "user" })
       .select("-password")
       .lean();
+    console.log(`Fetched ${users.length} users`);
 
-    //  Fetch all profiles
-    const profiles = await UserProfile.find()
-      .populate("user", "_id")
-      .lean();
+    console.log("Fetching profiles, goals, and subscriptions in parallel...");
+    // 2. Fetch Profiles, Goals, and Subscriptions in parallel
+    const [profiles, goals, subscriptions] = await Promise.all([
+      UserProfile.find().lean(),
+      Goal.find().lean(),
+      Subscription.find({
+        status: "active",
+        endDate: { $gte: new Date() },
+      })
+      .populate("plan", "name amount") // Populating the Plan model to get the name
+      .lean()
+    ]);
+    console.log(`Fetched ${profiles.length} profiles, ${goals.length} goals, and ${subscriptions.length} active subscriptions`);
 
-    //  Fetch all goals
-    const goals = await Goal.find()
-      .populate("user", "_id")
-      .lean();
-
-    //  Create profile map
+    // 3. Create profile map
     const profileMap = {};
     profiles.forEach(profile => {
-      if (profile.user?._id) {
-        profileMap[profile.user._id.toString()] = profile;
-      }
+      const userId = profile.user?.toString();
+      if (userId) profileMap[userId] = profile;
     });
+    console.log(`Profile map keys: ${Object.keys(profileMap).length}`);
 
-    //  Create goal map
+    // 4. Create goal map
     const goalMap = {};
     goals.forEach(goal => {
-      if (goal.user?._id) {
-        goalMap[goal.user._id.toString()] = goal;
-      }
-      
+      const userId = goal.user?.toString();
+      if (userId) goalMap[userId] = goal;
     });
+    console.log(`Goal map keys: ${Object.keys(goalMap).length}`);
 
-    //  Merge user + profile + goal
-    const usersWithProfileAndGoal = users
-  .filter(user => profileMap[user._id.toString()]) //  only users with profile
-  .map(user => ({
-    ...user,
-    profile: profileMap[user._id.toString()],
-    goal: goalMap[user._id.toString()] || null,
-  }));
-  // Deleted uers show 
-//   const usersWithProfileAndGoal = users.map((user) => ({
-//   ...user,
-//   profile: profileMap[user._id.toString()] || null,
-//   goal: goalMap[user._id.toString()] || null,
-// }));
+    // 5. Create subscription map 
+    const subscriptionMap = {};
+    subscriptions.forEach(sub => {
+      console.log("Sub User ID:", sub.user);
+      const userId = sub.user?.toString();
+      if (userId) {
+        subscriptionMap[userId] = {
+          planName: sub.plan?.name || "N/A",
+          planType: sub.planType || "N/A",
+          amount: sub.planAmount || 0,
+          startDate: sub.startDate,
+          endDate: sub.endDate,
+        };
+      }
+    });
+    console.log(`Subscription map keys: ${Object.keys(subscriptionMap).length}`);
 
+    // 6. Merge data
+    const usersWithDetails = users
+      .filter(user => profileMap[user._id.toString()])
+      .map(user => {
+        const userIdStr = user._id.toString();
+        return {
+          ...user,
+          profile: profileMap[userIdStr] || null,
+          goal: goalMap[userIdStr] || null,
+          subscription: subscriptionMap[userIdStr] || null,
+        };
+      });
 
-    res.status(200).json(usersWithProfileAndGoal);
+    console.log(`Returning ${usersWithDetails.length} users with details`);
+    res.status(200).json(usersWithDetails);
   } catch (error) {
     console.error("Admin get users error:", error);
-    res.status(500).json({
-      message: "Failed to fetch users",
-    });
+    res.status(500).json({ message: "Failed to fetch users" });
   }
 };
+
 
 
 /* =========================

@@ -164,147 +164,157 @@ const handleSubmit = async (e) => {
   };
 
   return (
-    <div className="p-4 md:p-6">
-      {/* Header with title and "Create Plan" button */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
-        <h2 className="text-2xl font-bold">Plans</h2>
-        <button
-          onClick={() => { resetForm(); setShowForm(true); }}
-          className="bg-indigo-600 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-indigo-700 transition"
-        >
-          Create Plan
-        </button>
+   <div className="p-4 sm:p-5 md:p-6">
+  {/* Header with title and "Create Plan" button */}
+  <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
+    <h2 className="text-xl sm:text-2xl md:text-2xl font-bold text-gray-900 dark:text-white">
+      Plans
+    </h2>
+    <button
+      onClick={() => { resetForm(); setShowForm(true); }}
+      className="bg-indigo-600 text-white px-4 py-2 rounded w-full md:w-auto hover:bg-indigo-700 transition"
+    >
+      Create Plan
+    </button>
+  </div>
+
+  {/* Create/Edit Plan Form */}
+  {showForm && (
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 p-4 sm:p-5 md:p-6 rounded-xl shadow mb-6 w-full max-w-lg mx-auto">
+      <h3 className="font-semibold mb-4 text-lg sm:text-xl">{isEditMode ? "Edit Plan" : "Create New Plan"}</h3>
+
+      {/* Plan Name */}
+      <input
+        type="text"
+        name="planName"
+        placeholder="Plan Name"
+        value={planData.planName}
+        onChange={handleChange}
+        className="w-full border p-2 rounded mb-3 focus:ring-2 focus:ring-indigo-400"
+        required
+      />
+
+      {/* Monthly & Yearly Amount */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <input
+          type="text"
+          name="monthlyPlanAmount"
+          placeholder="Monthly Amount"
+          value={planData.monthlyPlanAmount}
+          onChange={handleChange}
+          className="border p-2 rounded focus:ring-2 focus:ring-indigo-400"
+          required
+        />
+        <input
+          type="text"
+          name="yearlyPlanAmount"
+          placeholder="Yearly Amount"
+          value={planData.yearlyPlanAmount}
+          readOnly
+          className="border p-2 rounded bg-gray-100 dark:bg-slate-700"
+        />
       </div>
 
-      {/* Create/Edit Plan Form */}
-      {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded shadow mb-6 w-full max-w-lg mx-auto">
-          <h3 className="font-semibold mb-4 text-lg">{isEditMode ? "Edit Plan" : "Create New Plan"}</h3>
+      {/* Feature checkboxes */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+        {Object.keys(defaultPlanState)
+          .filter(k => !["planName", "monthlyPlanAmount", "yearlyPlanAmount"].includes(k))
+          .map(feature => (
+            <label key={feature} className="flex items-center gap-2 text-sm sm:text-base">
+              <input
+                type="checkbox"
+                name={feature}
+                checked={planData[feature]}
+                onChange={handleChange}
+                className="accent-indigo-600"
+              />
+              {feature.replace(/([A-Z])/g, " $1")}
+            </label>
+          ))}
+      </div>
 
-          {/* Plan Name */}
-          <input
-            type="text"
-            name="planName"
-            placeholder="Plan Name"
-            value={planData.planName}
-            onChange={handleChange}
-            className="w-full border p-2 rounded mb-3"
-            required
-          />
+      {/* Form buttons */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto hover:bg-green-700 transition"
+        >
+          {loading ? "Saving..." : isEditMode ? "Update Plan" : "Save Plan"}
+        </button>
+        <button
+          type="button"
+          onClick={resetForm}
+          className="bg-gray-300 dark:bg-slate-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded w-full sm:w-auto hover:bg-gray-400 dark:hover:bg-slate-500 transition"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  )}
 
-          {/* Monthly & Yearly Amount */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <input
-              type="text"
-              name="monthlyPlanAmount"
-              placeholder="Monthly Amount"
-              value={planData.monthlyPlanAmount}
-              onChange={handleChange}
-              className="border p-2 rounded"
-              required
-            />
-            <input
-              type="text"
-              name="yearlyPlanAmount"
-              placeholder="Yearly Amount"
-              value={planData.yearlyPlanAmount}
-              readOnly
-              className="border p-2 rounded bg-gray-100"
-            />
-          </div>
+  {/* Plan Details Modal */}
+  {showDetails && (
+    <div className="bg-white dark:bg-slate-800 p-4 sm:p-5 md:p-6 rounded-xl shadow mb-6 w-full max-w-md mx-auto">
+      <h3 className="font-semibold mb-4 text-lg sm:text-xl">Plan Details</h3>
+      <p><strong>Name:</strong> {planData.planName}</p>
+      <p><strong>Monthly:</strong> ₹{planData.monthlyPlanAmount}</p>
+      <p><strong>Yearly:</strong> ₹{planData.yearlyPlanAmount}</p>
+      <ul className="ml-5 mt-2 space-y-1">
+        {Object.keys(defaultPlanState)
+          .filter(k => !["planName", "monthlyPlanAmount", "yearlyPlanAmount"].includes(k))
+          .map(f => planData[f] && <li key={f}>✔ {f.replace(/([A-Z])/g, " $1")}</li>)}
+      </ul>
 
-          {/* Feature checkboxes */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
-            {Object.keys(defaultPlanState)
-              .filter(k => !["planName", "monthlyPlanAmount", "yearlyPlanAmount"].includes(k))
-              .map(feature => (
-                <label key={feature} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    name={feature}
-                    checked={planData[feature]}
-                    onChange={handleChange}
-                  />
-                  {feature.replace(/([A-Z])/g, " $1")} {/* Format camelCase to readable */}
-                </label>
-              ))}
-          </div>
+      {/* Detail buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 mt-4">
+        <button
+          onClick={() => { setShowForm(true); setIsEditMode(true); setSelectedPlanId(planData._id); }}
+          className="bg-yellow-500 text-white px-4 py-2 rounded w-full sm:w-auto hover:bg-yellow-600 transition"
+        >
+          Edit
+        </button>
+        <button
+          onClick={resetForm}
+          className="bg-gray-300 dark:bg-slate-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded w-full sm:w-auto hover:bg-gray-400 dark:hover:bg-slate-500 transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  )}
 
-          {/* Form buttons */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto"
-            >
-              {loading ? "Saving..." : isEditMode ? "Update Plan" : "Save Plan"}
+  {/* List of all plans */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {plans.map(plan => (
+      <div key={plan._id} className="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
+        <img src={plan3} alt={plan.planName} className="w-full h-40 sm:h-44 object-cover" />
+        <div className="p-4 sm:p-5">
+          <h4 className="text-lg sm:text-xl font-bold mb-1">{plan.planName}</h4>
+          <p className="text-md sm:text-lg font-semibold text-indigo-600">
+            ₹{plan.monthlyPlanAmount} <span className="text-sm text-gray-500">/ month</span>
+          </p>
+          <p className="text-sm text-gray-500 mb-3">
+            ₹{plan.yearlyPlanAmount} / year
+          </p>
+          {/* Buttons for each plan */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button onClick={() => handleView(plan)} className="flex-1 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">
+              View
             </button>
-            <button
-              type="button"
-              onClick={resetForm}
-              className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Plan Details Modal */}
-      {showDetails && (
-        <div className="bg-white p-4 md:p-6 rounded shadow mb-6 w-full max-w-md mx-auto">
-          <h3 className="font-semibold mb-4 text-lg">Plan Details</h3>
-          <p><strong>Name:</strong> {planData.planName}</p>
-          <p><strong>Monthly:</strong> ₹{planData.monthlyPlanAmount}</p>
-          <p><strong>Yearly:</strong> ₹{planData.yearlyPlanAmount}</p>
-          <ul className="ml-5 mt-2 space-y-1">
-            {Object.keys(defaultPlanState)
-              .filter(k => !["planName", "monthlyPlanAmount", "yearlyPlanAmount"].includes(k))
-              .map(f => planData[f] && <li key={f}>✔ {f.replace(/([A-Z])/g, " $1")}</li>)}
-          </ul>
-
-          {/* Detail buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-4">
-            <button
-              onClick={() => { setShowForm(true); setIsEditMode(true); setSelectedPlanId(planData._id); }}
-              className="bg-yellow-500 text-white px-4 py-2 rounded w-full sm:w-auto"
-            >
+            <button onClick={() => handleEdit(plan)} className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition">
               Edit
             </button>
-            <button
-              onClick={resetForm}
-              className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto"
-            >
-              Close
+            <button onClick={() => handleDelete(plan._id)} className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 transition">
+              Delete
             </button>
           </div>
         </div>
-      )}
-
-      {/* List of all plans */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {plans.map(plan => (
-          <div key={plan._id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
-            <img src={plan3} alt={plan.planName} className="w-full h-44 object-cover" />
-            <div className="p-5">
-              <h4 className="text-xl font-bold mb-2">{plan.planName}</h4>
-              <p className="text-lg font-semibold text-indigo-600">
-                ₹{plan.monthlyPlanAmount} <span className="text-sm text-gray-500">/ month</span>
-              </p>
-              <p className="text-sm text-gray-500 mb-4">
-                ₹{plan.yearlyPlanAmount} / year
-              </p>
-              {/* Buttons for each plan */}
-              <div className="flex flex-col sm:flex-row gap-2">
-                <button onClick={() => handleView(plan)} className="flex-1 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">View</button>
-                <button onClick={() => handleEdit(plan)} className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600">Edit</button>
-                <button onClick={() => handleDelete(plan._id)} className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700">Delete</button>
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
-    </div>
+    ))}
+  </div>
+</div>
+
   );
 };
 

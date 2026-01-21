@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaUserTie } from "react-icons/fa";
 import api from "../../api/api";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
@@ -49,79 +50,104 @@ const Trainers = () => {
   if (loading) return <p>Loading trainers...</p>;
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Trainer Management</h2>
+<div className="p-2 sm:p-5 md:p-6">
+  {/* Section Header */}
+  <h2 className="flex items-center text-xl sm:text-2xl md:text-2xl font-extrabold text-gray-900 dark:text-white mb-4 gap-2">
+    <FaUserTie className="w-5 h-5 text-blue-500" /> {/* Icon */}
+    Trainer Management
+  </h2>
 
-      <div className="space-y-4">
-        {trainers.map((trainer) => {
-          // ✅ Define avatarSrc inside the map callback
-          const avatarSrc = trainer?.profileImage
-            ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
-            : "/default-avatar.png";
+  {/* Trainer List */}
+  <div className="space-y-3">
+    {trainers.map((trainer) => {
+      const avatarSrc = trainer?.profileImage
+        ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+        : "/default-avatar.png";
 
-          return (
-            <div
-              key={trainer._id}
-              className="flex justify-between items-center border p-4 rounded-lg"
-            >
-              {/* Trainer Info */}
-              <div className="flex items-start gap-4">
-                <img
-                  src={avatarSrc}
-                  alt={trainer?.user?.name || "Trainer"}
-                  className="w-20 h-20 rounded-full object-cover border"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/default-avatar.png";
-                  }}
-                />
+      return (
+        <div
+          key={trainer._id}
+          className="
+            flex flex-col md:flex-row justify-between items-start md:items-center
+            border border-gray-200 dark:border-slate-700
+            p-3 sm:p-4
+            rounded-xl
+            bg-white dark:bg-slate-800
+            shadow-sm hover:shadow-md
+            transition-all duration-300
+          "
+        >
+          {/* Trainer Info */}
+          <div className="flex items-start md:items-center gap-3">
+            <img
+              src={avatarSrc}
+              alt={trainer?.user?.name || "Trainer"}
+              className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover border"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/default-avatar.png";
+              }}
+            />
 
-                <div>
-                  <p className="font-semibold">Name: {trainer.user?.name}</p>
-                  <p>Email: {trainer.user?.email}</p>
-                  <p>Phone: {trainer.phoneNumber}</p>
-                  <p>Specialization: {trainer.specialization}</p>
-                  <p>Experience: {trainer.experience} yrs</p>
+            <div className="flex flex-col gap-1 text-sm sm:text-base">
+              <p className="font-semibold text-gray-900 dark:text-white">
+                Name: {trainer.user?.name}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                Email: {trainer.user?.email}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                Phone: {trainer.phoneNumber || "-"}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                Specialization: {trainer.specialization || "-"}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                Experience: {trainer.experience || 0} yrs
+              </p>
 
-                  <span
-                    className={`inline-block mt-2 px-2 py-1 text-xs rounded ${
-                      trainer.status === "active"
-                        ? "bg-green-100 text-green-700"
-                        : trainer.status === "inactive"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {trainer.status?.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                {trainer.status !== "active" && (
-                  <button
-                    onClick={() => updateStatus(trainer._id, "active")}
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                  >
-                    Activate
-                  </button>
-                )}
-
-                {trainer.status === "active" && (
-                  <button
-                    onClick={() => updateStatus(trainer._id, "inactive")}
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                  >
-                    Deactivate
-                  </button>
-                )}
-              </div>
+              {/* Status Badge */}
+              <span
+                className={`inline-block mt-2 px-2 sm:px-3 py-0.5 text-xs font-semibold rounded-full ${
+                  trainer.status === "active"
+                    ? "bg-green-100 text-green-700 dark:bg-green-600/20 dark:text-green-400"
+                    : trainer.status === "inactive"
+                    ? "bg-red-100 text-red-700 dark:bg-red-600/20 dark:text-red-400"
+                    : "bg-yellow-100 text-yellow-700 dark:bg-yellow-600/20 dark:text-yellow-400"
+                }`}
+              >
+                {trainer.status?.toUpperCase()}
+              </span>
             </div>
-          );
-        })}
-      </div>
-    </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 mt-3 md:mt-0 text-sm sm:text-base">
+            {trainer.status !== "active" && (
+              <button
+                onClick={() => updateStatus(trainer._id, "active")}
+                className="bg-green-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                Activate
+              </button>
+            )}
+
+            {trainer.status === "active" && (
+              <button
+                onClick={() => updateStatus(trainer._id, "inactive")}
+                className="bg-red-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-red-700 transition"
+              >
+                Deactivate
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+
   );
 };
 

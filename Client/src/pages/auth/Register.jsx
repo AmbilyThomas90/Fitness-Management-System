@@ -1,96 +1,50 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../../api/api";
-import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const UserRegister = ({ isModal = false, closeModal, switchView }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "user",
-    phoneNumber: "",
-    experience: "",
-    specialization: "",
   });
 
-  const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  /* ================= INPUT CHANGE ================= */
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  // ✅ Image Validation
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/webp",
-    ];
-    const maxSize = 2 * 1024 * 1024; // 2MB
-
-    if (!allowedTypes.includes(file.type)) {
-      setError("Only JPG, PNG, or WEBP images are allowed");
-      e.target.value = "";
-      return;
-    }
-
-    if (file.size > maxSize) {
-      setError("Image size must be less than 2MB");
-      e.target.value = "";
-      return;
-    }
-
     setError("");
-    setProfileImage(file);
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    // ❗ Trainer image required
-    if (formData.role === "trainer" && !profileImage) {
-      setError("Profile image is required for trainers");
-      return;
-    }
+    if (loading) return;
 
     setLoading(true);
+    setError("");
 
     try {
-      const data = new FormData();
-
-      data.append("name", formData.name);
-      data.append("email", formData.email);
-      data.append("password", formData.password);
-      data.append("role", formData.role);
-
-      if (formData.role === "trainer") {
-        data.append("phoneNumber", formData.phoneNumber);
-        data.append("experience", formData.experience);
-        data.append("specialization", formData.specialization);
-      }
-
-      if (profileImage) {
-        data.append("profileImage", profileImage);
-      }
-
-      await api.post("/auth/register", data, {
-        headers: { "Content-Type": "multipart/form-data" },
+      await api.post("/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: "user", // 🔒 USER ONLY
       });
 
       alert("Registration successful");
-      navigate("/login");
+
+      if (isModal && closeModal) {
+        closeModal();
+        switchView?.("login");
+      } else {
+        navigate("/login");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {
@@ -98,106 +52,113 @@ const Register = () => {
     }
   };
 
+  /* ================= UI ================= */
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">Register</h2>
-
-      {error && <p className="text-red-500 mb-3">{error}</p>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
-
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
-
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
-
-        <select
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        >
-          <option value="user">User</option>
-          <option value="trainer">Trainer</option>
-        </select>
-
-        {formData.role === "trainer" && (
-          <>
-            <input
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-              className="w-full border p-2 rounded"
-            />
-
-            <input
-              name="experience"
-              type="number"
-              placeholder="Experience (years)"
-              value={formData.experience}
-              onChange={handleChange}
-              required
-              className="w-full border p-2 rounded"
-            />
-
-            <select
-              name="specialization"
-              value={formData.specialization}
-              onChange={handleChange}
-              required
-              className="w-full border p-2 rounded"
-            >
-              <option value="">Select specialization</option>
-              <option value="weight_loss">Weight Loss</option>
-              <option value="muscle_gain">Muscle Gain</option>
-              <option value="yoga_and_endurance">Yoga & Endurance</option>
-              <option value="flexibility">Flexibility</option>
-            </select>
-
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full"
-            />
-          </>
+    <div
+      className={`${
+        isModal
+          ? "fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4"
+          : "min-h-screen flex items-center justify-center bg-gray-100 px-4"
+      }`}
+      onClick={isModal ? closeModal : undefined}
+    >
+      <div
+        className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {isModal && closeModal && (
+          <button
+            onClick={closeModal}
+            className="absolute top-3 right-4 text-xl font-bold text-gray-400 hover:text-black"
+          >
+            ✕
+          </button>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 rounded"
-        >
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          User Registration
+        </h2>
+
+        {error && (
+          <p className="text-red-500 mb-3 text-center text-sm">{error}</p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            title="Please enter a valid email address"
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            minLength={6}
+            required
+            className="w-full border p-2 rounded"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-50"
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
+        </form>
+
+        {/* 🔹 LINKS */}
+     <div className="mt-4 text-center text-sm text-gray-600 space-y-1">
+  {/* Login link (for modal usage) */}
+  {switchView && (
+    <p>
+      Already have an account?{" "}
+      <span
+        onClick={() => switchView("login")}
+        className="text-indigo-600 cursor-pointer hover:underline"
+      >
+        Login
+      </span>
+    </p>
+  )}
+
+  {/* Trainer registration link (page usage) */}
+  {switchView && (
+    <p>
+      Are you a trainer?{" "}
+      
+     <span
+        onClick={() => switchView("trainer-register")}
+        className="text-indigo-600 cursor-pointer hover:underline"
+      >
+        Register as Trainer
+         </span>
+      
+    </p>
+  )}
+</div>
+
+      </div>
     </div>
   );
 };
 
-export default Register;
+export default UserRegister;

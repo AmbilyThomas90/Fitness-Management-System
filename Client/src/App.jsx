@@ -3,11 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 /* COMMON */
 import Navbar from "./components/Navbar";
 import Home from "./pages/public/Home";
- //import Login from "./pages/auth/Login";
 import Login from "./pages/auth/Login";
-//import Register from "./pages/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
-import UserRegister from "./pages/auth/UserRegister";
+import UserRegister from "./pages/auth/Register";
 import TrainerRegister from "./pages/auth/TrainerRegister";
 //import Register from "./pages/auth/Register";
 import PlanCard from "./components/PlanCardModal";
@@ -28,7 +26,6 @@ import Users from "./pages/admin/Users";
 import Trainers from "./pages/admin/Trainers";
 import Plans from "./pages/admin/Plans";
 import PlanDetail from "./pages/admin/PlanDetail";
-import Payments from "./pages/admin/Payments";
 import Analytics from "./pages/admin/Analytics";
 import AdminPayments from "./pages/admin/AdminPayments";
 

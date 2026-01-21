@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply min-h-screen bg-white text-black;
+  }
+
+  html.dark,
+  html.dark body,
+  html.dark #root {
+    @apply bg-gray-100 text-gray-500;
+  }
+}
