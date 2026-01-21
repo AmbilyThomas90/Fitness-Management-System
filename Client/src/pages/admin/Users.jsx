@@ -57,7 +57,13 @@ const Users = () => {
     }
   };
 
-  if (loading) return <p className="p-6">Loading users...</p>;
+  if (loading)  {
+return (
+   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+);
+    }
   if (error) return <p className="p-6 text-red-600">{error}</p>;
 
   return (
@@ -167,6 +173,14 @@ const Users = () => {
                       {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
                     </td>
                     <td className="p-3">{user.subscription?.planType || "-"}</td>
+                    <td className="p-3">
+  {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
+</td>
+
+<td className="p-3">
+  {user.subscription?.planType || "-"}
+</td>
+
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${

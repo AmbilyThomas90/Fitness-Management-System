@@ -47,7 +47,13 @@ const Trainers = () => {
     }
   };
 
-  if (loading) return <p>Loading trainers...</p>;
+  if (loading)  {
+return (
+   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+);
+    }
 
   return (
 <div className="p-2 sm:p-5 md:p-6">

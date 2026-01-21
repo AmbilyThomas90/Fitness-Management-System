@@ -43,79 +43,89 @@ export const getDashboardStatus = async (req, res) => {
 export const getAllUsersWithProfile = async (req, res) => {
   try {
     console.log("Fetching all users...");
-    // 1. Fetch all users
+
+    // 1️⃣ Fetch all users
     const users = await User.find({ role: "user" })
       .select("-password")
       .lean();
+
     console.log(`Fetched ${users.length} users`);
 
-    console.log("Fetching profiles, goals, and subscriptions in parallel...");
-    // 2. Fetch Profiles, Goals, and Subscriptions in parallel
+    // 2️⃣ Fetch profiles, goals, subscriptions (NO over-filtering)
     const [profiles, goals, subscriptions] = await Promise.all([
       UserProfile.find().lean(),
       Goal.find().lean(),
-      Subscription.find({
-        status: "active",
-        endDate: { $gte: new Date() },
-      })
-      .populate("plan", "name amount") // Populating the Plan model to get the name
-      .lean()
+      Subscription.find()
+        .populate("plan", "name amount")
+        .lean(),
     ]);
-    console.log(`Fetched ${profiles.length} profiles, ${goals.length} goals, and ${subscriptions.length} active subscriptions`);
 
-    // 3. Create profile map
+    console.log(
+      `Fetched ${profiles.length} profiles, ${goals.length} goals, ${subscriptions.length} subscriptions`
+    );
+
+    // 3️⃣ Profile map
     const profileMap = {};
-    profiles.forEach(profile => {
-      const userId = profile.user?.toString();
-      if (userId) profileMap[userId] = profile;
-    });
-    console.log(`Profile map keys: ${Object.keys(profileMap).length}`);
-
-    // 4. Create goal map
-    const goalMap = {};
-    goals.forEach(goal => {
-      const userId = goal.user?.toString();
-      if (userId) goalMap[userId] = goal;
-    });
-    console.log(`Goal map keys: ${Object.keys(goalMap).length}`);
-
-    // 5. Create subscription map 
-    const subscriptionMap = {};
-    subscriptions.forEach(sub => {
-      console.log("Sub User ID:", sub.user);
-      const userId = sub.user?.toString();
-      if (userId) {
-        subscriptionMap[userId] = {
-          planName: sub.plan?.name || "N/A",
-          planType: sub.planType || "N/A",
-          amount: sub.planAmount || 0,
-          startDate: sub.startDate,
-          endDate: sub.endDate,
-        };
+    profiles.forEach((profile) => {
+      if (profile.user) {
+        profileMap[profile.user.toString()] = profile;
       }
     });
+
+    // 4️⃣ Goal map
+    const goalMap = {};
+    goals.forEach((goal) => {
+      if (goal.user) {
+        goalMap[goal.user.toString()] = goal;
+      }
+    });
+
+    // 5️⃣ Subscription map (ACTIVE + NOT EXPIRED)
+    const subscriptionMap = {};
+
+    subscriptions.forEach((sub) => {
+      const userId = sub.user?.toString();
+      if (!userId) return;
+
+      const isActive =
+        sub.status === "active" &&
+        new Date(sub.endDate) >= new Date();
+
+      if (!isActive) return;
+
+      subscriptionMap[userId] = {
+        planName: sub.plan?.name || "No Plan",
+        planType: sub.planType || "-",
+        amount: sub.plan?.amount || 0, // ✅ FIXED
+        startDate: sub.startDate,
+        endDate: sub.endDate,
+      };
+    });
+
     console.log(`Subscription map keys: ${Object.keys(subscriptionMap).length}`);
 
-    // 6. Merge data
+    // 6️⃣ Merge everything
     const usersWithDetails = users
-      .filter(user => profileMap[user._id.toString()])
-      .map(user => {
-        const userIdStr = user._id.toString();
+      .filter((user) => profileMap[user._id.toString()])
+      .map((user) => {
+        const id = user._id.toString();
         return {
           ...user,
-          profile: profileMap[userIdStr] || null,
-          goal: goalMap[userIdStr] || null,
-          subscription: subscriptionMap[userIdStr] || null,
+          profile: profileMap[id] || null,
+          goal: goalMap[id] || null,
+          subscription: subscriptionMap[id] || null,
         };
       });
 
-    console.log(`Returning ${usersWithDetails.length} users with details`);
+    console.log(`Returning ${usersWithDetails.length} users`);
+
     res.status(200).json(usersWithDetails);
   } catch (error) {
     console.error("Admin get users error:", error);
     res.status(500).json({ message: "Failed to fetch users" });
   }
 };
+
 
 
 
@@ -189,60 +199,6 @@ export const getAllTrainers = async (req, res) => {
   }
 };
 
-// export const getAllTrainers = async (req, res) => {
-//   try {
-//     const trainers = await Trainer.find()
-//       .populate({
-//         path: "user",
-//         select: "name email role"
-//       })
-//       .sort({ createdAt: -1 });
-
-//         //  Log raw trainers from DB
-//  console.log("👉 Raw Trainers Count:", trainers.length);
-
-// console.log(
-//   "👉 Raw Trainers Data:",
-//   JSON.stringify(trainers, null, 2)
-// );
-
-
-//     // If frontend wants merged data: ?format=merged
-//     if (req.query.format === "merged") {
-//       const mergedData = trainers.map((trainer) => ({
-//         trainerId: trainer._id,
-//         name: trainer.user?.name,
-//         email: trainer.user?.email,
-//         role: trainer.user?.role,
-//         phoneNumber: trainer.phoneNumber,
-//         experience: trainer.experience,
-//         specialization: trainer.specialization,
-//        status: trainer.status,
-//         profileImage: trainer.profileImage ,
-//         createdAt: trainer.createdAt
-//       }));
-   
-//       return res.status(200).json({
-//         success: true,
-//         count: mergedData.length,
-//         trainers: mergedData
-//       });
-//     }
-
-//     // Default: raw populated data
-//     res.status(200).json({
-//       success: true,
-//       count: trainers.length,
-//       trainers
-//     });
-//   } catch (error) {
-//     console.error("Get trainers error:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch trainers"
-//     });
-//   }
-// };
 
 /* =========================
    UPDATE  TRAINER STATUS

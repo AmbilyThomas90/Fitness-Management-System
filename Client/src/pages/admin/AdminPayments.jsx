@@ -42,7 +42,13 @@ useEffect(() => {
 }, []);
 
 
-  if (loading) return <div className="p-6 text-center">Loading payment records...</div>;
+  if (loading)  {
+return (
+   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+);
+    }
 
   return (
  <div className="p-4 md:p-6">

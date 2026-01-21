@@ -30,10 +30,13 @@ app.use(
   cors({
     origin: "https://fitness-management-system-zeta.vercel.app",
     credentials: true,
-   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.options("*", cors());
+
 
 // ----------------url localhost and render.com -------------//
 // app.use(
