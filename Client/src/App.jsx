@@ -2,15 +2,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 /* COMMON */
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+import Home from "./pages/public/Home";
  //import Login from "./pages/auth/Login";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/auth/Login";
+//import Register from "./pages/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import UserRegister from "./pages/auth/UserRegister";
+import TrainerRegister from "./pages/auth/TrainerRegister";
 //import Register from "./pages/auth/Register";
 import PlanCard from "./components/PlanCardModal";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
+import About from "./pages/public/About";
+import Contact from "./pages/public/Contact";
 
 /*Plan */
 import ViewPlans from "./components/PlanForm";
@@ -78,7 +80,10 @@ function App() {
         {/* ================= PUBLIC ROUTES ================= */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        {/* <Route path="/register" element={<Register />} /> */}
+        <Route path="/register" element={<UserRegister />} />
+<Route path="/trainer-register" element={<TrainerRegister />} />
+
         <Route path="/forgot-password" element={<ForgotPassword />} />
          {/* Public plans */}
          <Route path="plancard" element={< PlanCard />} />
