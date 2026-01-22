@@ -91,7 +91,7 @@ return (
               className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover border"
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = "/default-avatar.png";
+                e.currentTarget.src = "";
               }}
             />
 
