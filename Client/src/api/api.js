@@ -3,18 +3,13 @@ import axios from "axios";
 
 // // ------ production URL for deployed site------------//
 
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL, // backend base URL
-//   headers: {
-//     "Content-Type": "application/json",
+const api = axios.create({
+  baseURL: "https://fitness-management-system-yl6n.onrender.com/api", // backend base URL
+  headers: {
+    "Content-Type": "application/json",
    
-//   },
-// });
-//-------------Use local for development---------//
-// const api = axios.create({
-//   baseURL: "http://localhost:5000/api",
-//   withCredentials: true,
-// });
+  },
+});
 
 
 /* =========================
