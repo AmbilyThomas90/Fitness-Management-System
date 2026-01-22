@@ -37,6 +37,13 @@ app.use(
 
 app.options("*", cors());
 
+// ----------------url localhost and render.com -------------//
+// app.use(cors({
+//   origin: "http://localhost:5174",
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// }));
 
 
 app.use(express.json());

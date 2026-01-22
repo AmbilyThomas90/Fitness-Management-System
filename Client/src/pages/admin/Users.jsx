@@ -42,12 +42,12 @@ const Users = () => {
         prev.map(user =>
           user._id === userId
             ? {
-                ...user,
-                profile: {
-                  ...user.profile,
-                  isActive: !user.profile?.isActive,
-                },
-              }
+              ...user,
+              profile: {
+                ...user.profile,
+                isActive: !user.profile?.isActive,
+              },
+            }
             : user
         )
       );
@@ -57,13 +57,13 @@ const Users = () => {
     }
   };
 
-  if (loading)  {
-return (
-   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
       </div>
-);
-    }
+    );
+  }
   if (error) return <p className="p-6 text-red-600">{error}</p>;
 
   return (
@@ -96,11 +96,10 @@ return (
                   {user.name}
                 </h3>
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    isActive
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
                       ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
                       : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
-                  }`}
+                    }`}
                 >
                   {isActive ? "Active" : "Blocked"}
                 </span>
@@ -124,9 +123,8 @@ return (
               {/* Action Button */}
               <button
                 onClick={() => toggleBlock(user._id)}
-                className={`w-full mt-3 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${
-                  isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-                }`}
+                className={`w-full mt-3 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                  }`}
               >
                 {isActive ? "Block User" : "Unblock User"}
               </button>
@@ -169,22 +167,17 @@ return (
                     <td className="p-3">{user.profile?.age || "-"}</td>
                     <td className="p-3">{user.profile?.gender || "-"}</td>
                     <td className="p-3">{user.goal?.goalType || "-"}</td>
-                  
-                    <td className="p-3">
-  {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
-</td>
 
-<td className="p-3">
-  {user.subscription?.planType || "-"}
-</td>
+                    <td className="p-3">  {user.payment?.planName || "No Plan"} </td>
 
+                    <td className="p-3 font-semibold text-green-600">{user.payment?.amount
+                        ? `₹${user.payment.amount.toLocaleString()}`  : "-"}</td>
                     <td className="p-3">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          isActive
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
                             ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
                             : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
-                        }`}
+                          }`}
                       >
                         {isActive ? "Active" : "Blocked"}
                       </span>
@@ -192,9 +185,8 @@ return (
                     <td className="p-3">
                       <button
                         onClick={() => toggleBlock(user._id)}
-                        className={`px-3 py-1 rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-300 ${
-                          isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-                        }`}
+                        className={`px-3 py-1 rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-300 ${isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                          }`}
                       >
                         {isActive ? "Block" : "Unblock"}
                       </button>

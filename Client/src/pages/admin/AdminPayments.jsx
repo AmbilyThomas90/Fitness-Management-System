@@ -60,7 +60,7 @@ return (
   {/* Table Container */}
   <div className="overflow-x-auto shadow-lg rounded-lg">
     <table className="w-full min-w-[800px] border-collapse bg-white dark:bg-slate-800">
-      <thead className="bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-200">
+      <thead className="bg-gray-200 dark:bg-slate-700 text-blue-700 dark:text-gray-200">
         <tr>
           <th className="p-3 text-left">User</th>
           <th className="p-3 text-left">Plan</th>

@@ -44,80 +44,75 @@ export const getAllUsersWithProfile = async (req, res) => {
   try {
     console.log("Fetching all users...");
 
-    // 1️⃣ Fetch all users
+    // 1️⃣ Users
     const users = await User.find({ role: "user" })
       .select("-password")
       .lean();
 
-    console.log(`Fetched ${users.length} users`);
-
-    // 2️⃣ Fetch profiles, goals, subscriptions (NO over-filtering)
-    const [profiles, goals, subscriptions] = await Promise.all([
+    // 2️⃣ Related data
+    const [profiles, goals, subscriptions, payments] = await Promise.all([
       UserProfile.find().lean(),
       Goal.find().lean(),
-      Subscription.find()
-        .populate("plan", "name amount")
+      Subscription.find().lean(),
+      Payment.find({ status: "success" })
+        .sort({ createdAt: -1 }) // latest payment first
         .lean(),
     ]);
 
-    console.log(
-      `Fetched ${profiles.length} profiles, ${goals.length} goals, ${subscriptions.length} subscriptions`
-    );
-
-    // 3️⃣ Profile map
+    // 3️⃣ Profile Map
     const profileMap = {};
-    profiles.forEach((profile) => {
-      if (profile.user) {
-        profileMap[profile.user.toString()] = profile;
-      }
+    profiles.forEach(p => {
+      if (p.user) profileMap[p.user.toString()] = p;
     });
 
-    // 4️⃣ Goal map
+    // 4️⃣ Goal Map
     const goalMap = {};
-    goals.forEach((goal) => {
-      if (goal.user) {
-        goalMap[goal.user.toString()] = goal;
-      }
+    goals.forEach(g => {
+      if (g.user) goalMap[g.user.toString()] = g;
     });
 
-    // 5️⃣ Subscription map (ACTIVE + NOT EXPIRED)
+    // 5️⃣ ACTIVE Subscription Map
     const subscriptionMap = {};
+    const today = new Date();
 
-    subscriptions.forEach((sub) => {
+    subscriptions.forEach(sub => {
       const userId = sub.user?.toString();
       if (!userId) return;
 
       const isActive =
         sub.status === "active" &&
-        new Date(sub.endDate) >= new Date();
+        (!sub.endDate || new Date(sub.endDate) >= today);
 
-      if (!isActive) return;
+      if (isActive) subscriptionMap[userId] = sub;
+    });
 
-      subscriptionMap[userId] = {
-        planName: sub.plan?.name || "No Plan",
-        planType: sub.planType || "-",
-        amount: sub.plan?.amount || 0, // ✅ FIXED
-        startDate: sub.startDate,
-        endDate: sub.endDate,
+    // 6️⃣ Payment Map (LATEST PAYMENT PER USER)
+    const paymentMap = {};
+    payments.forEach(pay => {
+      const userId = pay.user?.toString();
+      if (!userId || paymentMap[userId]) return;
+
+      paymentMap[userId] = {
+        planName: pay.planName,
+        amount: pay.planAmount,
+        paymentMethod: pay.paymentMethod,
+        paymentStatus: pay.status,
       };
     });
 
-    console.log(`Subscription map keys: ${Object.keys(subscriptionMap).length}`);
-
-    // 6️⃣ Merge everything
+    // 7️⃣ Merge
     const usersWithDetails = users
-      .filter((user) => profileMap[user._id.toString()])
-      .map((user) => {
+      .filter(user => profileMap[user._id.toString()])
+      .map(user => {
         const id = user._id.toString();
         return {
           ...user,
           profile: profileMap[id] || null,
           goal: goalMap[id] || null,
           subscription: subscriptionMap[id] || null,
+          payment: paymentMap[id] || null,
         };
       });
-
-    console.log(`Returning ${usersWithDetails.length} users`);
 
     res.status(200).json(usersWithDetails);
   } catch (error) {
@@ -125,7 +120,6 @@ export const getAllUsersWithProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch users" });
   }
 };
-
 
 
 

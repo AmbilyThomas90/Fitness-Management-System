@@ -11,8 +11,7 @@ const Sidebar = () => {
      }`;
 
   return (
-<aside className="w-64 min-h-[120vh] max-h-[1600px] overflow-y-auto bg-gray-900 p-4 flex flex-col">
-
+<aside className="w-64 h-screen overflow-y-auto bg-gray-900 p-4 flex flex-col">
       {/* Logo */}
       <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center tracking-tight">
         Admin Panel
@@ -21,36 +20,37 @@ const Sidebar = () => {
       {/* Navigation */}
       <nav className="flex flex-col gap-2">
         <NavLink to="/admin/dashboard" end className={navLinkClasses}>
-          <FaTachometerAlt className="w-5 h-5" /> Dashboard
+          <FaTachometerAlt className="w-5 h-5" />
+          Dashboard
         </NavLink>
 
         <NavLink to="/admin/dashboard/users" className={navLinkClasses}>
-          <FaUsers className="w-5 h-5" /> Users
+          <FaUsers className="w-5 h-5" />
+          Users
         </NavLink>
 
         <NavLink to="/admin/dashboard/trainers" className={navLinkClasses}>
-          <FaUserTie className="w-5 h-5" /> Trainers
+          <FaUserTie className="w-5 h-5" />
+          Trainers
         </NavLink>
 
         <NavLink to="/admin/dashboard/plans" className={navLinkClasses}>
-          <FaClipboardList className="w-5 h-5" /> Plans
+          <FaClipboardList className="w-5 h-5" />
+          Plans
         </NavLink>
 
         <NavLink to="/admin/dashboard/adminpayments" className={navLinkClasses}>
-          <FaDollarSign className="w-5 h-5" /> Payments
+          <FaDollarSign className="w-5 h-5" />
+          Payments
         </NavLink>
-
-        {/* <NavLink to="/admin/dashboard/analytics" className={navLinkClasses}>
-          Analytics
-        </NavLink> */}
       </nav>
 
       {/* Footer */}
-      <div className="mt-auto text-sm text-gray-400 text-center">
+      <div className="mt-auto pt-6 text-sm text-gray-400 text-center">
         © {new Date().getFullYear()} Admin
       </div>
     </aside>
   );
 };
-
+  
 export default Sidebar;

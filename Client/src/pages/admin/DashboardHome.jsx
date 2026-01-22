@@ -21,14 +21,14 @@ const DashboardHome = () => {
   }, []);
 
   return (
-   <div className="p-4 sm:p-6 lg:p-8">
+   <div className="p-4 sm:p-6 lg:p-8 ">
   {/* Header */}
   <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-6">
-    Dashboard
+    Admin Overview
   </h1>
 
   {/* Stats Grid */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 ">
     
     {/* Users Card */}
  <div className="
