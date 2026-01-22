@@ -169,10 +169,7 @@ return (
                     <td className="p-3">{user.profile?.age || "-"}</td>
                     <td className="p-3">{user.profile?.gender || "-"}</td>
                     <td className="p-3">{user.goal?.goalType || "-"}</td>
-                    <td className="p-3">
-                      {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
-                    </td>
-                    <td className="p-3">{user.subscription?.planType || "-"}</td>
+                  
                     <td className="p-3">
   {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
 </td>
