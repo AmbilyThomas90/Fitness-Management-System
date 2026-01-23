@@ -115,7 +115,7 @@ const Users = () => {
                 🎯 Goal: {user.goal?.goalType || "-"}
               </p>
               <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
-                💰 Plan: {user.planName} ({user.planAmount > 0 ? `₹${user.planAmount}` : "-"})
+                💰 Plan: {user.payment?.planName || "No Plan"} ({user.payment?.planAmount > 0 ? `₹${user.payment?.planAmount}` : "-"})
               </p>
 
               <button
@@ -168,16 +168,16 @@ const Users = () => {
 
                     {/* Displays planName from top-level user object */}
                     <td className="p-3 text-gray-700 dark:text-gray-300">
-                        {user.planName || "No Plan"}
+                        {user.payment?.planName || "No Plan"}
                     </td>
 
                     {/* Displays planAmount from top-level user object */}
                     <td className="p-3 font-semibold text-green-600">
-                        {user.planAmount > 0 ? `₹${user.planAmount.toLocaleString()}` : "-"}
+                        {user.payment?.planAmount > 0 ? `₹${user.planAmount.toLocaleString()}` : "-"}
                     </td>
 
-                    <td className="p-3">
-                      <span
+                      <td className="p-3">
+                        <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${
                           isActive
                             ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
