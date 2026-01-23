@@ -7,6 +7,11 @@ import {
 
 const router = express.Router();
 
+// Test route - remove after debugging
+router.get("/test", (req, res) => {
+  res.json({ message: "Nutrition route is working" });
+});
+
 // Trainer creates nutrition plan
 router.post(
   "/create-nutrition",
