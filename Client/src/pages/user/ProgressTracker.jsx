@@ -68,78 +68,90 @@ const handleLogProgress = async (e) => {
 };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-xl mt-8">
-      <h2 className="text-2xl font-bold mb-6">Track Your Progress</h2>
+  <div className="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-2xl">
 
-      <form onSubmit={handleLogProgress} className="space-y-4 mb-10 bg-gray-50 p-4 rounded-lg">
-        <div>
-          <label className="block text-sm font-medium mb-1">Select Goal</label>
-          <select 
-            value={selectedGoal} 
-            onChange={(e) => setSelectedGoal(e.target.value)}
-            className="w-full p-2 border rounded"
-          >
-            {goals.map(g => (
-              <option key={g._id} value={g._id}>
-                {/* FIX: Added optional chaining to prevent crash if goalType is missing */}
-                {g.goalType?.replace('_', ' ').toUpperCase() || "GOAL"}
-              </option>
-            ))}
-          </select>
-        </div>
+  <h2 className="text-2xl font-bold mb-6 text-gray-800">Track Your Progress</h2>
 
-        <div>
-  <label className="block text-sm font-medium mb-1">Current Value (kg/km/reps,sec)</label>
-  <input 
-    type="text" // Allows any character (letters and numbers)
-    required 
-    value={currentValue} 
-    onChange={(e) => setCurrentValue(e.target.value)}
-    className="w-full p-2 border rounded"
-    placeholder="e.g. 75kg, 5km, 12 reps or 45 sec"
-  />
+  {/* Form */}
+  <form onSubmit={handleLogProgress} className="space-y-5 mb-10 bg-gray-50 p-5 rounded-xl shadow-inner">
+    
+    {/* Select Goal */}
+    <div>
+      <label className="block text-sm font-medium mb-2 text-gray-700">Select Goal</label>
+      <select 
+        value={selectedGoal} 
+        onChange={(e) => setSelectedGoal(e.target.value)}
+        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+      >
+        {goals.map(g => (
+          <option key={g._id} value={g._id}>
+            {g.goalType?.replace('_', ' ').toUpperCase() || "GOAL"}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Current Value */}
+    <div>
+      <label className="block text-sm font-medium mb-2 text-gray-700">Current Value (kg/km/reps, sec)</label>
+      <input 
+        type="text"
+        required
+        value={currentValue}
+        onChange={(e) => setCurrentValue(e.target.value)}
+        placeholder="e.g. 75kg, 5km, 12 reps or 45 sec"
+        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+      />
+    </div>
+
+    {/* Daily Note */}
+    <div>
+      <label className="block text-sm font-medium mb-2 text-gray-700">Daily Note</label>
+      <textarea 
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        placeholder="How did it feel today?"
+        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+        rows={3}
+      />
+    </div>
+
+    {/* Submit Button */}
+    <button 
+      type="submit" 
+      disabled={loading}
+      className={`w-full py-3 rounded-xl font-bold text-white transition ${
+        loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"
+      }`}
+    >
+      {loading ? "Saving..." : "Log Progress"}
+    </button>
+  </form>
+
+  {/* History */}
+  <div className="history">
+    <h3 className="font-bold border-b pb-2 mb-5 text-gray-800">Recent History</h3>
+
+    {history.length === 0 ? (
+      <p className="text-gray-400">No logs found for this goal.</p>
+    ) : (
+      <div className="space-y-4">
+        {history.map(log => (
+          <div key={log._id} className="flex flex-col sm:flex-row sm:justify-between p-4 border-l-4 border-green-500 bg-white shadow-sm rounded-lg">
+            <div className="mb-2 sm:mb-0">
+              <p className="font-bold text-lg text-gray-800">{log.currentValue}</p>
+              <p className="text-xs text-gray-400">
+                {log.recordedAt ? new Date(log.recordedAt).toLocaleDateString() : "Date N/A"}
+              </p>
+            </div>
+            <p className="text-sm italic text-gray-600">"{log.note || 'No note added'}"</p>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
 </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Daily Note</label>
-          <textarea 
-            value={note} 
-            onChange={(e) => setNote(e.target.value)}
-            className="w-full p-2 border rounded"
-            placeholder="How did it feel today?"
-          />
-        </div>
-
-        <button 
-          type="submit" 
-          disabled={loading}
-          className="w-full bg-black text-white py-2 rounded font-bold hover:bg-gray-800"
-        >
-          {loading ? "Saving..." : "Log Progress"}
-        </button>
-      </form>
-
-      <div className="history">
-        <h3 className="font-bold border-b pb-2 mb-4">Recent History</h3>
-        {history.length === 0 ? (
-          <p className="text-gray-400">No logs found for this goal.</p>
-        ) : (
-          <div className="space-y-3">
-            {history.map(log => (
-              <div key={log._id} className="flex justify-between items-center p-3 border-l-4 border-green-500 bg-white shadow-sm rounded">
-                <div>
-                  <p className="font-bold text-lg">{log.currentValue}</p>
-                  <p className="text-xs text-gray-400">
-                    {log.recordedAt ? new Date(log.recordedAt).toLocaleDateString() : "Date N/A"}
-                  </p>
-                </div>
-                <p className="text-sm italic text-gray-600">"{log.note || 'No note added'}"</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
   );
 };
 

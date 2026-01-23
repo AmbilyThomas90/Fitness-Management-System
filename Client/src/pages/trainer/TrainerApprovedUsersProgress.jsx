@@ -31,17 +31,23 @@ const TrainerApprovedUsersProgress = () => {
     loadProgress();
   }, []);
 
-  if (loading) return <div className="p-6 text-center text-blue-500">Loading progress...</div>;
+
+  if (loading) 
+  {
+    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
   if (errorMsg) return <div className="p-6 text-red-500">{errorMsg}</div>;
 
   return (
-   <div className="p-6 max-w-5xl mx-auto">
-  <h2 className="text-3xl font-extrabold mb-8 text-gray-900 border-b border-gray-300 pb-3">
+<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <h2 className="text-2xl sm:text-3xl font-extrabold mb-8 text-gray-900 border-b border-gray-300 pb-3">
     Approved Users Progress
   </h2>
 
   {progress.length === 0 ? (
-    <div className="bg-gray-50 p-10 rounded-xl text-center text-gray-500 shadow-sm">
+    <div className="bg-gray-50 p-8 sm:p-10 rounded-xl text-center text-gray-500 shadow-sm">
       No progress records submitted by your assigned users yet.
     </div>
   ) : (
@@ -49,34 +55,51 @@ const TrainerApprovedUsersProgress = () => {
       {progress.map((item) => (
         <div
           key={item._id}
-          className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
+          className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
         >
-          <div className="flex justify-between items-start mb-4">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
             <div>
-              <h3 className="font-semibold text-lg text-indigo-700">{item.user?.name || "Unknown User"}</h3>
-              <p className="text-sm text-gray-500">{item.user?.email}</p>
+              <h3 className="font-semibold text-base sm:text-lg text-indigo-700">
+                {item.user?.name || "Unknown User"}
+              </h3>
+              <p className="text-sm text-gray-500 break-all">
+                {item.user?.email}
+              </p>
             </div>
-            <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-3 py-1 rounded-full uppercase">
+
+            <span className="w-fit bg-indigo-100 text-indigo-800 text-xs font-medium px-3 py-1 rounded-full uppercase">
               Goal: {item.goalType}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg mb-4">
+          {/* Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg mb-4">
             <div>
-              <p className="text-xs text-gray-400 uppercase font-semibold tracking-wide">Current Value</p>
-              <p className="text-2xl font-bold text-gray-900">{item.currentValue}</p>
+              <p className="text-xs text-gray-400 uppercase font-semibold tracking-wide">
+                Current Value
+              </p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                {item.currentValue}
+              </p>
             </div>
+
             <div>
-              <p className="text-xs text-gray-400 uppercase font-semibold tracking-wide">Date</p>
+              <p className="text-xs text-gray-400 uppercase font-semibold tracking-wide">
+                Date
+              </p>
               <p className="text-gray-700">
-                {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "N/A"}
+                {item.createdAt
+                  ? new Date(item.createdAt).toLocaleDateString()
+                  : "N/A"}
               </p>
             </div>
           </div>
 
+          {/* Note */}
           {item.note && (
-            <div className="mt-3 text-gray-600 italic border-l-4 border-gray-300 pl-4">
-              "{item.note}"
+            <div className="mt-3 text-sm text-gray-600 italic border-l-4 border-indigo-300 pl-4">
+              “{item.note}”
             </div>
           )}
         </div>
@@ -84,6 +107,7 @@ const TrainerApprovedUsersProgress = () => {
     </div>
   )}
 </div>
+
 
   );
 };

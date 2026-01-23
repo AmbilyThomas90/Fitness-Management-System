@@ -1,12 +1,12 @@
-
-dotenv.config();
-import express from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+dotenv.config();
+
+import express from "express";
+import mongoose from "mongoose";  
 import cors from "cors"; 
-console.log("CORS module loaded");
-import { connectDB } from "./config/db.js";
 import path from "path";
+
+import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
@@ -15,12 +15,11 @@ import planRoutes from "./routes/planRoutes.js";
 import subscriptionRoutes from "./routes/subscriptionRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
-import progressRoutes from"./routes/progressRoutes.js";
-import  trainerAssignmentRoutes from"./routes/trainerAssignmentRoutes.js";
+import progressRoutes from "./routes/progressRoutes.js";
+import trainerAssignmentRoutes from "./routes/trainerAssignmentRoutes.js";
 import workoutRoutes from "./routes/workoutRoutes.js";
 import nutritionRoutes from "./routes/nutritionRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
-
 
 const app = express();
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
@@ -36,16 +35,6 @@ app.use(
 );
 
 app.options("*", cors());
-
-// ----------------url localhost and render.com -------------//
-// app.use(cors({
-//   origin: "http://localhost:5174",
-//   credentials: true,
-//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-// }));
-
-
 app.use(express.json());
 
 connectDB(); // connect DB
@@ -58,18 +47,20 @@ app.use("/api/plans", planRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/goals", goalRoutes);
-app.use("/api/progress", progressRoutes)
+app.use("/api/progress", progressRoutes);
 app.use("/api/trainer-assignment", trainerAssignmentRoutes);
-app.use("/api/work", workoutRoutes);
+app.use("/api/workout", workoutRoutes);
 app.use("/api/nutrition",nutritionRoutes);
 app.use("/api/feedback", feedbackRoutes);
 
+
+
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;  
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-// mongoose
+// mongoos
 //   .connect(process.env.MONGO_URI)
 //   .then(() => {
 //     app.listen(5000, () =>

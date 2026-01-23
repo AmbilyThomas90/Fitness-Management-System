@@ -5,20 +5,22 @@ import Navbar from "../../components/Navbar";
 
 const UserDashboard = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
-   
+  <div className="min-h-screen bg-gray-100 flex flex-col">
 
-      {/* Body */}
-      <div className="flex min-h-[calc(100vh-64px)]">
-        {/* Sidebar */}
-        <Sidebar role="user" />
+  {/* Body */}
+  <div className="flex flex-1 min-h-[calc(100vh-64px)]">
 
-        {/* Main Content */}
-        <main className="flex-1 p-6 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
-    </div>
+    {/* Sidebar */}
+    <Sidebar role="user" />
+
+    {/* Main Content */}
+    <main className="flex-1 p-6 overflow-y-auto bg-gray-100">
+      <Outlet />
+    </main>
+
+  </div>
+</div>
+
   );
 };
 

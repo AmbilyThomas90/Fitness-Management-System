@@ -43,8 +43,12 @@ await api.patch(`/user/work/${workoutId}/status`, { status: newStatus });
 };
 
 
-
-  if (loading) return <p className="text-center text-gray-500 mt-4">Loading...</p>;
+ if (loading) 
+  {
+    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
   if (error) return <p className="text-center text-red-500 mt-4">{error}</p>;
 
   return (

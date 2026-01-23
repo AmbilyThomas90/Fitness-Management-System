@@ -37,7 +37,12 @@ const UserPaymentDetails = () => {
     fetchSubscription();
   }, []);
 
-  if (loading) return <p className="p-6">Loading subscription...</p>;
+ if (loading) 
+  {
+    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
 
   if (!subscription) {
     return (
@@ -53,57 +58,56 @@ const UserPaymentDetails = () => {
   const { plan, planType,planAmount, startDate, endDate, status } = subscription;
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow rounded">
-      <h1 className="text-2xl font-bold mb-4">My Subscription</h1>
+   <div className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow-md border border-gray-200 mt-10">
+  <h1 className="text-2xl font-bold text-gray-800 mb-6">My Subscription</h1>
 
-      {/* Subscription Info */}
-      <div className="space-y-2 text-gray-700">
-        <p>
-          <strong>Plan:</strong> {plan?.planName}
-        </p>
-        <p>
-          <strong>Plan Type:</strong>{" "}
-          <span className="capitalize">{planType}</span>
-        </p>
-         <p>
-          <strong>Amount:</strong> ₹{planAmount}
-        </p>
-        <p>
-          <strong>Subscription Status:</strong>{" "}
-          <span className="text-green-600 font-semibold">{status}</span>
-        </p>
-        <p>
-          <strong>Start Date:</strong>{" "}
-          {new Date(startDate).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>End Date:</strong>{" "}
-          {new Date(endDate).toLocaleDateString()}
-        </p>
-      </div>
+  {/* Subscription Info */}
+  <div className="space-y-3 text-gray-700">
+    <p>
+      <strong>Plan:</strong> {plan?.planName || "N/A"}
+    </p>
+    <p>
+      <strong>Plan Type:</strong>{" "}
+      <span className="capitalize">{planType || "N/A"}</span>
+    </p>
+    <p>
+      <strong>Amount:</strong> ₹{planAmount || 0}
+    </p>
+    <p>
+      <strong>Subscription Status:</strong>{" "}
+      <span className="text-green-600 font-semibold">{status || "N/A"}</span>
+    </p>
+    <p>
+      <strong>Start Date:</strong>{" "}
+      {startDate ? new Date(startDate).toLocaleDateString() : "-"}
+    </p>
+    <p>
+      <strong>End Date:</strong>{" "}
+      {endDate ? new Date(endDate).toLocaleDateString() : "-"}
+    </p>
+  </div>
 
-      {/* Payment Info */}
-      {payment && (
-        <div className="mt-6 border-t pt-4">
-          <h2 className="text-lg font-semibold mb-2">Payment Details</h2>
+  {/* Payment Info */}
+  {payment && (
+    <div className="mt-6 border-t pt-4">
+      <h2 className="text-lg font-semibold mb-3 text-gray-800">Payment Details</h2>
 
-          <p>
-            <strong>Amount Paid:</strong> ₹ <p>
-          <strong>Amount:</strong> ₹{planAmount}
-        </p>
-          </p>
-          <p>
-            <strong>Payment Method:</strong> {payment.paymentMethod}
-          </p>
-          <p>
-            <strong>Payment Status:</strong>{" "}
-            <span className="uppercase text-blue-600">
-              {payment.status}
-            </span>
-          </p>
-        </div>
-      )}
+      <p>
+        <strong>Amount Paid:</strong> ₹{payment.amount || planAmount || 0}
+      </p>
+      <p>
+        <strong>Payment Method:</strong> {payment.paymentMethod || "N/A"}
+      </p>
+      <p>
+        <strong>Payment Status:</strong>{" "}
+        <span className="uppercase text-blue-600 font-semibold">
+          {payment.status || "N/A"}
+        </span>
+      </p>
     </div>
+  )}
+</div>
+
   );
 };
 

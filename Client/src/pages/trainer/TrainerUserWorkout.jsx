@@ -144,9 +144,13 @@ const selectAssignment = async (assignment) => {
   };
 
   // ================= LOADING / ERROR =================
-  if (loading) {
-    return <div className="p-6 text-center text-gray-500">Loading...</div>;
-  }
+
+  if (loading) 
+  {
+    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
 
   if (error) {
     return <div className="p-6 text-center text-red-500">{error}</div>;
@@ -162,279 +166,208 @@ const validWorkouts = Array.isArray(workouts)
 
   // ================= UI =================
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+  <div className="min-h-screen bg-gray-50 px-4 sm:px-6 py-6 space-y-6">
 
-      {/* ===== APPROVED USERS LIST ===== */}
-      <div className="bg-white rounded-2xl shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4">👥 Approved Users</h2>
+  {/* ===== APPROVED USERS LIST ===== */}
+  <div className="bg-white rounded-2xl shadow-md p-5 sm:p-6">
+    <h2 className="text-lg sm:text-xl font-semibold mb-4">
+      👥 Approved Users
+    </h2>
 
-        {assignments.length === 0 ? (
-          <p className="text-gray-500 text-sm">No approved users</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {assignments.map((a) => (
-              <div
-                key={a._id}
-                onClick={() => selectAssignment(a)}
-                className={`cursor-pointer border rounded-xl p-4 transition
-                  ${
-                    selectedAssignmentId === a._id
-                      ? "border-blue-600 bg-blue-50"
-                      : Array.isArray(a.workouts) && a.workouts.length > 0
-                      ? "border-green-600 bg-green-50"
-                      : "hover:border-gray-400"
-                  }`}
-              >
-                <p className="font-semibold">{a.user?.name}</p>
-                <p className="text-sm text-gray-500">{a.user?.email}</p>
-                <p className="text-xs text-blue-600 mt-1">
-                  Goal: {a.goal?.goalType || "Not Assigned"}
-                </p>
-
-                {/* ✅ Workout Assigned Badge */}
-                {Array.isArray(a.workouts) && a.workouts.length > 0 && (
-                  <span className="inline-block mt-2 text-xs font-semibold text-green-700 bg-green-100 px-2.5 py-1 rounded-full">
-                    Workout Assigned
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ===== USER PROFILE ===== */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* USER INFORMATION */}
-        <div>
-          <h2 className="text-lg font-semibold mb-5 flex items-center gap-2 text-gray-800">
-            <User className="w-5 h-5 text-blue-600" /> User Information
-          </h2>
-
-          <div className="space-y-1 text-sm text-gray-700">
-            <div className="flex justify-between">
-              <span className="text-gray-900">Name</span>
-              <span className="font-medium">{user.name || "-"}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-gray-900 flex items-center gap-1">
-                <Mail className="w-4 h-4" /> Email
-              </span>
-              <span className="font-medium truncate max-w-[180px]">{user.email || "-"}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-gray-900 flex items-center gap-1">
-                <Phone className="w-4 h-4" /> Phone
-              </span>
-              <span className="font-medium">{userProfile.phoneNumber || "-"}</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-900">Gender</span>
-              <span className="font-medium">{userProfile.gender || "-"}</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-900">Health Condition</span>
-              <span className="font-medium">{userProfile.healthCondition || "-"}</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-900">Fitness Level</span>
-              <span className="font-medium">{userProfile.fitnessLevel || "-"}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* BODY METRICS */}
-        <div>
-          <h2 className="text-lg font-semibold mb-5 flex items-center gap-4 text-gray-800">
-            <Activity className="w-5 h-5 text-green-600" /> Body Metrics
-          </h2>
-
-          <div className="grid grid-cols-2 gap-5">
-            <div className="bg-gray-50 border border-gray-200 p-5 rounded-xl text-center">
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Weight</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">
-                {userProfile.weight || "-"}
-                <span className="text-sm font-medium text-gray-500 ml-1">kg</span>
-              </p>
-            </div>
-
-            <div className="bg-gray-50 border border-gray-200 p-5 rounded-xl text-center">
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Height</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">
-                {userProfile.height || "-"}
-                <span className="text-sm font-medium text-gray-500 ml-1">cm</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== GOAL ===== */}
-      <div className="bg-gradient-to-r from-blue-800 to-blue-950 text-white p-6 rounded-2xl shadow-lg flex items-center justify-center gap-3">
-        <span className="text-blue-200 text-xl">🎯</span>
-        <h3 className="text-lg font-medium">Fitness Goal:</h3>
-        <p className="text-2xl font-bold">{goal.goalType || "No Goal Assigned"}</p>
-      </div>
-
-    {/* ===== WORKOUTS ===== */}
-
-<div className="bg-white rounded-2xl shadow-md p-6">
-  <div className="flex justify-between mb-4">
-    <h3 className="text-xl font-semibold">🏋️ Workout Plan</h3>
-    <button
-      onClick={() => setShowModal(true)}
-      className="bg-blue-600 text-white px-2 py-2 rounded-lg"
-    >
-      + Add Workout
-    </button>
-  </div>
-
-{Array.isArray(validWorkouts) && validWorkouts.length > 0 ? (
-  <div className="space-y-6">
-    {validWorkouts.map((w, i) => (
-      <div
-        key={w._id}
-        className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
-      >
-        {/* Workout Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
-              Workout Category
-            </p>
-            <p className="text-base font-semibold text-gray-900">
-              {w.category}
-            </p>
-          </div>
-
-          <div className="text-right  ">
-            <p className="text-xs font-medium  text-gray-500 uppercase tracking-wide">
-              Status
-            </p>
-            <span
-              className={`inline-block mt-1 text-xs font-medium px-3 py-1 rounded-full ${
-                w.status === "COMPLETED"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-blue-100 text-blue-700"
+    {assignments.length === 0 ? (
+      <p className="text-gray-500 text-sm">No approved users</p>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        {assignments.map((a) => (
+          <div
+            key={a._id}
+            onClick={() => selectAssignment(a)}
+            className={`cursor-pointer rounded-xl border p-4 transition
+              ${
+                selectedAssignmentId === a._id
+                  ? "border-blue-600 bg-blue-50"
+                  : Array.isArray(a.workouts) && a.workouts.length > 0
+                  ? "border-green-600 bg-green-50"
+                  : "hover:border-gray-400"
               }`}
-            >
-              {w.status}
-            </span>
+          >
+            <p className="font-semibold text-gray-900 truncate">
+              {a.user?.name}
+            </p>
+            <p className="text-sm text-gray-500 truncate">
+              {a.user?.email}
+            </p>
+
+            <p className="text-xs text-blue-600 mt-1">
+              Goal: {a.goal?.goalType || "Not Assigned"}
+            </p>
+
+            {Array.isArray(a.workouts) && a.workouts.length > 0 && (
+              <span className="inline-block mt-2 text-xs font-semibold text-green-700 bg-green-100 px-2.5 py-1 rounded-full">
+                Workout Assigned
+              </span>
+            )}
           </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {/* ===== USER PROFILE ===== */}
+  <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+    {/* USER INFO */}
+    <div>
+      <h2 className="text-lg font-semibold mb-5 flex items-center gap-2">
+        <User className="w-5 h-5 text-blue-600" /> User Information
+      </h2>
+
+      <div className="space-y-2 text-sm text-gray-700">
+        {[
+          ["Name", user.name],
+          ["Gender", userProfile.gender],
+          ["Health Condition", userProfile.healthCondition],
+          ["Fitness Level", userProfile.fitnessLevel],
+        ].map(([label, value]) => (
+          <div key={label} className="flex justify-between gap-3">
+            <span className="text-gray-900">{label}</span>
+            <span className="font-medium text-right">{value || "-"}</span>
+          </div>
+        ))}
+
+        <div className="flex justify-between gap-3 items-center">
+          <span className="flex items-center gap-1">
+            <Mail className="w-4 h-4" /> Email
+          </span>
+          <span className="font-medium truncate max-w-[200px]">
+            {user.email || "-"}
+          </span>
         </div>
 
-        {/* Exercises Table */}
-        {Array.isArray(w.exercises) && w.exercises.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-gray-200 rounded-lg">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="text-left px-4 py-2 font-medium text-gray-600">
-                    Exercise Name
-                  </th>
-                  <th className="text-left px-4 py-2 font-medium text-gray-600">
-                    Category
-                  </th>
-                  <th className="text-center px-4 py-2 font-medium text-gray-600">
-                    Sets
-                  </th>
-                  <th className="text-center px-4 py-2 font-medium text-gray-600">
-                    Reps
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {w.exercises.map((ex, j) => (
-                  <tr key={`${i}-${j}`} className="border-t">
-                    <td className="px-4 py-2 text-gray-900 font-medium">
-                      {ex.name}
-                    </td>
-                    <td className="px-4 py-2 text-gray-600">
-                      {ex.category || w.category}
-                    </td>
-                    <td className="px-4 py-2 text-center">
-                      {ex.sets || "-"}
-                    </td>
-                    <td className="px-4 py-2 text-center">
-                      {ex.reps || "-"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-gray-400 text-sm italic mt-3">
-            No exercises added for this workout.
-          </p>
-        )}
+        <div className="flex justify-between gap-3 items-center">
+          <span className="flex items-center gap-1">
+            <Phone className="w-4 h-4" /> Phone
+          </span>
+          <span className="font-medium">
+            {userProfile.phoneNumber || "-"}
+          </span>
+        </div>
       </div>
-    ))}
-  </div>
-) : (
-  <p className="text-gray-400 text-sm italic text-center">
-    No workouts assigned yet.
-  </p>
-)}
+    </div>
 
+    {/* BODY METRICS */}
+    <div>
+      <h2 className="text-lg font-semibold mb-5 flex items-center gap-2">
+        <Activity className="w-5 h-5 text-green-600" /> Body Metrics
+      </h2>
+
+      <div className="grid grid-cols-2 gap-4">
+        {[
+          ["Weight", userProfile.weight, "kg"],
+          ["Height", userProfile.height, "cm"],
+        ].map(([label, value, unit]) => (
+          <div
+            key={label}
+            className="bg-gray-50 border rounded-xl p-5 text-center"
+          >
+            <p className="text-xs uppercase text-gray-500">{label}</p>
+            <p className="text-2xl font-bold">
+              {value || "-"}
+              <span className="text-sm text-gray-500 ml-1">{unit}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* ===== GOAL ===== */}
+  <div className="rounded-2xl bg-gradient-to-r from-blue-800 to-blue-950 text-white p-6 text-center shadow-lg">
+    <p className="text-sm text-blue-200">🎯 Fitness Goal</p>
+    <p className="text-2xl font-bold mt-1">
+      {goal.goalType || "No Goal Assigned"}
+    </p>
+  </div>
+
+  {/* ===== WORKOUTS ===== */}
+  <div className="bg-white rounded-2xl shadow-md p-5 sm:p-6">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4">
+      <h3 className="text-lg sm:text-xl font-semibold">
+        🏋️ Workout Plan
+      </h3>
+      <button
+        onClick={() => setShowModal(true)}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+      >
+        + Add Workout
+      </button>
+    </div>
+
+    {Array.isArray(validWorkouts) && validWorkouts.length > 0 ? (
+      <div className="space-y-6">
+        {validWorkouts.map((w, i) => (
+          <div
+            key={w._id}
+            className="border rounded-xl p-5 shadow-sm"
+          >
+            <div className="flex justify-between mb-4">
+              <div>
+                <p className="text-xs text-gray-500 uppercase">
+                  Workout Category
+                </p>
+                <p className="font-semibold">{w.category}</p>
+              </div>
+
+              <span
+                className={`text-xs font-medium px-3 py-1 rounded-full ${
+                  w.status === "COMPLETED"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-blue-100 text-blue-700"
+                }`}
+              >
+                {w.status}
+              </span>
+            </div>
+
+            {Array.isArray(w.exercises) && w.exercises.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm border rounded-lg">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Exercise</th>
+                      <th className="px-4 py-2 text-left">Category</th>
+                      <th className="px-4 py-2 text-center">Sets</th>
+                      <th className="px-4 py-2 text-center">Reps</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {w.exercises.map((ex, j) => (
+                      <tr key={`${i}-${j}`} className="border-t">
+                        <td className="px-4 py-2 font-medium">{ex.name}</td>
+                        <td className="px-4 py-2">{ex.category}</td>
+                        <td className="px-4 py-2 text-center">{ex.sets || "-"}</td>
+                        <td className="px-4 py-2 text-center">{ex.reps || "-"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-sm italic text-gray-400 mt-2">
+                No exercises added.
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p className="text-center italic text-gray-400">
+        No workouts assigned yet.
+      </p>
+    )}
+  </div>
 </div>
 
-
-
-      {/* ===== ADD WORKOUT MODAL ===== */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-40">
-          <div className="bg-blue-950 rounded-xl p-6 w-full max-w-2xl space-y-4">
-            <h2 className="text-xl font-semibold text-white">Add Workout</h2>
-
-            {exercises.map((ex, idx) => (
-              <div key={idx} className="grid grid-cols-6 gap-2 text-white">
-                <input
-                  className="border p-2 rounded"
-                  placeholder="Name"
-                  value={ex.name}
-                  onChange={(e) => handleChange(idx, "name", e.target.value)}
-                />
-                <select
-                  className="border p-2 rounded bg-blue-800 text-white"
-                  value={ex.category}
-                  onChange={(e) => handleChange(idx, "category", e.target.value)}
-                >
-                  <option value="GENERAL">General</option>
-                  <option value="STRENGTH">Strength</option>
-                  <option value="CARDIO">Cardio</option>
-                  <option value="CORE">Core</option>
-                  <option value="FLEXIBILITY">Flexibility</option>
-                  <option value="BALANCE">Balance</option>
-                  <option value="FUNCTIONAL">Functional</option>
-                  <option value="RECOVERY">Recovery</option>
-                </select>
-                <input className="border p-2 rounded" placeholder="Sets" onChange={(e) => handleChange(idx, "sets", e.target.value)} />
-                <input className="border p-2 rounded" placeholder="Reps" onChange={(e) => handleChange(idx, "reps", e.target.value)} />
-                <input className="border p-2 rounded" placeholder="Duration" onChange={(e) => handleChange(idx, "duration", e.target.value)} />
-                <input className="border p-2 rounded" placeholder="Rest" onChange={(e) => handleChange(idx, "rest", e.target.value)} />
-              </div>
-            ))}
-
-            <div className="flex justify-between">
-              <button onClick={addExercise} className="bg-gray-200 px-4 py-2 rounded">+ Add Row</button>
-              <div>
-                <button onClick={() => setShowModal(false)} className="mr-2 text-white">Cancel</button>
-                <button onClick={handleCreateWorkout} className="bg-blue-600 text-white px-4 py-2 rounded">
-                  {saving ? "Saving..." : "Assign Workout"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
   );
 };
 

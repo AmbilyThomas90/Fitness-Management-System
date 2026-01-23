@@ -92,23 +92,29 @@ const TrainerProfile = () => {
   };
 
   /* ================= LOADING OR ERROR STATES ================= */
-  if (loading) return <p className="p-6">Loading...</p>;
+
+  if (loading) 
+  {
+    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+      </div>
+      )}
   if (!trainer) return <p className="p-6">Profile not found</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-gray-50 to-blue-50 p-6 flex justify-center items-start">
-  <div className="w-full max-w-3xl rounded-2xl bg-white shadow-xl border border-gray-100">
+  <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-gray-50 to-blue-50 px-4 sm:px-6 py-6 flex justify-center items-start">
+  <div className="w-full max-w-4xl rounded-2xl bg-white shadow-xl border border-gray-100 overflow-hidden">
 
     {/* ================= HEADER ================= */}
-    <div className="rounded-t-2xl bg-indigo-600 px-8 py-6">
-      <h2 className="text-2xl md:text-3xl font-bold text-white text-center">
+    <div className="bg-indigo-500 px-4 sm:px-8 py-5 sm:py-6">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-center">
         Trainer Profile
       </h2>
     </div>
 
     {/* ================= CONTENT ================= */}
-    <div className="p-8">
-      <div className="flex flex-col md:flex-row gap-8">
+    <div className="p-4 sm:p-6 md:p-8">
+      <div className="flex flex-col md:flex-row gap-6 md:gap-8">
 
         {/* ================= IMAGE UPLOAD ================= */}
         <div className="flex flex-col items-center md:w-1/3 gap-4">
@@ -122,7 +128,7 @@ const TrainerProfile = () => {
                   : "https://via.placeholder.com/150"
               }
               alt="Trainer"
-              className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-md"
+              className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-md"
             />
           </div>
 
@@ -137,7 +143,7 @@ const TrainerProfile = () => {
               />
               <label
                 htmlFor="profileImage"
-                className="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 transition"
+                className="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-xs sm:text-sm font-medium text-white shadow hover:bg-indigo-700 transition"
               >
                 Select Profile Image
               </label>
@@ -154,12 +160,12 @@ const TrainerProfile = () => {
         {/* ================= INFO ================= */}
         <div className="md:w-2/3 space-y-5">
 
-          <p className="text-gray-800">
+          <p className="text-gray-800 text-sm sm:text-base">
             <span className="font-semibold">Name:</span>{" "}
             {trainer.user?.name}
           </p>
 
-          <p className="text-gray-800">
+          <p className="text-gray-800 text-sm sm:text-base break-all">
             <span className="font-semibold">Email:</span>{" "}
             {trainer.user?.email}
           </p>
@@ -173,10 +179,10 @@ const TrainerProfile = () => {
                 onChange={(e) =>
                   setForm({ ...form, phoneNumber: e.target.value })
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
               />
             ) : (
-              <p className="text-gray-800">
+              <p className="text-gray-800 text-sm sm:text-base">
                 {trainer.phoneNumber}
               </p>
             )}
@@ -191,7 +197,7 @@ const TrainerProfile = () => {
                 onChange={(e) =>
                   setForm({ ...form, specialization: e.target.value })
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
               >
                 <option value="">Select</option>
                 <option value="weight_loss">Weight Loss</option>
@@ -200,7 +206,7 @@ const TrainerProfile = () => {
                 <option value="flexibility">Flexibility</option>
               </select>
             ) : (
-              <p className="text-gray-800 capitalize">
+              <p className="text-gray-800 capitalize text-sm sm:text-base">
                 {trainer.specialization}
               </p>
             )}
@@ -216,10 +222,10 @@ const TrainerProfile = () => {
                 onChange={(e) =>
                   setForm({ ...form, experience: e.target.value })
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
               />
             ) : (
-              <p className="text-gray-800">
+              <p className="text-gray-800 text-sm sm:text-base">
                 {trainer.experience} years
               </p>
             )}
@@ -228,7 +234,7 @@ const TrainerProfile = () => {
       </div>
 
       {/* ================= ACTION BUTTONS ================= */}
-      <div className="mt-8 flex justify-center gap-4">
+      <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
         {isEditing ? (
           <>
             <button
@@ -261,6 +267,7 @@ const TrainerProfile = () => {
     </div>
   </div>
 </div>
+
 
   );
 };

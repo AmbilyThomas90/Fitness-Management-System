@@ -11,6 +11,7 @@ import TrainerRegister from "./pages/auth/TrainerRegister";
 import PlanCard from "./components/PlanCardModal";
 import About from "./pages/public/About";
 import Contact from "./pages/public/Contact";
+import Exercise from "./pages/public/Exercise";
 
 /*Plan */
 import ViewPlans from "./components/PlanForm";
@@ -87,6 +88,8 @@ function App() {
          {/* <Route path="/plans/:id" element={<PlanDetailsView />} /> */}
          <Route path="/about" element={<About />} />
          <Route path="/contact" element={<Contact />} />
+         <Route path="/exercise" element={<Exercise />} />
+     
                
 
         {/* ================= ADMIN DASHBOARD ================= */}

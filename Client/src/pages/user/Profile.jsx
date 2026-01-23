@@ -167,14 +167,15 @@ const handleSubmit = async (e) => {
   }
 
   return (
- <div className="mx-auto mt-10 max-w-xl rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
+ <div className="mx-auto mt-8 w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-5 sm:p-8 shadow-xl">
+
   {/* Header */}
-  <div className="mb-6 flex items-center justify-between">
+  <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div className="flex items-center gap-3">
-      <div className="rounded-lg bg-indigo-50 p-2 ring-1 ring-indigo-100">
-        <UserCircle className="h-6 w-6 text-indigo-600" />
+      <div className="rounded-xl bg-indigo-50 p-2 ring-1 ring-indigo-100">
+        <UserCircle className="h-7 w-7 text-indigo-600" />
       </div>
-      <h2 className="text-2xl font-semibold text-slate-800">
+      <h2 className="text-xl sm:text-2xl font-semibold text-slate-800">
         My Fitness Profile
       </h2>
     </div>
@@ -182,7 +183,7 @@ const handleSubmit = async (e) => {
     {hasProfile && !editMode && (
       <button
         onClick={handleEditClick}
-        className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
       >
         <Pencil className="h-4 w-4" />
         Update Profile
@@ -193,7 +194,7 @@ const handleSubmit = async (e) => {
   {/* Message */}
   {message && (
     <div
-      className={`mb-4 flex items-center gap-2 rounded-lg p-3 text-sm ${
+      className={`mb-5 flex items-center gap-2 rounded-xl p-3 text-sm font-medium ${
         message.includes("✅")
           ? "bg-emerald-50 text-emerald-700"
           : "bg-rose-50 text-rose-700"
@@ -210,7 +211,7 @@ const handleSubmit = async (e) => {
 
   {/* View Mode */}
   {hasProfile && !editMode && (
-    <div className="grid gap-4 rounded-lg bg-slate-50 p-4">
+    <div className="grid gap-3 rounded-xl bg-slate-50 p-4 sm:p-5">
       <ProfileRow icon={User} label="Name" value={profile.name} />
       <ProfileRow icon={Mail} label="Email" value={profile.email} />
       <ProfileRow icon={Phone} label="Phone" value={profile.phoneNumber} />
@@ -218,16 +219,8 @@ const handleSubmit = async (e) => {
       <ProfileRow icon={Users} label="Gender" value={profile.gender} />
       <ProfileRow icon={Ruler} label="Height" value={`${profile.height} cm`} />
       <ProfileRow icon={Scale} label="Weight" value={`${profile.weight} kg`} />
-      <ProfileRow
-        icon={HeartPulse}
-        label="Health Condition"
-        value={profile.healthCondition}
-      />
-      <ProfileRow
-        icon={Activity}
-        label="Fitness Level"
-        value={profile.fitnessLevel}
-      />
+      <ProfileRow icon={HeartPulse} label="Health Condition" value={profile.healthCondition} />
+      <ProfileRow icon={Activity} label="Fitness Level" value={profile.fitnessLevel} />
     </div>
   )}
 
@@ -241,12 +234,12 @@ const handleSubmit = async (e) => {
       <Input icon={Calendar} label="Age" name="age" type="number" value={profile.age} onChange={handleChange} />
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Gender</label>
+        <label className="mb-1 block text-sm font-medium text-slate-700">Gender</label>
         <select
           name="gender"
           value={profile.gender}
           onChange={handleChange}
-          className="w-full rounded border border-slate-300 p-2"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="">Select</option>
           <option value="male">Male</option>
@@ -259,12 +252,12 @@ const handleSubmit = async (e) => {
       <Input icon={Scale} label="Weight (kg)" name="weight" type="number" value={profile.weight} onChange={handleChange} />
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Health Condition</label>
+        <label className="mb-1 block text-sm font-medium text-slate-700">Health Condition</label>
         <select
           name="healthCondition"
           value={profile.healthCondition}
           onChange={handleChange}
-          className="w-full rounded border border-slate-300 p-2"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="NONE">None</option>
           <option value="DIABETES">Diabetes</option>
@@ -277,12 +270,12 @@ const handleSubmit = async (e) => {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Fitness Level</label>
+        <label className="mb-1 block text-sm font-medium text-slate-700">Fitness Level</label>
         <select
           name="fitnessLevel"
           value={profile.fitnessLevel}
           onChange={handleChange}
-          className="w-full rounded border border-slate-300 p-2"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="BEGINNER">Beginner</option>
           <option value="INTERMEDIATE">Intermediate</option>
@@ -291,11 +284,11 @@ const handleSubmit = async (e) => {
       </div>
 
       {/* Buttons */}
-      <div className="mt-6 flex gap-3">
+      <div className="mt-6 flex flex-col sm:flex-row gap-3">
         <button
           type="submit"
           disabled={!hasChanges()}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-white ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition ${
             hasChanges()
               ? "bg-emerald-600 hover:bg-emerald-700"
               : "cursor-not-allowed bg-slate-400"
@@ -309,7 +302,7 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             onClick={() => setEditMode(false)}
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-400 py-2 text-slate-700 hover:bg-slate-300"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-200 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-300"
           >
             <X className="h-4 w-4" />
             Cancel
@@ -319,6 +312,7 @@ const handleSubmit = async (e) => {
     </form>
   )}
 </div>
+
 
   );
 };

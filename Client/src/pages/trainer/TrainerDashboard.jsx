@@ -48,15 +48,15 @@ const TrainerDashboard = () => {
   }
 
   return (
-  <>
+<>
   {/* ===================== */}
   {/* DASHBOARD HEADER */}
   {/* ===================== */}
-  <div className="mb-10 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-[1px] shadow-lg">
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white px-6 py-5">
+  <div className="mb-8 sm:mb-10 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-[1px] shadow-lg">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-white px-4 sm:px-6 py-5">
 
       {/* Profile */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-4 sm:gap-5">
         <div className="relative">
           <img
             src={
@@ -65,25 +65,25 @@ const TrainerDashboard = () => {
                 : "/default-avatar.png"
             }
             alt="Trainer"
-            className="h-16 w-16 rounded-full object-cover ring-2 ring-blue-500"
+            className="h-14 w-14 sm:h-16 sm:w-16 rounded-full object-cover ring-2 ring-blue-500"
             onError={(e) => {
               e.target.src = "/default-avatar.png";
             }}
           />
 
           {/* Online status */}
-          <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full bg-green-500 ring-2 ring-white" />
+          <span className="absolute bottom-0 right-0 h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full bg-green-500 ring-2 ring-white" />
         </div>
 
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">
+          <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
             Welcome back,{" "}
             <span className="text-blue-600">
               {trainer?.user?.name || "Trainer"}
             </span>
           </h1>
           <p className="text-sm text-gray-500">
-              Manage Your clients & workouts
+            Manage your clients & workouts
           </p>
         </div>
       </div>
@@ -99,41 +99,40 @@ const TrainerDashboard = () => {
   {/* ===================== */}
   {/* DASHBOARD ACTION CARDS */}
   {/* ===================== */}
-  <div className="mb-10 mx-auto max-w-5xl grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <div className="mb-8 sm:mb-10 mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-1">
+    {[
+      { to: "profile", label: "Update Profile" },
+      { to: "users-approve", label: "Clients Approvals" },
+      { to: "trainer-users", label: "All Clients" },
+      { to: "workout", label: "Assign Workout" },
+      { to: "nutrition", label: "Assign Nutrition" },
+      { to: "user-progress", label: "Monitor Progress" },
+      { to: "trainer-feedback", label: "Feedback" },
+    ].map((item) => (
+      <Link
+        key={item.to}
+        to={item.to}
+        className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm
+                   transition-all hover:-translate-y-0.5 hover:shadow-md
+                   focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <h3 className="text-base font-semibold text-gray-800 group-hover:text-blue-600">
+          {item.label}
+        </h3>
 
-  {[
-    { to: "profile", label: "Update Profile" },
-    { to: "users-approve", label: "Clients Approvals" },
-    { to: "trainer-users", label: "All Clients" },
-    { to: "workout", label: "Assign Workout" },
-    { to: "nutrition", label: "Assign Nutrition" },
-    { to: "user-progress", label: "Monitor Progress" },
-    // { to: "suggestions", label: "Suggestions" },
-    { to: "trainer-feedback", label: "Feedback" }
-  ].map((item) => (
-    <Link
-      key={item.to}
-      to={item.to}
-      className="group rounded-lg border bg-white p-1 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-    >
-      <h3 className="text-base font-semibold text-gray-800 group-hover:text-blue-600">
-        {item.label}
-      </h3>
-
-      <p className="mt-0.5 text-xs text-gray-500">
-        Manage {item.label.toLowerCase()}
-      </p>
-    </Link>
-  ))}
-</div>
-
+        <p className="mt-1 text-xs text-gray-500">
+          Manage {item.label.toLowerCase()}
+        </p>
+      </Link>
+    ))}
+  </div>
 
   {/* ===================== */}
   {/* DYNAMIC CONTENT AREA */}
   {/* ===================== */}
-  <div className="min-h-[300px] rounded-2xl bg-white p-6 shadow">
+  <div className="min-h-[300px] rounded-2xl bg-white p-4 sm:p-6 shadow">
     {loading ? (
-      <div className="flex items-center justify-center py-20 text-gray-500">
+      <div className="flex items-center justify-center py-20 text-gray-500 text-sm sm:text-base">
         Loading dashboard content...
       </div>
     ) : (
@@ -141,6 +140,7 @@ const TrainerDashboard = () => {
     )}
   </div>
 </>
+
 
   );
 };

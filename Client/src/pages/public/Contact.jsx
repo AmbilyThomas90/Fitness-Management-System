@@ -1,9 +1,41 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
-import Navbar from "../../components/Navbar"; // ✅ adjust path if needed
+import Navbar from "../../components/Navbar"; 
 import Footer from "../../components/Footer";
+import Login from "../../pages/auth/Login";
+import ForgotPassword from "../../pages/auth/ForgotPassword";
+import Register from "../../pages/auth/Register";
+import TrainerRegister from "../../pages/auth/TrainerRegister";
 
 const Contact = () => {
+   const [showAuth, setShowAuth] = useState(false);
+    const [authView, setAuthView] = useState("login");
+    const [showPlans, setShowPlans] = useState(false);
+  
+    /* ===== Auth handlers ===== */
+    const openLogin = () => {
+      setAuthView("login");
+      setShowAuth(true);
+    };
+  
+    const openRegister = () => {
+      setAuthView("register");
+      setShowAuth(true);
+    };
+  
+    const openTrainerRegister = () => {
+      setAuthView("trainer-register");
+      setShowAuth(true);
+    };
+  
+    const openForgot = () => {
+      setAuthView("forgot");
+      setShowAuth(true);
+    };
+  
+    const closeAuthModal = () => {
+      setShowAuth(false);
+    };
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,20 +68,33 @@ const Contact = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      {/* ✅ Navbar now works */}
-      <Navbar />
+      {/*  Navbar now works */}
+          <Navbar
+      openLogin={openLogin}
+        openRegister={openRegister}
+        openTrainerRegister={openTrainerRegister}/>
 
       {/* -------- HEADER -------- */}
-      <section className="bg-gray-900 text-white py-16 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            Contact Smart Fitness Suite
-          </h1>
-          <p className="text-gray-300 text-lg">
-            We’d love to hear from you. Get in touch with us anytime.
-          </p>
-        </div>
-      </section>
+      <section
+  className="relative text-white py-16 px-6 bg-cover bg-center"
+  style={{
+    backgroundImage:
+      "url('https://media.istockphoto.com/id/1129113676/photo/got-a-problem-contact-us.jpg?s=612x612&w=0&k=20&c=ioyOUc3GeUaSqfbl5qVMoRYdyY-Nk6cMfFf6zgqa1rg=')",
+  }}
+>
+  {/* Dark Overlay */}
+  <div className="absolute inset-0 bg-black/70"></div>
+
+  <div className="relative z-10 max-w-5xl mx-auto text-center">
+    <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+      Contact Smart Fitness Suite
+    </h1>
+    <p className="text-gray-300 text-lg">
+      We’d love to hear from you. Get in touch with us anytime.
+    </p>
+  </div>
+</section>
+
 
       {/* -------- CONTACT CONTENT -------- */}
       <section className="py-16 px-6">
@@ -138,6 +183,34 @@ const Contact = () => {
       <section className="bg-gray-900 text-white py-8 text-center">
         <Footer/>
       </section>
+      {/* ================= AUTH MODALS ================= */}
+      {showAuth && authView === "login" && (
+        <Login isModal closeModal={closeAuthModal} switchView={setAuthView} />
+      )}
+
+      {showAuth && authView === "register" && (
+        <Register
+          isModal
+          closeModal={closeAuthModal}
+          switchView={setAuthView}
+        />
+      )}
+
+      {showAuth && authView === "trainer-register" && (
+        <TrainerRegister
+          isModal
+          closeModal={closeAuthModal} // Consistent with other modals
+          switchView={setAuthView}
+        />
+      )}
+
+      {showAuth && authView === "forgot" && (
+        <ForgotPassword
+          isModal
+          closeModal={closeAuthModal}
+          switchView={setAuthView}
+        />
+      )}
     </div>
   );
 };

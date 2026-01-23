@@ -127,7 +127,9 @@ const PlanSubscription = () => {
     }
   };
 
-  if (loading) {return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  if (loading)
+   {
+    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
       </div>
       )}
@@ -135,38 +137,77 @@ const PlanSubscription = () => {
   if (!plan) return <p className="p-6 text-center">Plan not found.</p>;
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg border border-gray-100">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">Confirm Subscription</h1>
+    <div className="mx-auto mt-10 w-full max-w-xl
+                rounded-2xl bg-white
+                p-6 sm:p-8
+                shadow-xl border border-gray-100">
 
-      <div className="space-y-4 text-gray-700">
-        <div className="flex justify-between">
-          <span className="font-semibold text-gray-500">Selected Plan:</span>
-          <span className="font-bold">{plan.planName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-semibold text-gray-500">Billing Cycle:</span>
-          <span className="capitalize">{planType}</span>
-        </div>
-        <div className="flex justify-between text-xl border-t pt-4">
-          <span className="font-bold text-gray-800">Total Amount:</span>
-          <span className="font-extrabold text-green-600">₹{displayAmount}</span>
-        </div>
-      </div>
+  {/* Header */}
+  <h1 className="mb-6 text-xl sm:text-2xl
+                 font-semibold text-gray-800
+                 border-b border-gray-200 pb-4">
+    Confirm Subscription
+  </h1>
 
-      <button
-        onClick={handleSubscribe}
-        disabled={subscribing}
-        className={`mt-8 w-full py-4 rounded-md text-white font-bold text-lg transition-colors ${
-          subscribing ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
-        }`}
-      >
-        {subscribing ? "Processing Payment..." : "Proceed to Pay"}
-      </button>
+  {/* Plan Summary */}
+  <div className="space-y-4 rounded-xl
+                  bg-gray-50 p-4 sm:p-5
+                  text-sm text-gray-700
+                  border border-gray-100">
 
-      <p className="mt-4 text-xs text-gray-400 text-center">
-        Secure payment powered by Razorpay.
-      </p>
+    <div className="flex items-center justify-between">
+      <span className="font-medium text-gray-500">
+        Selected Plan
+      </span>
+      <span className="font-semibold text-gray-800">
+        {plan.planName}
+      </span>
     </div>
+
+    <div className="flex items-center justify-between">
+      <span className="font-medium text-gray-500">
+        Billing Cycle
+      </span>
+      <span className="capitalize">
+        {planType}
+      </span>
+    </div>
+
+    <div className="flex items-center justify-between
+                    border-t border-gray-200 pt-4 text-lg">
+      <span className="font-semibold text-gray-800">
+        Total Amount
+      </span>
+      <span className="font-extrabold text-emerald-600">
+        ₹{displayAmount}
+      </span>
+    </div>
+  </div>
+
+  {/* Action Button */}
+  <button
+    onClick={handleSubscribe}
+    disabled={subscribing}
+    className={`mt-8 w-full
+                rounded-xl py-3.5
+                text-base sm:text-lg
+                font-semibold text-white
+                transition-all duration-200
+                ${
+                  subscribing
+                    ? "cursor-not-allowed bg-gray-400"
+                    : "bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98]"
+                }`}
+  >
+    {subscribing ? "Processing Payment..." : "Proceed to Pay"}
+  </button>
+
+  {/* Footer */}
+  <p className="mt-4 text-center text-xs text-gray-400">
+    Secure payment powered by Razorpay.
+  </p>
+</div>
+
   );
 };
 

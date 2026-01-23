@@ -20,10 +20,26 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  //  Image validation handler
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setProfileImage(file);
-  };
+  const file = e.target.files[0];
+  if (!file) return;
+
+  //  Allow ALL image types
+  if (!file.type.startsWith("image/")) {
+    setError("Only image files are allowed.");
+    setImage(null);
+    setPreview("");
+    e.target.value = null;
+    return;
+  }
+
+  //  Valid image
+  setError("");
+  setImage(file);
+  setPreview(URL.createObjectURL(file));
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +82,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
   };
 
   return (
+    
     // Overlay
     <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] px-4"
@@ -81,7 +98,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
         {/* Close Button */}
         <button
           type="button"
-          onClick={() => closeModal()} // ✅ make sure it's a function call
+          onClick={() => closeModal()} //  make sure it's a function call
           className="absolute top-3 right-4 text-2xl text-gray-400 hover:text-black"
         >
           ✕
@@ -99,6 +116,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-3">
+          {/* Name */}
           <input
             className="w-full border p-2 rounded"
             name="name"
@@ -107,25 +125,40 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
             required
             onChange={handleChange}
           />
+          {/* Email*/}
           <input
-            className="w-full border p-2 rounded"
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            required
-            onChange={handleChange}
-          />
-          <input
-            className="w-full border p-2 rounded"
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            required
-            minLength={6}
-            onChange={handleChange}
-          />
+        name="email"
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
+        title="Please enter a valid email address"
+        className="w-full rounded-lg border border-gray-300
+                   px-4 py-2.5 text-sm
+                   focus:outline-none focus:ring-2
+                   focus:ring-indigo-500 focus:border-indigo-500
+                   transition
+                   invalid:border-red-500 invalid:ring-red-500"
+      />
+         
+      {/* Password */}
+      <input
+        name="password"
+        type="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+        minLength={6}
+        required
+        className="w-full rounded-lg border border-gray-300
+                   px-4 py-2.5 text-sm
+                   focus:outline-none focus:ring-2
+                   focus:ring-indigo-500 focus:border-indigo-500
+                   transition
+                   invalid:border-red-500 invalid:ring-red-500"
+      />
           <input
             className="w-full border p-2 rounded"
             name="phoneNumber"

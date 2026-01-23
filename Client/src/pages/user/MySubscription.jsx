@@ -57,43 +57,71 @@ const MySubscription = () => {
     subscription;
 
   return (
-<div className="mx-auto max-w-xl rounded-xl bg-white p-6 shadow">
-  <h1 className="mb-4 text-2xl font-semibold text-slate-800">
+<div className="mx-auto mt-10 w-full max-w-xl
+                rounded-2xl bg-white
+                p-5 sm:p-6
+                shadow-lg border border-gray-100">
+
+  {/* Header */}
+  <h1 className="mb-5 text-xl sm:text-2xl
+                 font-semibold text-slate-800">
     My Subscription
   </h1>
 
   {/* Subscription Details */}
-  <div className="space-y-2 text-slate-700">
-    <p>
-      <strong>Plan:</strong> {plan.planName}
-    </p>
-    <p>
-      <strong>Plan Type:</strong> {planType}
-    </p>
-    <p>
-      <strong>Amount:</strong> ₹{planAmount}
-    </p>
-    <p>
-      <strong>Status:</strong>{" "}
-      <span className="font-semibold text-emerald-600">
+  <div className="divide-y divide-gray-100
+                  rounded-xl border border-gray-100
+                  bg-gray-50 px-4 py-3
+                  text-sm text-slate-700">
+
+    <div className="flex justify-between py-2">
+      <span className="font-medium text-slate-600">Plan</span>
+      <span className="font-semibold">{plan.planName}</span>
+    </div>
+
+    <div className="flex justify-between py-2">
+      <span className="font-medium text-slate-600">Plan Type</span>
+      <span>{planType}</span>
+    </div>
+
+    <div className="flex justify-between py-2">
+      <span className="font-medium text-slate-600">Amount</span>
+      <span className="font-semibold text-indigo-600">
+        ₹{planAmount}
+      </span>
+    </div>
+
+    <div className="flex justify-between py-2">
+      <span className="font-medium text-slate-600">Status</span>
+      <span className="rounded-full bg-emerald-100
+                       px-3 py-0.5
+                       text-xs font-semibold
+                       text-emerald-700">
         {status}
       </span>
-    </p>
-    <p>
-      <strong>Start Date:</strong>{" "}
-      {new Date(startDate).toLocaleDateString()}
-    </p>
-    <p>
-      <strong>End Date:</strong>{" "}
-      {new Date(endDate).toLocaleDateString()}
-    </p>
+    </div>
+
+    <div className="flex justify-between py-2">
+      <span className="font-medium text-slate-600">Start Date</span>
+      <span>{new Date(startDate).toLocaleDateString()}</span>
+    </div>
+
+    <div className="flex justify-between py-2">
+      <span className="font-medium text-slate-600">End Date</span>
+      <span>{new Date(endDate).toLocaleDateString()}</span>
+    </div>
   </div>
 
   {/* Action Buttons */}
-  <div className="mt-6 flex gap-3">
+  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
     <button
       onClick={() => navigate("/user/goals")}
-      className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+      className="flex w-full flex-1 items-center justify-center
+                 gap-2 rounded-lg
+                 bg-indigo-600 px-4 py-2.5
+                 text-sm font-semibold text-white
+                 hover:bg-indigo-700
+                 transition"
     >
       <Target className="h-4 w-4" />
       Set Goal
@@ -101,13 +129,19 @@ const MySubscription = () => {
 
     <button
       onClick={() => navigate("/user/select-trainer")}
-      className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+      className="flex w-full flex-1 items-center justify-center
+                 gap-2 rounded-lg
+                 bg-emerald-600 px-4 py-2.5
+                 text-sm font-semibold text-white
+                 hover:bg-emerald-700
+                 transition"
     >
       <CalendarCheck className="h-4 w-4" />
       Trainer Appointment
     </button>
   </div>
 </div>
+
 
   );
 };

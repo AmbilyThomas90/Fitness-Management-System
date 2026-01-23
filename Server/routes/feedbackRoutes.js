@@ -1,10 +1,10 @@
 import express from "express";
 import {
   createFeedback,
-  getTrainerFeedback,
+  getApprovedUsersFeedback,
 } from "../controllers/feedbackController.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { authorizeRole } from "../middleware/roleMiddleware.js";
+// import { authorizeRole } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
@@ -12,12 +12,11 @@ const router = express.Router();
 router.post(
   "/user-feedback",
   protect,
-  authorizeRole("user"),
   createFeedback
 );
 
 // Trainer views feedback
-router.get("/trainer-feedback", protect, getTrainerFeedback);
+router.get("/trainer-feedback", protect, getApprovedUsersFeedback);
 // router.get(
 //   "/trainer/feedback",
 //   protect,

@@ -105,85 +105,121 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
     : "w-full max-w-md bg-white p-6 rounded-lg shadow-lg";
 
   return (
-    <div className={modalWrapperClass}>
-      <div className={modalContentClass}>
-        {isModal && closeModal && (
-          <button
-            onClick={closeModal}
-            className="absolute top-2 right-3 text-xl font-bold"
-          >
-            ✕
-          </button>
-        )}
+<div className={`${modalWrapperClass} flex items-center justify-center px-4`}>
+  <div
+    className={`${modalContentClass} relative w-full max-w-md
+                bg-white rounded-2xl shadow-xl
+                p-6 sm:p-8`}
+  >
+    {/* Close button */}
+    {isModal && closeModal && (
+      <button
+        onClick={closeModal}
+        aria-label="Close"
+        className="absolute top-3 right-4 text-gray-500
+                   hover:text-gray-800 text-xl font-semibold transition"
+      >
+        ✕
+      </button>
+    )}
 
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+    <h2 className="text-2xl sm:text-3xl font-semibold text-center text-gray-800 mb-6">
+      Login
+    </h2>
 
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded text-sm text-center mb-4">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-
-          <div className="text-right">
-            {switchView ? (
-              <span
-                onClick={() => switchView("forgot")}
-                className="text-sm text-blue-500 cursor-pointer"
-              >
-                Forgot password?
-              </span>
-            ) : (
-              <Link to="/forgot-password" className="text-sm text-blue-500">
-                Forgot password?
-              </Link>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-500 text-white py-2 rounded disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <p className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          {switchView ? (
-            <span
-              onClick={() => switchView("register")}
-              className="text-blue-500 cursor-pointer"
-            >
-              Sign Up
-            </span>
-          ) : (
-            <Link to="/register" className="text-blue-500">
-              Sign Up
-            </Link>
-          )}
-        </p>
+    {error && (
+      <div className="mb-4 rounded-lg border border-red-200 bg-red-50
+                      px-4 py-2 text-sm text-center text-red-600">
+        {error}
       </div>
-    </div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Email */}
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+        className="w-full rounded-lg border border-gray-300 px-4 py-2.5
+                   text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+                   focus:border-blue-500 transition
+                   invalid:border-red-500 invalid:ring-red-500"
+      />
+
+      {/* Password */}
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+        required
+        minLength={6}
+        className="w-full rounded-lg border border-gray-300 px-4 py-2.5
+                   text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+                   focus:border-blue-500 transition
+                   invalid:border-red-500 invalid:ring-red-500"
+      />
+
+      {/* Forgot password */}
+      <div className="flex justify-end">
+        {switchView ? (
+          <span
+            onClick={() => switchView("forgot")}
+            className="text-sm text-blue-600 cursor-pointer
+                       hover:underline font-medium"
+          >
+            Forgot password?
+          </span>
+        ) : (
+          <Link
+            to="/forgot-password"
+            className="text-sm text-blue-600 hover:underline font-medium"
+          >
+            Forgot password?
+          </Link>
+        )}
+      </div>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-lg bg-blue-600 text-white py-2.5
+                   text-sm font-medium hover:bg-blue-700
+                   disabled:opacity-60 disabled:cursor-not-allowed transition"
+      >
+        {loading ? "Logging in..." : "Login"}
+      </button>
+    </form>
+
+    {/* Sign up */}
+    <p className="mt-6 text-center text-sm text-gray-600">
+      Don&apos;t have an account?{" "}
+      {switchView ? (
+        <span
+          onClick={() => switchView("register")}
+          className="text-blue-600 cursor-pointer font-medium hover:underline"
+        >
+          Sign Up
+        </span>
+      ) : (
+        <Link
+          to="/register"
+          className="text-blue-600 font-medium hover:underline"
+        >
+          Sign Up
+        </Link>
+      )}
+    </p>
+  </div>
+</div>
+
+
   );
 };
 

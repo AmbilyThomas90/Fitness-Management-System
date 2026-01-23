@@ -9,20 +9,25 @@ import Subscription from "../models/Subscription.js";
 ========================= */
 export const getDashboardStatus = async (req, res) => {
   try {
-    const users = await User.countDocuments({ role: "user" });
-    const trainers = await Trainer.countDocuments();
-
-    const revenueAgg = await Payment.aggregate([
-      {
-        $group: {
-          _id: null,
-          total: { $sum: { $ifNull: ["$planAmount", 0] } },
+    // Run all queries in parallel
+    const [users, trainers, revenueAgg] = await Promise.all([
+      User.countDocuments({ role: "user" }),
+      Trainer.countDocuments(),
+      Payment.aggregate([
+        {
+          $group: {
+            _id: null,
+            total: { $sum: { $ifNull: ["$planAmount", 0] } },
+          },
         },
-      },
+      ]),
     ]);
 
     const revenue = revenueAgg.length > 0 ? revenueAgg[0].total : 0;
 
+    // Explicitly prevent caching if you want fresh data every time
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    
     res.status(200).json({
       users,
       trainers,
@@ -30,12 +35,9 @@ export const getDashboardStatus = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Dashboard stats error:", error);
-    res.status(500).json({
-      message: "Failed to load dashboard stats",
-    });
+    res.status(500).json({ message: "Failed to load dashboard stats" });
   }
 };
-
 
 /* =========================
    GET ALL USERS + PROFILE + GOAL
