@@ -22,6 +22,9 @@ import { getMySubscription } from "../controllers/subscriptionController.js";
 import { getUserDashboard } from "../controllers/dashboardController.js";
 import {getMyPayments} from "../controllers/paymentController.js";
 import { getUserWorkouts,updateWorkoutStatus } from "../controllers/workoutController.js";
+import {
+  getUserNutrition 
+} from "../controllers/nutritionController.js";
 //import {getUserNutrition} from "../controllers/nutritionController.js";
 
 const router = express.Router();
@@ -67,7 +70,8 @@ router.get("/dashboard", protect, authorizeRole("user"), getUserDashboard);
 
  //--------------User- Workout ----------------//
 router.get("/workouts", protect, authorizeRole("user"), getUserWorkouts);
-
+// Get user nutrition --By User
+router.get("/user-nutrition", protect,getUserNutrition);
 // Update status of a specific workout  --By User
 router.patch("/work/:workoutId/status", protect, authorizeRole("user"), updateWorkoutStatus);
 
