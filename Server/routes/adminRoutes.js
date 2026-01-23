@@ -30,7 +30,7 @@ router.get("/dashboard", protect, authorizeRole("admin"), getDashboardStatus);
 router.patch("/users/:id/block", protect, authorizeRole("admin"), blockUnblockUser);
 
 // Get users ,profiles and goals
-router.get("/users", protect,  getAllUsersWithProfile);
+router.get("/users", protect, authorizeRole("admin"), getAllUsersWithProfile);
 
 /* =======================
    ADMIN TRAINERS / REPORTS

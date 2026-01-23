@@ -19,7 +19,7 @@ const Users = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setUsers(res.data);
+      setUsers(res.data.data); // note: API returns { success, data }
     } catch (err) {
       console.error("Failed to fetch users", err);
       setError("Unable to load users");
@@ -38,14 +38,15 @@ const Users = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setUsers(prev =>
-        prev.map(user =>
+      setUsers((prev) =>
+        prev.map((user) =>
           user._id === userId
             ? {
                 ...user,
                 profile: {
                   ...user.profile,
-                  isActive: !user.profile?.isActive,
+                  status:
+                    user.profile?.status === "active" ? "blocked" : "active",
                 },
               }
             : user
@@ -64,35 +65,29 @@ const Users = () => {
       </div>
     );
   }
+
   if (error) return <p className="p-6 text-red-600">{error}</p>;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
-      {/* Section Header */}
       <h2 className="flex items-center text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-6 gap-2">
         <FaUsers className="w-6 h-6 text-blue-500" />
         Users
       </h2>
 
-      {/* ================= MOBILE VIEW ================= */}
+      {/* MOBILE VIEW */}
       <div className="grid gap-4 md:hidden">
         {users.map((user) => {
-          const isActive = user.profile?.isActive;
+          const isActive = user.profile?.status === "active";
 
           return (
             <div
               key={user._id}
-              className="
-                bg-white dark:bg-slate-800
-                rounded-2xl
-                shadow-sm hover:shadow-lg
-                p-4 sm:p-5
-                transition-all duration-300
-              "
+              className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-lg p-4 sm:p-5 transition-all duration-300"
             >
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-semibold text-gray-900 dark:text-white">
-                  {user.name}
+                  {user.displayName}
                 </h3>
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -112,16 +107,22 @@ const Users = () => {
                 📞 {user.profile?.phoneNumber || "-"}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-300">
-                🎯 Goal: {user.goal?.goalType || "-"}
+                🎯 Goal: {user.goal?.userGoal || "-"}
               </p>
               <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
-                💰 Plan: {user.planName} ({user.planAmount > 0 ? `₹${user.planAmount}` : "-"})
+                💰 Plan: {user.payment?.planName || "-"} (
+                {user.payment?.planAmount
+                  ? `₹${user.payment.planAmount.toLocaleString()}`
+                  : "-"}
+                )
               </p>
 
               <button
                 onClick={() => toggleBlock(user._id)}
                 className={`w-full mt-3 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${
-                  isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                  isActive
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-green-600 hover:bg-green-700"
                 }`}
               >
                 {isActive ? "Block User" : "Unblock User"}
@@ -131,7 +132,7 @@ const Users = () => {
         })}
       </div>
 
-      {/* ================= DESKTOP VIEW ================= */}
+      {/* DESKTOP VIEW */}
       <div className="hidden md:block overflow-x-auto rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm">
         <table className="w-full text-sm sm:text-base">
           <thead className="bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-gray-300">
@@ -148,34 +149,28 @@ const Users = () => {
               <th className="p-3 text-left">Action</th>
             </tr>
           </thead>
-
           <tbody>
             {users.length > 0 ? (
               users.map((user) => {
-                const isActive = user.profile?.isActive;
+                const isActive = user.profile?.status === "active";
 
                 return (
                   <tr
                     key={user._id}
                     className="border-t hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                   >
-                    <td className="p-3">{user.name}</td>
+                    <td className="p-3">{user.displayName}</td>
                     <td className="p-3">{user.email}</td>
                     <td className="p-3">{user.profile?.phoneNumber || "-"}</td>
                     <td className="p-3">{user.profile?.age || "-"}</td>
                     <td className="p-3 capitalize">{user.profile?.gender || "-"}</td>
-                    <td className="p-3">{user.goal?.goalType || "-"}</td>
-
-                    {/* Displays planName from top-level user object */}
-                    <td className="p-3 text-gray-700 dark:text-gray-300">
-                        {user.planName || "No Plan"}
-                    </td>
-
-                    {/* Displays planAmount from top-level user object */}
+                    <td className="p-3">{user.goal?.userGoal || "-"}</td>
+                    <td className="p-3">{user.payment?.planName || "No Plan"}</td>
                     <td className="p-3 font-semibold text-green-600">
-                        {user.planAmount > 0 ? `₹${user.planAmount.toLocaleString()}` : "-"}
+                      {user.payment?.planAmount
+                        ? `₹${user.payment.planAmount.toLocaleString()}`
+                        : "-"}
                     </td>
-
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -191,7 +186,9 @@ const Users = () => {
                       <button
                         onClick={() => toggleBlock(user._id)}
                         className={`px-3 py-1 rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-300 ${
-                          isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                          isActive
+                            ? "bg-red-600 hover:bg-red-700"
+                            : "bg-green-600 hover:bg-green-700"
                         }`}
                       >
                         {isActive ? "Block" : "Unblock"}

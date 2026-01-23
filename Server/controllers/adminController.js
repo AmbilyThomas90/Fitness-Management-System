@@ -44,64 +44,42 @@ export const getDashboardStatus = async (req, res) => {
 ========================= */
 export const getAllUsersWithProfile = async (req, res) => {
   try {
-    // 1️⃣ Fetch all users
-    const users = await User.find({ role: "user" }).select("-password").lean();
+    const users = await User.find()
+      .select("displayName email") // only displayName and email from User
+      .populate({
+        path: "profile",           // assuming User has a profile field pointing to UserProfile
+        model: "UserProfile",
+        select: "age phoneNumber gender status"
+      })
+      .populate({
+        path: "goal",             // assuming User has a goal field pointing to Goal
+        model: "Goal",
+        select: "userGoal"
+      })
+      .lean(); // optional: converts Mongoose docs to plain JS objects
 
-    // 2️⃣ Fetch related data in parallel
-    const [profiles, goals, subscriptions, payments] = await Promise.all([
-      UserProfile.find().lean(),
-      Goal.find().lean(),
-      Subscription.find().lean(),
-      Payment.find({ status: "success" }).sort({ createdAt: -1 }).lean(),
-    ]);
+    // If you want to include latest Payment and Plan info per user
+    const usersWithPayment = await Promise.all(
+      users.map(async (user) => {
+        const payment = await Payment.findOne({ user: user._id })
+          .populate({
+            path: "plan",
+            select: "planName planAmount"
+          })
+          .select("planName planAmount trainerEarning paymentMethod status") // optional
+          .lean();
 
-    // 3️⃣ Create lookup maps
-    const profileMap = {};
-    profiles.forEach(p => { if (p.user) profileMap[p.user.toString()] = p; });
+        return {
+          ...user,
+          payment: payment || null
+        };
+      })
+    );
 
-    const goalMap = {};
-    goals.forEach(g => { if (g.user) goalMap[g.user.toString()] = g; });
-
-    const subscriptionMap = {};
-    subscriptions.forEach(sub => {
-      const userId = sub.user?.toString();
-      if (userId) {
-        if (!subscriptionMap[userId] || new Date(sub.startDate) > new Date(subscriptionMap[userId].startDate)) {
-          subscriptionMap[userId] = sub;
-        }
-      }
-    });
-
-    const paymentMap = {};
-    payments.forEach(pay => {
-      const userId = pay.user?.toString();
-      if (userId && !paymentMap[userId]) {
-        paymentMap[userId] = pay;
-      }
-    });
-
-    // 4️⃣ Final Merge with Flattened Fields
-    const usersWithDetails = users.map(user => {
-      const id = user._id.toString();
-      const sub = subscriptionMap[id] || null;
-      const pay = paymentMap[id] || null;
-
-      return {
-        ...user,
-        profile: profileMap[id] || null,
-        goal: goalMap[id] || null,
-        subscription: sub,
-        payment: pay,
-        // Root-level fields for easy React Table access
-        planName: sub?.planName || pay?.planName || "No Plan",
-        planAmount: sub?.planAmount || pay?.planAmount || 0,
-        planType: sub?.planType || "-",
-      };
-    });
-
-    res.status(200).json(usersWithDetails);
+    res.status(200).json({ success: true, data: usersWithPayment });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch users" });
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
