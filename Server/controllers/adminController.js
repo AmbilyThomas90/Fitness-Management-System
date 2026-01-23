@@ -103,18 +103,25 @@ export const getAllUsersWithProfile = async (req, res) => {
     });
 
     // 7️⃣ Merge
-    const usersWithDetails = users
-      .filter(user => profileMap[user._id.toString()])
-      .map(user => {
-        const id = user._id.toString();
-        return {
-          ...user,
-          profile: profileMap[id] || null,
-          goal: goalMap[id] || null,
-          subscription: subscriptionMap[id] || null,
-          payment: paymentMap[id] || null,
-        };
-      });
+
+const usersWithDetails = users
+  .filter(user => profileMap[user._id.toString()])
+  .map(user => {
+    const id = user._id.toString();
+    const activeSub = subscriptionMap[id] || null;
+    const latestPayment = paymentMap[id] || null;
+
+    return {
+      ...user,
+      profile: profileMap[id] || null,
+      goal: goalMap[id] || null,
+      subscription: activeSub,
+      payment: latestPayment,
+      // Manually add these fields if your frontend expects them at the top level:
+      planName: activeSub ? activeSub.planName : (latestPayment ? latestPayment.planName : "No Plan"),
+      planAmount: activeSub ? activeSub.planAmount : (latestPayment ? latestPayment.amount : "-"),
+    };
+  });
 
     res.status(200).json(usersWithDetails);
   } catch (error) {
