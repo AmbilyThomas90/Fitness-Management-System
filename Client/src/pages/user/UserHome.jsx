@@ -10,10 +10,17 @@ const UserHome = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await api.get("/user/dashboard");
+        const token = localStorage.getItem("token");
+
+        const response = await api.get("/user/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching dashboard:", error);
+        console.error("Error fetching dashboard:", error.response?.data || error.message);
       } finally {
         setLoading(false);
       }
@@ -22,16 +29,18 @@ const UserHome = () => {
     fetchDashboardData();
   }, []);
 
-   if (loading) 
-  {
-    return(<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
       </div>
-      )}
+    );
+  }
 
-  // ✅ CORRECT & SAFE USER NAME ACCESS
+  // ✅ SAFE USER NAME RESOLUTION
   const userName =
     data?.user?.name ||
+    data?.user?.username ||
     data?.name ||
     "User";
 
@@ -39,58 +48,62 @@ const UserHome = () => {
   const trainer = data?.trainer || null;
 
   return (
- <div className="min-h-screen bg-gray-800 p-6">
+    <div className="min-h-screen bg-gray-800 p-6">
 
-  {/* ===== Welcome Header ===== */}
-  <div className="mb-6 mt-4">
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-lg px-6 py-5">
-      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
-        Welcome back,
-        <span className="text-green-600">{userName}</span> 👋
-      </h1>
+      {/* ===== Welcome Header ===== */}
+      <div className="mb-6 mt-4">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg px-6 py-5">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
+            Welcome back,
+            <span className="text-green-600">{userName}</span> 👋
+          </h1>
 
-      <p className="mt-3 max-w-xl text-sm sm:text-base font-semibold leading-relaxed tracking-wide
-                    bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50
-                    text-indigo-800
-                    px-4 py-3
-                    rounded-xl
-                    border border-indigo-200
-                    shadow-sm">
-        Stay consistent. Stay strong. Your fitness journey continues here.
-      </p>
-    </div>
-  </div>
+          <p className="mt-3 max-w-xl text-sm sm:text-base font-semibold leading-relaxed tracking-wide
+                        bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50
+                        text-indigo-800
+                        px-4 py-3
+                        rounded-xl
+                        border border-indigo-200
+                        shadow-sm">
+            Stay consistent. Stay strong. Your fitness journey continues here.
+          </p>
+        </div>
+      </div>
 
-  {/* ===== Stats Grid ===== */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div className="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500 flex flex-col justify-between">
-      <h3 className="font-semibold text-gray-500 text-xs uppercase">Active Plan</h3>
-      <p className="text-blue-600 text-xl font-bold mt-2">{subscription?.planName || "No Active Plan"}</p>
-    </div>
+      {/* ===== Stats Grid ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
+          <h3 className="font-semibold text-gray-500 text-xs uppercase">Active Plan</h3>
+          <p className="text-blue-600 text-xl font-bold mt-2">
+            {subscription?.planName || "No Active Plan"}
+          </p>
+        </div>
 
-    <div className="bg-white p-4 rounded-lg shadow border-l-4 border-green-500 flex flex-col justify-between">
-      <h3 className="font-semibold text-gray-500 text-xs uppercase">Your Trainer</h3>
-      <p className="text-green-600 text-xl font-bold mt-2">{trainer?.name || "Not Assigned"}</p>
-    </div>
+        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
+          <h3 className="font-semibold text-gray-500 text-xs uppercase">Your Trainer</h3>
+          <p className="text-green-600 text-xl font-bold mt-2">
+            {trainer?.name || "Not Assigned"}
+          </p>
+        </div>
 
-    <div className="bg-white p-4 rounded-lg shadow border-l-4 border-purple-500 flex items-center justify-center">
-      <button
-        onClick={() => navigate("/user/workouts")}
-        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition w-full"
-      >
-        Your Workouts
-      </button>
-    </div>
+        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-purple-500 flex items-center">
+          <button
+            onClick={() => navigate("/user/workouts")}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg w-full"
+          >
+            Your Workouts
+          </button>
+        </div>
 
-    <div className="bg-white p-4 rounded-lg shadow border-l-4 border-red-500 flex items-center justify-center">
-      <button
-        onClick={() => navigate("/user/nutrition")}
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition w-full"
-      >
-        Your Nutrition
-      </button>
-    </div>
-  </div>
+        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-red-500 flex items-center">
+          <button
+            onClick={() => navigate("/user/nutrition")}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg w-full"
+          >
+            Your Nutrition
+          </button>
+        </div>
+      </div>
 
   {/* ===== Plan & Trainer Details ===== */}
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
