@@ -44,10 +44,10 @@ export const getDashboardStatus = async (req, res) => {
 ========================= */
 export const getAllUsersWithProfile = async (req, res) => {
   try {
-    console.log("Fetching all users with specific plan details...");
-
+    // 1️⃣ Fetch all users
     const users = await User.find({ role: "user" }).select("-password").lean();
 
+    // 2️⃣ Fetch related data in parallel
     const [profiles, goals, subscriptions, payments] = await Promise.all([
       UserProfile.find().lean(),
       Goal.find().lean(),
@@ -55,6 +55,7 @@ export const getAllUsersWithProfile = async (req, res) => {
       Payment.find({ status: "success" }).sort({ createdAt: -1 }).lean(),
     ]);
 
+    // 3️⃣ Create lookup maps
     const profileMap = {};
     profiles.forEach(p => { if (p.user) profileMap[p.user.toString()] = p; });
 
@@ -62,51 +63,48 @@ export const getAllUsersWithProfile = async (req, res) => {
     goals.forEach(g => { if (g.user) goalMap[g.user.toString()] = g; });
 
     const subscriptionMap = {};
-    const today = new Date();
     subscriptions.forEach(sub => {
       const userId = sub.user?.toString();
-      if (!userId) return;
-      const isActive = sub.status === "active" && (!sub.endDate || new Date(sub.endDate) >= today);
-      if (isActive) subscriptionMap[userId] = sub;
+      if (userId) {
+        if (!subscriptionMap[userId] || new Date(sub.startDate) > new Date(subscriptionMap[userId].startDate)) {
+          subscriptionMap[userId] = sub;
+        }
+      }
     });
 
     const paymentMap = {};
     payments.forEach(pay => {
       const userId = pay.user?.toString();
-      if (!userId || paymentMap[userId]) return;
-      paymentMap[userId] = {
-        planName: pay.planName,
-        planAmount: pay.planAmount, // Consistency: Use planAmount
-        paymentStatus: pay.status,
+      if (userId && !paymentMap[userId]) {
+        paymentMap[userId] = pay;
+      }
+    });
+
+    // 4️⃣ Final Merge with Flattened Fields
+    const usersWithDetails = users.map(user => {
+      const id = user._id.toString();
+      const sub = subscriptionMap[id] || null;
+      const pay = paymentMap[id] || null;
+
+      return {
+        ...user,
+        profile: profileMap[id] || null,
+        goal: goalMap[id] || null,
+        subscription: sub,
+        payment: pay,
+        // Root-level fields for easy React Table access
+        planName: sub?.planName || pay?.planName || "No Plan",
+        planAmount: sub?.planAmount || pay?.planAmount || 0,
+        planType: sub?.planType || "-",
       };
     });
 
-    const usersWithDetails = users
-      .filter(user => profileMap[user._id.toString()])
-      .map(user => {
-        const id = user._id.toString();
-        const paymentData = paymentMap[id];
-        const subData = subscriptionMap[id];
-
-        return {
-          ...user,
-          profile: profileMap[id] || null,
-          goal: goalMap[id] || null,
-          subscription: subData || null,
-          payment: paymentData || null,
-          // Extracting these for the frontend table
-          planName: subData?.planName || paymentData?.planName || "No Plan",
-          planAmount: subData?.planAmount || paymentData?.planAmount || 0,
-          planType: subData?.planType || "-"
-        };
-      });
-
     res.status(200).json(usersWithDetails);
   } catch (error) {
-    console.error("Admin get users error:", error);
     res.status(500).json({ message: "Failed to fetch users" });
   }
 };
+
 
 
 /* =========================

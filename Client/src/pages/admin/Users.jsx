@@ -42,12 +42,12 @@ const Users = () => {
         prev.map(user =>
           user._id === userId
             ? {
-                ...user,
-                profile: {
-                  ...user.profile,
-                  isActive: !user.profile?.isActive,
-                },
-              }
+              ...user,
+              profile: {
+                ...user.profile,
+                isActive: !user.profile?.isActive,
+              },
+            }
             : user
         )
       );
@@ -90,21 +90,22 @@ const Users = () => {
                 transition-all duration-300
               "
             >
+              {/* Header: Name + Status */}
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-semibold text-gray-900 dark:text-white">
                   {user.name}
                 </h3>
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    isActive
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
                       ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
                       : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
-                  }`}
+                    }`}
                 >
                   {isActive ? "Active" : "Blocked"}
                 </span>
               </div>
 
+              {/* User Info */}
               <p className="text-sm text-gray-500 dark:text-gray-300">
                 {user.email}
               </p>
@@ -114,15 +115,16 @@ const Users = () => {
               <p className="text-sm text-gray-500 dark:text-gray-300">
                 🎯 Goal: {user.goal?.goalType || "-"}
               </p>
-              <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
-                💰 Plan: {user.payment?.planName || "No Plan"} ({user.payment?.planAmount > 0 ? `₹${user.payment?.planAmount}` : "-"})
+              <p className="text-sm text-gray-500 dark:text-gray-300">
+                💰 Plan Amount:{" "}
+                {user.payment ? `$${user.payment.amount}` : "No Plan"}
               </p>
 
+              {/* Action Button */}
               <button
                 onClick={() => toggleBlock(user._id)}
-                className={`w-full mt-3 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${
-                  isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-                }`}
+                className={`w-full mt-3 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                  }`}
               >
                 {isActive ? "Block User" : "Unblock User"}
               </button>
@@ -142,8 +144,8 @@ const Users = () => {
               <th className="p-3 text-left">Age</th>
               <th className="p-3 text-left">Gender</th>
               <th className="p-3 text-left">Goal</th>
-              <th className="p-3 text-left">Plan Name</th>
               <th className="p-3 text-left">Plan Amount</th>
+              <th className="p-3 text-left">Plan Type</th>
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Action</th>
             </tr>
@@ -163,26 +165,19 @@ const Users = () => {
                     <td className="p-3">{user.email}</td>
                     <td className="p-3">{user.profile?.phoneNumber || "-"}</td>
                     <td className="p-3">{user.profile?.age || "-"}</td>
-                    <td className="p-3 capitalize">{user.profile?.gender || "-"}</td>
+                    <td className="p-3">{user.profile?.gender || "-"}</td>
                     <td className="p-3">{user.goal?.goalType || "-"}</td>
 
-                    {/* Displays planName from top-level user object */}
-                    <td className="p-3 text-gray-700 dark:text-gray-300">
-                        {user.payment?.planName || "No Plan"}
-                    </td>
+                    <td className="p-3">  {user.payment?.planName || "No Plan"} </td>
 
-                    {/* Displays planAmount from top-level user object */}
-                    <td className="p-3 font-semibold text-green-600">
-                        {user.payment?.planAmount > 0 ? `₹${user.planAmount.toLocaleString()}` : "-"}
-                    </td>
-
-                      <td className="p-3">
-                        <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          isActive
+                    <td className="p-3 font-semibold text-green-600">{user.payment?.amount
+                        ? `₹${user.payment.amount.toLocaleString()}`  : "-"}</td>
+                    <td className="p-3">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
                             ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
                             : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
-                        }`}
+                          }`}
                       >
                         {isActive ? "Active" : "Blocked"}
                       </span>
@@ -190,9 +185,8 @@ const Users = () => {
                     <td className="p-3">
                       <button
                         onClick={() => toggleBlock(user._id)}
-                        className={`px-3 py-1 rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-300 ${
-                          isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
-                        }`}
+                        className={`px-3 py-1 rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-300 ${isActive ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                          }`}
                       >
                         {isActive ? "Block" : "Unblock"}
                       </button>
