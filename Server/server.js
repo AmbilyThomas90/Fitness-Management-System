@@ -24,16 +24,19 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 const app = express();
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-// ...............url vercel............//
-app.use(
-  cors({
-    origin: "https://fitness-management-system-zeta.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-app.options("/*", cors());
+// CORS Configuration
+const corsOptions = {
+  origin: [
+    "https://fitness-management-system-zeta.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
