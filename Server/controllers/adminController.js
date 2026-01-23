@@ -109,7 +109,6 @@ export const getAllUsersWithProfile = async (req, res) => {
 };
 
 
-
 /* =========================
   Block users and unblock users
 ========================= */
