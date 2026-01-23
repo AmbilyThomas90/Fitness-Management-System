@@ -44,84 +44,62 @@ export const getDashboardStatus = async (req, res) => {
 ========================= */
 export const getAllUsersWithProfile = async (req, res) => {
   try {
-    console.log("Fetching all users...");
+    console.log("Fetching all users with specific plan details...");
 
-    // 1️⃣ Users
-    const users = await User.find({ role: "user" })
-      .select("-password")
-      .lean();
+    const users = await User.find({ role: "user" }).select("-password").lean();
 
-    // 2️⃣ Related data
     const [profiles, goals, subscriptions, payments] = await Promise.all([
       UserProfile.find().lean(),
       Goal.find().lean(),
       Subscription.find().lean(),
-      Payment.find({ status: "success" })
-        .sort({ createdAt: -1 }) // latest payment first
-        .lean(),
+      Payment.find({ status: "success" }).sort({ createdAt: -1 }).lean(),
     ]);
 
-    // 3️⃣ Profile Map
     const profileMap = {};
-    profiles.forEach(p => {
-      if (p.user) profileMap[p.user.toString()] = p;
-    });
+    profiles.forEach(p => { if (p.user) profileMap[p.user.toString()] = p; });
 
-    // 4️⃣ Goal Map
     const goalMap = {};
-    goals.forEach(g => {
-      if (g.user) goalMap[g.user.toString()] = g;
-    });
+    goals.forEach(g => { if (g.user) goalMap[g.user.toString()] = g; });
 
-    // 5️⃣ ACTIVE Subscription Map
     const subscriptionMap = {};
     const today = new Date();
-
     subscriptions.forEach(sub => {
       const userId = sub.user?.toString();
       if (!userId) return;
-
-      const isActive =
-        sub.status === "active" &&
-        (!sub.endDate || new Date(sub.endDate) >= today);
-
+      const isActive = sub.status === "active" && (!sub.endDate || new Date(sub.endDate) >= today);
       if (isActive) subscriptionMap[userId] = sub;
     });
 
-    // 6️⃣ Payment Map (LATEST PAYMENT PER USER)
     const paymentMap = {};
     payments.forEach(pay => {
       const userId = pay.user?.toString();
       if (!userId || paymentMap[userId]) return;
-
       paymentMap[userId] = {
         planName: pay.planName,
-        amount: pay.planAmount,
-        paymentMethod: pay.paymentMethod,
+        planAmount: pay.planAmount, // Consistency: Use planAmount
         paymentStatus: pay.status,
       };
     });
 
-    // 7️⃣ Merge
+    const usersWithDetails = users
+      .filter(user => profileMap[user._id.toString()])
+      .map(user => {
+        const id = user._id.toString();
+        const paymentData = paymentMap[id];
+        const subData = subscriptionMap[id];
 
-const usersWithDetails = users
-  .filter(user => profileMap[user._id.toString()])
-  .map(user => {
-    const id = user._id.toString();
-    const activeSub = subscriptionMap[id] || null;
-    const latestPayment = paymentMap[id] || null;
-
-    return {
-      ...user,
-      profile: profileMap[id] || null,
-      goal: goalMap[id] || null,
-      subscription: activeSub,
-      payment: latestPayment,
-      // Manually add these fields if your frontend expects them at the top level:
-      planName: activeSub ? activeSub.planName : (latestPayment ? latestPayment.planName : "No Plan"),
-      planAmount: activeSub ? activeSub.planAmount : (latestPayment ? latestPayment.amount : "-"),
-    };
-  });
+        return {
+          ...user,
+          profile: profileMap[id] || null,
+          goal: goalMap[id] || null,
+          subscription: subData || null,
+          payment: paymentData || null,
+          // Extracting these for the frontend table
+          planName: subData?.planName || paymentData?.planName || "No Plan",
+          planAmount: subData?.planAmount || paymentData?.planAmount || 0,
+          planType: subData?.planType || "-"
+        };
+      });
 
     res.status(200).json(usersWithDetails);
   } catch (error) {
