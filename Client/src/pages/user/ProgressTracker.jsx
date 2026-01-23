@@ -133,7 +133,10 @@ const handleLogProgress = async (e) => {
     <h3 className="font-bold border-b pb-2 mb-5 text-gray-800">Recent History</h3>
 
     {history.length === 0 ? (
-      <p className="text-gray-400">No logs found for this goal.</p>
+     <div className="flex justify-center items-center py-6">
+  <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+</div>
+
     ) : (
       <div className="space-y-4">
         {history.map(log => (
