@@ -11,7 +11,7 @@ const fetchNutrition = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await api.get("/nutrition/user-nutrition", {
+    const res = await api.get("/user/user-nutrition", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
