@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
+// Backend URL (local + production safe)
+const BACKEND_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://fitness-management-system-yl6n.onrender.com";
 
 const TrainerProfile = () => {
   const [trainer, setTrainer] = useState(null); // Store trainer data
