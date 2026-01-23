@@ -44,42 +44,82 @@ export const getDashboardStatus = async (req, res) => {
 ========================= */
 export const getAllUsersWithProfile = async (req, res) => {
   try {
-    const users = await User.find()
-      .select("displayName email") // only displayName and email from User
-      .populate({
-        path: "profile",           // assuming User has a profile field pointing to UserProfile
-        model: "UserProfile",
-        select: "age phoneNumber gender status"
-      })
-      .populate({
-        path: "goal",             // assuming User has a goal field pointing to Goal
-        model: "Goal",
-        select: "userGoal"
-      })
-      .lean(); // optional: converts Mongoose docs to plain JS objects
+    console.log("Fetching all users...");
 
-    // If you want to include latest Payment and Plan info per user
-    const usersWithPayment = await Promise.all(
-      users.map(async (user) => {
-        const payment = await Payment.findOne({ user: user._id })
-          .populate({
-            path: "plan",
-            select: "planName planAmount"
-          })
-          .select("planName planAmount trainerEarning paymentMethod status") // optional
-          .lean();
+    //  Users
+    const users = await User.find({ role: "user" })
+      .select("-password")
+      .lean();
 
+    //  Related data
+    const [profiles, goals, subscriptions, payments] = await Promise.all([
+      UserProfile.find().lean(),
+      Goal.find().lean(),
+      Subscription.find().lean(),
+      Payment.find({ status: "success" })
+        .sort({ createdAt: -1 }) // latest payment first
+        .lean(),
+    ]);
+
+    //  Profile Map
+    const profileMap = {};
+    profiles.forEach(p => {
+      if (p.user) profileMap[p.user.toString()] = p;
+    });
+
+    //  Goal Map
+    const goalMap = {};
+    goals.forEach(g => {
+      if (g.user) goalMap[g.user.toString()] = g;
+    });
+
+    //  ACTIVE Subscription Map
+    const subscriptionMap = {};
+    const today = new Date();
+
+    subscriptions.forEach(sub => {
+      const userId = sub.user?.toString();
+      if (!userId) return;
+
+      const isActive =
+        sub.status === "active" &&
+        (!sub.endDate || new Date(sub.endDate) >= today);
+
+      if (isActive) subscriptionMap[userId] = sub;
+    });
+
+    // 6️⃣ Payment Map (LATEST PAYMENT PER USER)
+    const paymentMap = {};
+    payments.forEach(pay => {
+      const userId = pay.user?.toString();
+      if (!userId || paymentMap[userId]) return;
+
+      paymentMap[userId] = {
+        planName: pay.planName,
+        amount: pay.planAmount,
+        paymentMethod: pay.paymentMethod,
+        paymentStatus: pay.status,
+      };
+    });
+
+    // 7️⃣ Merge
+    const usersWithDetails = users
+      .filter(user => profileMap[user._id.toString()])
+      .map(user => {
+        const id = user._id.toString();
         return {
           ...user,
-          payment: payment || null
+          profile: profileMap[id] || null,
+          goal: goalMap[id] || null,
+          subscription: subscriptionMap[id] || null,
+          payment: paymentMap[id] || null,
         };
-      })
-    );
+      });
 
-    res.status(200).json({ success: true, data: usersWithPayment });
+    res.status(200).json(usersWithDetails);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    console.error("Admin get users error:", error);
+    res.status(500).json({ message: "Failed to fetch users" });
   }
 };
 
