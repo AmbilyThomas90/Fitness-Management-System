@@ -15,7 +15,7 @@ router.post(
   createNutrition
 );
 // Get user nutrition --By User
-router.get("/user-nutrition", protect, authorizeRole("user"), getUserNutrition);
+router.get("/user-nutrition", protect, getUserNutrition);
 // // User / Trainer get nutrition by user
 // router.get(
 //   "/user-nutrition/:userId",
