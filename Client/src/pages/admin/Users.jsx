@@ -11,28 +11,22 @@ const Users = () => {
     fetchUsers();
   }, []);
 
- const fetchNutrition = async () => {
-  try {
-    const token = localStorage.getItem("token");
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await api.get("/nutrition/user-nutrition", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      const res = await api.get("/admin/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setNutritionList(res.data?.nutrition || []);
-  } catch (err) {
-    console.error(
-      "Error fetching nutrition:",
-      err.response?.data || err.message
-    );
-    setError("Failed to load nutrition");
-  } finally {
-    setLoading(false);
-  }
-};
-
+      setUsers(res.data);
+    } catch (err) {
+      console.error("Failed to fetch users", err);
+      setError("Unable to load users");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleBlock = async (userId) => {
     try {
