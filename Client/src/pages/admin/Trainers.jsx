@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { FaUserTie } from "react-icons/fa";
 import api from "../../api/api";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+// Backend URL (local + production safe)
+const BACKEND_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://fitness-management-system-yl6n.onrender.com";
+
 
 const Trainers = () => {
   const [trainers, setTrainers] = useState([]);

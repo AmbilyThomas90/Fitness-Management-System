@@ -7,17 +7,28 @@ const UserNutrition = () => {
   const [error, setError] = useState("");
 
   // ================= FETCH USER NUTRITION =================
-  const fetchNutrition = async () => {
-    try {
-    const res = await api.get("/nutrition/user-nutrition");
-      setNutritionList(res.data.nutrition || []);
-    } catch (err) {
-      console.error("Error fetching nutrition:", err);
-      setError("Failed to load nutrition");
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchNutrition = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await api.get("/nutrition/user-nutrition", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setNutritionList(res.data?.nutrition || []);
+  } catch (err) {
+    console.error(
+      "Error fetching nutrition:",
+      err.response?.data || err.message
+    );
+    setError("Failed to load nutrition");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchNutrition();

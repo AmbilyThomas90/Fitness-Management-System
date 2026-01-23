@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import api from "../../api/api";
-
+// Backend URL (local + production safe)
 const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://fitness-management-system-yl6n.onrender.com";
+
 
 const TrainerDashboard = () => {
   const [trainer, setTrainer] = useState(null);
