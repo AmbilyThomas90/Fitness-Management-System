@@ -11,22 +11,27 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const token = localStorage.getItem("token");
+const fetchUsers = async () => {
+  try {
+    const token = localStorage.getItem("token");
 
-      const res = await api.get("/admin/users", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const res = await api.get("/admin/users", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      setUsers(res.data.data); // note: API returns { success, data }
-    } catch (err) {
-      console.error("Failed to fetch users", err);
-      setError("Unable to load users");
-    } finally {
-      setLoading(false);
+    if (res.data && res.data.data) {
+      setUsers(res.data.data); // ✅ use the data array
+    } else {
+      setUsers([]); // fallback
     }
-  };
+  } catch (err) {
+    console.error("Failed to fetch users", err);
+    setError("Unable to load users");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const toggleBlock = async (userId) => {
     try {
