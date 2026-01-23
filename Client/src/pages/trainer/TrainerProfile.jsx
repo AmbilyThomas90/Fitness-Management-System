@@ -135,6 +135,20 @@ const TrainerProfile = () => {
               alt="Trainer"
               className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-md"
             />
+                        <img
+              src={
+                preview
+                  ? preview
+                  : trainer.profileImage
+                  ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+                  : "https://via.placeholder.com/150"
+              }
+              alt="Trainer"
+              className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-md"
+              onError={(e) => {
+                e.target.src = "https://via.placeholder.com/150";
+              }}
+            />
           </div>
 
           {isEditing && (

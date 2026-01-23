@@ -115,10 +115,10 @@ const Users = () => {
               <p className="text-sm text-gray-500 dark:text-gray-300">
                 🎯 Goal: {user.goal?.goalType || "-"}
               </p>
-              {/* <p className="text-sm text-gray-500 dark:text-gray-300">
+              <p className="text-sm text-gray-500 dark:text-gray-300">
                 💰 Plan Amount:{" "}
                 {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
-              </p> */}
+              </p>
 
               {/* Action Button */}
               <button
@@ -144,8 +144,8 @@ const Users = () => {
               <th className="p-3 text-left">Age</th>
               <th className="p-3 text-left">Gender</th>
               <th className="p-3 text-left">Goal</th>
-              {/* <th className="p-3 text-left">Plan Amount</th>
-              <th className="p-3 text-left">Plan Type</th> */}
+              <th className="p-3 text-left">Plan Amount</th>
+              <th className="p-3 text-left">Plan Type</th>
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Action</th>
             </tr>
@@ -168,10 +168,10 @@ const Users = () => {
                     <td className="p-3">{user.profile?.gender || "-"}</td>
                     <td className="p-3">{user.goal?.goalType || "-"}</td>
 
-                    {/* <td className="p-3">  {user.payment?.planName || "No Plan"} </td>
+                    <td className="p-3">  {user.payment?.planName || "No Plan"} </td>
 
                     <td className="p-3 font-semibold text-green-600">{user.payment?.amount
-                        ? `₹${user.payment.amount.toLocaleString()}`  : "-"}</td> */}
+                        ? `₹${user.payment.amount.toLocaleString()}`  : "-"}</td>
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
