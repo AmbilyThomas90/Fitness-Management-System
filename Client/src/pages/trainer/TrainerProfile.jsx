@@ -124,18 +124,7 @@ const TrainerProfile = () => {
         {/* ================= IMAGE UPLOAD ================= */}
         <div className="flex flex-col items-center md:w-1/3 gap-4">
           <div className="relative">
-            <img
-              src={
-                preview
-                  ? preview
-                  : trainer.profileImage
-                  ? `http://localhost:5000/uploads/${trainer.profileImage}`
-                  : "https://via.placeholder.com/150"
-              }
-              alt="Trainer"
-              className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-md"
-            />
-                        <img
+              <img
               src={
                 preview
                   ? preview

@@ -289,8 +289,8 @@ const TrainerUserNutrition = () => {
               <option value="">Select Meal</option>
               <option value="BREAKFAST">Breakfast</option>
               <option value="LUNCH">Lunch</option>
-              <option value="DINNER">Dinner</option>
-              <option value="SNACK">Snack</option>
+               <option value="SNACK">Snack</option>
+              <option value="DINNER">Dinner</option>     
             </select>
           ) : (
             <input

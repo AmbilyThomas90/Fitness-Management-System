@@ -55,7 +55,7 @@ const UserHome = () => {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-lg px-6 py-5">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
             Welcome back,
-            <span className="text-green-600">{userName.name}</span> 👋
+            <span className="text-green-600">{userName}</span> 👋
           </h1>
 
           <p className="mt-3 max-w-xl text-sm sm:text-base font-semibold leading-relaxed tracking-wide
