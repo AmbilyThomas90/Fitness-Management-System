@@ -71,7 +71,7 @@ router.get("/dashboard", protect, authorizeRole("user"), getUserDashboard);
  //--------------User- Workout ----------------//
 router.get("/workouts", protect, authorizeRole("user"), getUserWorkouts);
 // Get user nutrition --By User
-router.get("/user-nutrition", protect,getUserNutrition);
+router.get("/user-nutrition", protect,authorizeRole("user"),getUserNutrition);
 // Update status of a specific workout  --By User
 router.patch("/work/:workoutId/status", protect, authorizeRole("user"), updateWorkoutStatus);
 
