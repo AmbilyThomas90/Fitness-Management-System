@@ -2,15 +2,10 @@ import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorizeRole } from "../middleware/roleMiddleware.js";
 import {
-  createNutrition
+  createNutrition,getUserNutrition 
 } from "../controllers/nutritionController.js";
 
 const router = express.Router();
-
-// Test route - remove after debugging
-router.get("/test", (req, res) => {
-  res.json({ message: "Nutrition route is working" });
-});
 
 // Trainer creates nutrition plan
 router.post(
@@ -20,7 +15,7 @@ router.post(
   createNutrition
 );
 // Get user nutrition --By User
-//router.get("/user-nutrition", protect,getUserNutrition);
+router.get("/user-nutrition", protect, getUserNutrition);
 // // User / Trainer get nutrition by user
 // router.get(
 //   "/user-nutrition/:userId",
