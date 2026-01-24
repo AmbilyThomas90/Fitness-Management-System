@@ -128,7 +128,7 @@ const selectAssignment = async (assignment) => {
 
       console.log(" CREATE WORKOUT PAYLOAD:", payload);
 
-      await api.post("/work/create-workouts", payload);
+      await api.post("/workout/create-workouts", payload);
 
       alert("Workout created successfully ✅");
       setShowModal(false);
