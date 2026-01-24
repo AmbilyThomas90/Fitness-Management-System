@@ -25,7 +25,19 @@ const TrainerProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await api.get("/trainer/profile"); // Fetch trainer data
+        console.log("📥 Fetching trainer profile...");
+        const res = await api.get("/trainer/profile", {
+          headers: {
+            "Cache-Control": "no-cache",
+          }
+        }); 
+        
+        console.log("✅ Profile response:", res.data);
+        
+        if (!res.data?.trainer) {
+          throw new Error("No trainer data in response");
+        }
+        
         setTrainer(res.data.trainer);
         setForm({
           phoneNumber: res.data.trainer.phoneNumber || "",
@@ -35,7 +47,8 @@ const TrainerProfile = () => {
           profileImage: null,
         });
       } catch (err) {
-        console.error("Profile fetch error:", err.response?.data || err);
+        console.error("❌ Profile fetch error:", err.message);
+        console.error("📋 Error details:", err.response?.data || err);
       } finally {
         setLoading(false);
       }

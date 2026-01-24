@@ -15,26 +15,33 @@ const TrainerDashboard = () => {
 
   useEffect(() => {
     const fetchTrainerProfile = async () => {
-  try {
-    setLoading(true);
-    setError(false);
+      try {
+        setLoading(true);
+        setError(false);
 
-    const res = await api.get("/trainer/profile");
+        console.log("📥 Fetching trainer profile...");
+        const res = await api.get("/trainer/profile", {
+          headers: {
+            "Cache-Control": "no-cache",
+          }
+        });
 
-    if (!res?.data?.trainer) {
-      throw new Error("Trainer not found");
-    }
+        console.log("✅ Trainer profile response:", res.data);
 
-    setTrainer(res.data.trainer);
-  } catch (err) {
-    console.error("Trainer profile fetch failed:", err);
-    setError(true);
-    setTrainer(null);
-  } finally {
-    setLoading(false);
-  }
-};
+        if (!res?.data?.trainer) {
+          throw new Error("Trainer not found in response");
+        }
 
+        setTrainer(res.data.trainer);
+      } catch (err) {
+        console.error("❌ Trainer profile fetch failed:", err.message);
+        console.error("📋 Error details:", err.response?.data || err);
+        setError(true);
+        setTrainer(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchTrainerProfile();
   }, []);
