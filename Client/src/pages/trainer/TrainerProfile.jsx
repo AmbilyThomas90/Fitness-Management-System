@@ -26,11 +26,7 @@ const TrainerProfile = () => {
     const fetchProfile = async () => {
       try {
         console.log("📥 Fetching trainer profile...");
-        const res = await api.get("/trainer/profile", {
-          headers: {
-            "Cache-Control": "no-cache",
-          }
-        }); 
+        const res = await api.get("/trainer/profile");
         
         console.log("✅ Profile response:", res.data);
         

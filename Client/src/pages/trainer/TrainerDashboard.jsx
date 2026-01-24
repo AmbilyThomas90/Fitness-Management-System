@@ -20,11 +20,7 @@ const TrainerDashboard = () => {
         setError(false);
 
         console.log("📥 Fetching trainer profile...");
-        const res = await api.get("/trainer/profile", {
-          headers: {
-            "Cache-Control": "no-cache",
-          }
-        });
+        const res = await api.get("/trainer/profile");
 
         console.log("✅ Trainer profile response:", res.data);
 
