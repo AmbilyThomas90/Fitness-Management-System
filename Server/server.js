@@ -53,7 +53,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/trainer-assignment", trainerAssignmentRoutes);
-app.use("/api/workout", workoutRoutes);
+app.use("/api/work", workoutRoutes);
 app.use("/api/nutrition",nutritionRoutes);
 app.use("/api/feedback", feedbackRoutes);
 
