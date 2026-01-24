@@ -22,17 +22,23 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
   // ================= FETCH TRAINER USERS =================
   const fetchTrainerUsers = async () => {
     try {
+      console.log("📥 Fetching assigned users...");
       const res = await api.get("/trainer-assignment/my-users");
+      console.log("✅ Assigned users response:", res.data);
+      
       const data = res.data?.assignments || [];
       setAssignments(data);
 
       if (data.length > 0) {
         selectAssignment(data[0]); // auto select first user
+      } else {
+        console.log("⚠️ No assigned users found");
+        setLoading(false);
       }
     } catch (err) {
-      console.error("❌ Fetch trainer users error:", err);
-      setError("Failed to load users");
-    } finally {
+      console.error("❌ Fetch trainer users error:", err.message);
+      console.error("📋 Error response:", err.response?.status, err.response?.data);
+      setError("Failed to load users: " + (err.response?.data?.message || err.message));
       setLoading(false);
     }
   };
@@ -43,12 +49,14 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
  // ================= FETCH USER WORKOUTS =================
 const fetchUserWorkouts = async (assignment) => {
   try {
-    // Correct backend route for trainer fetching a user's workouts
-    // Backend route: /api/trainer/user-workout/:userId
+    console.log("📥 Fetching workouts for user:", assignment.user._id);
     const res = await api.get(`/trainer/user-workout/${assignment.user._id}`);
+    console.log("✅ Workouts response:", res.data);
     return res.data?.workouts || [];
   } catch (err) {
-    console.error("❌ Fetch user workouts error:", err);
+    console.error("❌ Fetch user workouts error:", err.message);
+    console.error("📋 Error response:", err.response?.status, err.response?.data);
+    console.error("🔗 Requested URL:", `/trainer/user-workout/${assignment.user._id}`);
     return [];
   }
 };
