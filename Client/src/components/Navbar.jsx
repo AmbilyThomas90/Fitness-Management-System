@@ -47,7 +47,7 @@ const Navbar = ({ openLogin, openRegister }) => {
             <Link to="/" className="hover:text-blue-400 transition">Home</Link>
             <Link to="/about" className="hover:text-blue-400 transition">About</Link>
             <Link to="/contact" className="hover:text-blue-400 transition">Contact</Link>
-            <Link to="/exercise" className="hover:text-blue-400 transition">Exercise</Link>
+            {/* <Link to="/exercise" className="hover:text-blue-400 transition">Exercise</Link> */}
 
             {/* Logged-in user */}
             {token && (
