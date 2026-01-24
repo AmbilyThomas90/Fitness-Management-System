@@ -28,7 +28,7 @@ const TrainerEarnings = () => {
   return (
     <div>
       {/* <h2>₹{data.totalEarnings}</h2> */}
-     <h2>₹150000</h2> 
+     <h2> Total Earning: ₹150000</h2> 
 
 
 
