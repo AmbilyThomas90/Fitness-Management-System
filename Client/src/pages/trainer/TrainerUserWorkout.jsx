@@ -45,7 +45,12 @@ const fetchUserWorkouts = async (assignment) => {
   try {
     // Correct backend route for trainer fetching a user's workouts
     // Backend route: /api/trainer/user-workout/:userId
-    const res = await api.get(`/trainer/user-workout/${assignment.user._id}`);
+    const res = await api.get(`/trainer/user-workout/${assignment.user._id}`, {
+      headers: {
+        "Cache-Control": "no-cache",
+        "If-None-Match": undefined, // Force fresh response, ignore ETag
+      }
+    });
     return res.data?.workouts || [];
   } catch (err) {
     console.error("❌ Fetch user workouts error:", err);

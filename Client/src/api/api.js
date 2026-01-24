@@ -7,14 +7,13 @@ const api = axios.create({
   baseURL: "https://fitness-management-system-yl6n.onrender.com/api", // backend base URL
   headers: {
     "Content-Type": "application/json",
-   
   },
 });
 
 
 /* =========================
    REQUEST INTERCEPTOR
-   Automatically attach token
+   Automatically attach token & disable caching
 ========================= */
 api.interceptors.request.use(
   (config) => {
@@ -22,6 +21,13 @@ api.interceptors.request.use(
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Disable caching for all GET requests
+    if (config.method === "get") {
+      config.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+      config.headers["Pragma"] = "no-cache";
+      config.headers["Expires"] = "0";
     }
 
     return config;
