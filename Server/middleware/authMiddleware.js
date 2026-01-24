@@ -2,6 +2,11 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 export const protect = async (req, res, next) => {
+  // Allow OPTIONS requests to pass through (for CORS preflight)
+  if (req.method === "OPTIONS") {
+    return next();
+  }
+
   let token;
 
   // Check Authorization header

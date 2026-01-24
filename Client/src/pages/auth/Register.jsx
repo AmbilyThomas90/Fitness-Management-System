@@ -81,7 +81,10 @@ const UserRegister = ({ isModal = false, closeModal, switchView }) => {
 
     <h2 className="mb-6 text-center text-2xl sm:text-3xl
                    font-semibold text-gray-800">
-      User Registration
+  Create Your Account <br />
+  <span className="text-lg sm:text-xl font-normal">
+    Join Smart Fitness Suite and embark on your personalized fitness journey today!
+  </span>
     </h2>
 
     {error && (
@@ -111,7 +114,7 @@ const UserRegister = ({ isModal = false, closeModal, switchView }) => {
       <input
         name="email"
         type="email"
-        placeholder="Email"
+   placeholder="📧  your email"
         value={formData.email}
         onChange={handleChange}
         required
@@ -129,7 +132,7 @@ const UserRegister = ({ isModal = false, closeModal, switchView }) => {
       <input
         name="password"
         type="password"
-        placeholder="Password"
+       placeholder="🔒  your password"
         value={formData.password}
         onChange={handleChange}
         minLength={6}

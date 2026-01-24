@@ -105,7 +105,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
         </button>
 
         <h2 className="text-2xl font-bold text-center mb-1">
-          Trainer Registration
+          Create  Account
         </h2>
         <p className="text-center text-gray-500 text-sm mb-4">
           Join as a professional fitness trainer
@@ -147,7 +147,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
       <input
         name="password"
         type="password"
-        placeholder="Password"
+         placeholder="🔒 your password"
         value={formData.password}
         onChange={handleChange}
         minLength={6}

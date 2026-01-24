@@ -40,7 +40,7 @@ export const getDashboardStatus = async (req, res) => {
 };
 
 /* =========================
-   GET ALL USERS + PROFILE + GOAL
+   GET ALL USERS + PROFILE + GOAL+ SUBSCRIPTION + LATEST PAYMENT
 ========================= */
 export const getAllUsersWithProfile = async (req, res) => {
   try {
@@ -88,7 +88,7 @@ export const getAllUsersWithProfile = async (req, res) => {
       if (isActive) subscriptionMap[userId] = sub;
     });
 
-    // 6️⃣ Payment Map (LATEST PAYMENT PER USER)
+    //  Payment Map (LATEST PAYMENT PER USER)
     const paymentMap = {};
     payments.forEach(pay => {
       const userId = pay.user?.toString();
@@ -102,7 +102,7 @@ export const getAllUsersWithProfile = async (req, res) => {
       };
     });
 
-    // 7️⃣ Merge
+    //  Merge user with related data
     const usersWithDetails = users
       .filter(user => profileMap[user._id.toString()])
       .map(user => {

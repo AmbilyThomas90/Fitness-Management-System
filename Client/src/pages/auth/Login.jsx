@@ -124,8 +124,10 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
     )}
 
     <h2 className="text-2xl sm:text-3xl font-semibold text-center text-gray-800 mb-6">
-      Login
-    </h2>
+  Welcome Back  <br />
+  <span className="text-lg sm:text-xl font-normal">Login to continue your fitness journey with Smart Fitness Suite</span>
+</h2>
+
 
     {error && (
       <div className="mb-4 rounded-lg border border-red-200 bg-red-50
@@ -136,34 +138,35 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
 
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Email */}
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-        className="w-full rounded-lg border border-gray-300 px-4 py-2.5
-                   text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
-                   focus:border-blue-500 transition
-                   invalid:border-red-500 invalid:ring-red-500"
-      />
+    <input
+  type="email"
+  name="email"
+  placeholder="📧 Enter your email"
+  value={formData.email}
+  onChange={handleChange}
+  required
+  pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+  className="w-full rounded-lg border border-gray-300 px-4 py-2.5
+             text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+             focus:border-blue-500 transition
+             invalid:border-red-500 invalid:ring-red-500"
+/>
+
 
       {/* Password */}
       <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-        minLength={6}
-        className="w-full rounded-lg border border-gray-300 px-4 py-2.5
-                   text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
-                   focus:border-blue-500 transition
-                   invalid:border-red-500 invalid:ring-red-500"
-      />
+  type="password"
+  name="password"
+  placeholder="🔒 Enter your password"
+  value={formData.password}
+  onChange={handleChange}
+  required
+  minLength={6}
+  className="w-full rounded-lg border border-gray-300 px-4 py-2.5
+             text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+             focus:border-blue-500 transition
+             invalid:border-red-500 invalid:ring-red-500"
+/>
 
       {/* Forgot password */}
       <div className="flex justify-end">
