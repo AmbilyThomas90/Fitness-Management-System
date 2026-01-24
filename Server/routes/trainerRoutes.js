@@ -11,6 +11,7 @@ import {
 import { getTrainerUsersFullDetails,approveTrainerAssignment} from "../controllers/appointmentController.js";
 import {getUserWorkoutsForTrainer} from "../controllers/workoutController.js";
 import {getUserNutritionForTrainer} from "../controllers/nutritionController.js";
+import { getTrainerEarnings } from "../controllers/tr ";
 
 const router = express.Router();
 
@@ -47,6 +48,8 @@ router.get(
   getUserNutritionForTrainer
 );
 
+// Trainer Earnings -->by triner
+router.get("/earnings", protect, authorizeRole("trainer"), getTrainerEarnings);
 // Trainer dashboard
 
 router.get("/dashboard",protect,authorizeRole("trainer"),

@@ -56,6 +56,7 @@ import TrainerUsersWorkout from "./pages/trainer/TrainerUserWorkout";
 import TrainerUsersNutrition from "./pages/trainer/TrainerUserNutrition";
 import TrainerFeedback from "./pages/trainer/TrainerFeedback";
 import TrainerUserProgress from "./pages/trainer/TrainerApprovedUsersProgress";
+import TrainerEarnings from "./pages/trainer/TrainerEarnings";
 
 // import Progress from "./pages/user/Progress";
 // import Workouts from "./pages/user/Workouts";
@@ -122,6 +123,8 @@ function App() {
     <Route path="nutrition" element={<TrainerUsersNutrition />} />
     <Route path="trainer-feedback" element={<TrainerFeedback />} />
     <Route path="user-progress" element={<TrainerUserProgress />} />
+    <Route path="trainer-earnings" element={<TrainerEarnings />} />
+
     {/* etc */}
   </Route>
 </Route>
