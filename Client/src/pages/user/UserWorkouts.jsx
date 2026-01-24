@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
+import { Link } from "react-router-dom";
 
 const UserWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -22,12 +23,12 @@ const UserWorkouts = () => {
     fetchWorkouts();
   }, []);
 
-  // ✅ STATUS UPDATE HANDLER
+  //  STATUS UPDATE HANDLER
 const handleStatusUpdate = async (workoutId, currentStatus) => {
   try {
     const newStatus = currentStatus === "COMPLETED" ? "ACTIVE" : "COMPLETED";
 
-    // ✅ Correct URL, no quotes
+    //  Correct URL, no quotes
 await api.patch(`/user/work/${workoutId}/status`, { status: newStatus });
 
     // Optimistic UI update
@@ -133,6 +134,13 @@ await api.patch(`/user/work/${workoutId}/status`, { status: newStatus });
           ))}
         </div>
       )}
+      
+<Link
+  to="/exercise"
+  className="font-semibold hover:text-blue-600 transition"
+>
+  
+</Link>
     </div>
   );
 };

@@ -97,8 +97,8 @@ const Users = () => {
                 </h3>
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
-                      ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
-                      : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
+                    ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
+                    : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
                     }`}
                 >
                   {isActive ? "Active" : "Blocked"}
@@ -116,9 +116,16 @@ const Users = () => {
                 🎯 Goal: {user.goal?.goalType || "-"}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-300">
-                💰 Plan Amount:{" "}
-                {user.subscription ? `$${user.subscription.amount}` : "No Plan"}
+                Plan : {user.payment?.planName || "No Plan"}
               </p>
+
+              <p className="text-sm text-gray-500 dark:text-gray-300">
+                💰 Plan Amount:{" "}
+                {user.payment?.amount
+                  ? `₹${user.payment.amount.toLocaleString()}`
+                  : "No Plan"}
+              </p>
+
 
               {/* Action Button */}
               <button
@@ -144,8 +151,9 @@ const Users = () => {
               <th className="p-3 text-left">Age</th>
               <th className="p-3 text-left">Gender</th>
               <th className="p-3 text-left">Goal</th>
+              <th className="p-3 text-left">Plan </th>
               <th className="p-3 text-left">Plan Amount</th>
-              <th className="p-3 text-left">Plan Type</th>
+
               <th className="p-3 text-left">Status</th>
               <th className="p-3 text-left">Action</th>
             </tr>
@@ -168,15 +176,15 @@ const Users = () => {
                     <td className="p-3">{user.profile?.gender || "-"}</td>
                     <td className="p-3">{user.goal?.goalType || "-"}</td>
 
-                    <td className="p-3">  {user.payment?.planName || "No Plan"} </td>
+                    <td className="p-3">   {user.payment?.planName || "No Plan"} </td>
 
                     <td className="p-3 font-semibold text-green-600">{user.payment?.amount
-                        ? `₹${user.payment.amount.toLocaleString()}`  : "-"}</td>
+                      ? `₹${user.payment.amount.toLocaleString()}` : "-"}</td>
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${isActive
-                            ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
-                            : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
+                          ? "bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400"
+                          : "bg-red-100 text-red-600 dark:bg-red-600/20 dark:text-red-400"
                           }`}
                       >
                         {isActive ? "Active" : "Blocked"}
