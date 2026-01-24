@@ -85,7 +85,7 @@ export default function Exercise() {
   {/* 🔙 Back to Home */}
   <div className="max-w-7xl mx-auto">
     <button
-      onClick={() => navigate("/")}
+     onClick={() => navigate(-1)}
       className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-orange-500 hover:text-blue-700 transition mb-4 sm:mb-6"
     >
       ← Back to Home
