@@ -165,50 +165,71 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
         </div>
       </div>
 
-      {/* ===== USER PROFILE ===== */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h2 className="font-semibold mb-4 flex items-center gap-2">
-            <User className="w-5 h-5 text-blue-600" /> User Information
-          </h2>
-
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span>Name</span>
-              <span>{user.name || "-"}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Email</span>
-              <span className="truncate max-w-[200px]">{user.email || "-"}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Phone</span>
-              <span>{userProfile.phoneNumber || "-"}</span>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h2 className="font-semibold mb-4 flex items-center gap-2">
-            <Activity className="w-5 h-5 text-green-600" /> Body Metrics
-          </h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-50 p-4 rounded-xl text-center">
-              <p className="text-xs text-gray-500">Weight</p>
-              <p className="text-xl font-bold">
-                {userProfile.weight || "-"} kg
-              </p>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-xl text-center">
-              <p className="text-xs text-gray-500">Height</p>
-              <p className="text-xl font-bold">
-                {userProfile.height || "-"} cm
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+     
+     {/* ===== USER PROFILE ===== */}
+     <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+       <div>
+         <h2 className="text-sm sm:text-lg font-semibold mb-4 flex items-center gap-2">
+           <User className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+           User Information
+         </h2>
+   
+         <div className="space-y-2 text-xs sm:text-sm">
+           <div className="flex justify-between gap-2">
+             <span className="text-gray-500">Name</span>
+             <span className="font-medium text-right">{user.name || "-"}</span>
+           </div>
+           <div className="flex justify-between gap-2">
+             <span className="text-gray-500">Email</span>
+             <span className="font-medium text-right break-all">
+               {user.email || "-"}
+             </span>
+           </div>
+           <div className="flex justify-between gap-2">
+             <span className="text-gray-500">Phone</span>
+             <span className="font-medium text-right">
+               {userProfile.phoneNumber || "-"}
+             </span>
+           </div>
+           <div className="flex justify-between gap-2">
+             <span className="text-gray-500">Health</span>
+             <span className="font-medium text-right">
+               {userProfile.healthCondition || "-"}
+             </span>
+           </div>
+         </div>
+       </div>
+   
+       <div>
+         <h2 className="text-sm sm:text-lg font-semibold mb-4 flex items-center gap-2">
+           <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+           Body Metrics
+         </h2>
+   
+         <div className="grid grid-cols-2 gap-4">
+           <div className="bg-gray-50 p-3 sm:p-4 rounded-xl text-center">
+             <p className="text-xs text-gray-500">Weight</p>
+             <p className="text-lg sm:text-xl font-bold">
+               {userProfile.weight || "-"} kg
+             </p>
+           </div>
+           <div className="bg-gray-50 p-3 sm:p-4 rounded-xl text-center">
+             <p className="text-xs text-gray-500">Height</p>
+             <p className="text-lg sm:text-xl font-bold">
+               {userProfile.height || "-"} cm
+             </p>
+           </div>
+         </div>
+       </div>
+     </div>
+   
+     {/* ===== GOAL ===== */}
+     <div className="bg-green-700 text-white p-5 sm:p-6 rounded-2xl text-center">
+       <h3 className="text-sm sm:text-base opacity-90">Fitness Goal</h3>
+       <p className="text-xl sm:text-2xl font-bold mt-1">
+         {goal.goalType || "-"}
+       </p>
+     </div>
 
       {/* ===== WORKOUT PLAN ===== */}
       <div className="bg-white rounded-2xl shadow-md p-6">
@@ -289,6 +310,7 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
 };
 
 export default TrainerUserWorkout;
+
 
 
 // import React, { useEffect, useState } from "react";
