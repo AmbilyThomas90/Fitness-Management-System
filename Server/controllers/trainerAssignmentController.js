@@ -99,7 +99,7 @@ export const assignTrainer = async (req, res) => {
 // Triner approved users  // view all Users approved by trainer  and trainer'sClient
 export const getMyAssignedUsers = async (req, res) => {
   try {
-    const trainer = await Trainer.findOne({ user: req.user.id });
+    const trainer = await Trainer.findOne({ user: req.user._id });
 
     if (!trainer) {
       return res.status(404).json({

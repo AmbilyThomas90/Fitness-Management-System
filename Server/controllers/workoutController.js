@@ -12,9 +12,9 @@ import Plan from "../models/Plan.js";
 export const createWorkout = async (req, res) => {
   try {
     console.log("📥 Incoming body:", req.body);
-    console.log("📥 User ID from token:", req.user.id);
+    console.log("📥 User ID from token:", req.user._id);
 
-    const trainer = await Trainer.findOne({ user: req.user.id });
+    const trainer = await Trainer.findOne({ user: req.user._id });
     if (!trainer) {
       return res.status(404).json({ message: "Trainer profile not found. Please create your trainer profile first." });
     }
@@ -85,11 +85,11 @@ export const createWorkout = async (req, res) => {
 export const getUserWorkouts = async (req, res) => {
   try {
     // Option 1: let Mongoose cast string to ObjectId automatically
-    const workouts = await Workout.find({ user: req.user.id })
+    const workouts = await Workout.find({ user: req.user._id })
       .sort({ createdAt: -1 })
       .lean();
 
-    console.log("=== Fetched workouts for user:", req.user.id, "===");
+    console.log("=== Fetched workouts for user:", req.user._id, "===");
     if (workouts.length === 0) {
       console.log("No workouts found for this user.");
     } else {

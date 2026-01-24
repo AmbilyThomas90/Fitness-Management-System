@@ -8,7 +8,7 @@ export const getMyPayments = async (req, res) => {
   try {
     // 1️⃣ Find active subscription
     const subscription = await Subscription.findOne({
-      user: req.user.id,
+      user: req.user._id,
       status: "active",
       endDate: { $gte: new Date() },
     }).populate("plan");
@@ -22,7 +22,7 @@ export const getMyPayments = async (req, res) => {
 
     // 2️⃣ Find latest payment for this subscription
     const payment = await Payment.findOne({
-      user: req.user.id,
+      user: req.user._id,
       subscription: subscription._id,
     }).sort({ createdAt: -1 });
 

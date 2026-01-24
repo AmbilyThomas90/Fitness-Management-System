@@ -80,7 +80,7 @@ export const createProfile = async (req, res) => {
   try {
     //  Check if profile already exists
     const existingProfile = await UserProfile.findOne({
-      user: req.user.id
+      user: req.user._id
     });
 
     if (existingProfile) {
@@ -111,7 +111,7 @@ export const createProfile = async (req, res) => {
 
     //  Create profile
     const profile = await UserProfile.create({
-      user: req.user.id,
+      user: req.user._id,
       phoneNumber,
       age,
       gender: normalizedGender,
@@ -135,7 +135,7 @@ export const createProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const profile = await UserProfile.findOneAndUpdate(
-      { user: req.user.id },
+      { user: req.user._id },
       req.body,
       { new: true, runValidators: true }
     );

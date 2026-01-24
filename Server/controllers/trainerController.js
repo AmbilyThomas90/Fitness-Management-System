@@ -50,7 +50,7 @@ console.log("BODY:", req.body);
 export const updateTrainerProfile = async (req, res) => {
   try {
     // Find the trainer by logged-in user
-    const trainer = await Trainer.findOne({ user: req.user.id });
+    const trainer = await Trainer.findOne({ user: req.user._id });
     if (!trainer) {
       return res.status(404).json({ message: "Trainer profile not found" });
     }
@@ -94,14 +94,14 @@ export const updateTrainerProfile = async (req, res) => {
  */
 export const getMyTrainerProfile = async (req, res) => {
   try {
-    console.log("📥 Fetching trainer profile for user:", req.user.id);
+    console.log("📥 Fetching trainer profile for user:", req.user._id);
 
     const trainer = await Trainer.findOne({
-      user: req.user.id
+      user: req.user._id
     }).populate("user", "name email role");
 
     if (!trainer) {
-      console.log("❌ Trainer profile not found for user:", req.user.id);
+      console.log("❌ Trainer profile not found for user:", req.user._id);
       return res
         .status(404)
         .json({ success: false, message: "Trainer profile not found. Please create your profile first." });

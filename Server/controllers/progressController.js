@@ -12,14 +12,14 @@ export const recordProgress = async (req, res) => {
     const { goalId, currentValue, note } = req.body;
 
     //  Verify the goal exists and belongs to the user
-    const goal = await Goal.findOne({ _id: goalId, user: req.user.id });
+    const goal = await Goal.findOne({ _id: goalId, user: req.user._id });
     if (!goal) {
       return res.status(404).json({ message: "Goal not found" });
     }
 
     //  Create progress entry
     const progress = await Progress.create({
-      user: req.user.id,
+      user: req.user._id,
       goal: goalId,
       goalType: goal.goalType,
       currentValue,
@@ -38,7 +38,7 @@ export const getGoalProgress = async (req, res) => {
   try {
     const progressLogs = await Progress.find({ 
       goal: req.params.goalId, 
-      user: req.user.id 
+      user: req.user._id 
     }).sort({ recordedAt: -1 });
 
     res.json({ success: true, count: progressLogs.length, progressLogs });

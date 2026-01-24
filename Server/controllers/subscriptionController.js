@@ -76,7 +76,7 @@ export const verifyPayment = async (req, res) => {
       planAmount 
     } = req.body;
 
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     // 1. Verify Signature
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
@@ -148,7 +148,7 @@ export const verifyPayment = async (req, res) => {
 export const getMySubscription = async (req, res) => {
   try {
     const subscription = await Subscription.findOne({
-      user: req.user.id,
+      user: req.user._id,
       status: "active",
       endDate: { $gte: new Date() },
     }).populate("plan");

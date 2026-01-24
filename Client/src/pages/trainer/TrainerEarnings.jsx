@@ -3,7 +3,7 @@ import api from "../../api/api";
 
 const TrainerEarnings = () => {
   const [data, setData] = useState({
-    totalEarnings: 0,
+    totalEarnings: 10000,
     earnings: [],
   });
   const [loading, setLoading] = useState(true);
