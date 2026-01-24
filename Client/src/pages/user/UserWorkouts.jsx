@@ -57,7 +57,12 @@ await api.patch(`/user/work/${workoutId}/status`, { status: newStatus });
       <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
         <span className="text-4xl">🏋️</span> My Workouts
       </h2>
-
+<Link
+  to="/exercise"
+  className="font-semibold hover:text-blue-600 transition"
+>
+  
+</Link>
       {workouts.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg italic">
@@ -135,12 +140,7 @@ await api.patch(`/user/work/${workoutId}/status`, { status: newStatus });
         </div>
       )}
       
-<Link
-  to="/exercise"
-  className="font-semibold hover:text-blue-600 transition"
->
-  
-</Link>
+
     </div>
   );
 };
