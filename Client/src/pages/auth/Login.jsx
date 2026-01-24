@@ -125,7 +125,7 @@ const Login = ({ isModal = false, closeModal, switchView }) => {
 
     <h2 className="text-2xl sm:text-3xl font-semibold text-center text-gray-800 mb-6">
   Welcome Back  <br />
-  <span className="text-lg sm:text-xl font-normal">Login to continue your fitness journey with Smart Fitness Suite</span>
+  <span className="text-lg sm:text-xl font-normal">Login  with Smart Fitness Suite</span>
 </h2>
 
 

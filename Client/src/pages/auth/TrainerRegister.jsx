@@ -129,7 +129,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
           <input
         name="email"
         type="email"
-        placeholder="Email"
+        placeholder="📧 your email"
         value={formData.email}
         onChange={handleChange}
         required

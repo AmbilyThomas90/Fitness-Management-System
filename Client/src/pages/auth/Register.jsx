@@ -83,7 +83,7 @@ const UserRegister = ({ isModal = false, closeModal, switchView }) => {
                    font-semibold text-gray-800">
   Create Your Account <br />
   <span className="text-lg sm:text-xl font-normal">
-    Join Smart Fitness Suite and embark on your personalized fitness journey today!
+    Join Smart Fitness Suite 
   </span>
     </h2>
 
@@ -114,7 +114,7 @@ const UserRegister = ({ isModal = false, closeModal, switchView }) => {
       <input
         name="email"
         type="email"
-   placeholder="📧  your email"
+   placeholder="📧 your email"
         value={formData.email}
         onChange={handleChange}
         required

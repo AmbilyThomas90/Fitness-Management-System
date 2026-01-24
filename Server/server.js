@@ -39,9 +39,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Handle preflight OPTIONS requests
-app.options("*", cors(corsOptions));
-
 app.use(express.json());
 
 connectDB(); // connect DB

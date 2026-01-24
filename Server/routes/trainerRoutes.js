@@ -38,7 +38,7 @@ router.put("/assignments/:id/action",protect,authorizeRole("trainer"),approveTra
 
 
 // Fetch workouts of a specific user (Trainer view)
-router.get("/user-workout/:userId", protect, getUserWorkoutsForTrainer);
+router.get("/user-workout/:userId", protect, authorizeRole("trainer"), getUserWorkoutsForTrainer);
 // Get  user's nutrition----By Trainer
 router.get(
   "/user-nutrition/:userId",
