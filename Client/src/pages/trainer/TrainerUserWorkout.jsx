@@ -22,23 +22,17 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
   // ================= FETCH TRAINER USERS =================
   const fetchTrainerUsers = async () => {
     try {
-      console.log("📥 Fetching assigned users...");
       const res = await api.get("/trainer-assignment/my-users");
-      console.log("✅ Assigned users response:", res.data);
-      
       const data = res.data?.assignments || [];
       setAssignments(data);
 
       if (data.length > 0) {
         selectAssignment(data[0]); // auto select first user
-      } else {
-        console.log("⚠️ No assigned users found");
-        setLoading(false);
       }
     } catch (err) {
-      console.error("❌ Fetch trainer users error:", err.message);
-      console.error("📋 Error response:", err.response?.status, err.response?.data);
-      setError("Failed to load users: " + (err.response?.data?.message || err.message));
+      console.error("❌ Fetch trainer users error:", err);
+      setError("Failed to load users");
+    } finally {
       setLoading(false);
     }
   };
@@ -49,14 +43,12 @@ const TrainerUserWorkout = ({ refreshWorkouts }) => {
  // ================= FETCH USER WORKOUTS =================
 const fetchUserWorkouts = async (assignment) => {
   try {
-    console.log("📥 Fetching workouts for user:", assignment.user._id);
+    // Correct backend route for trainer fetching a user's workouts
+    // Make sure your backend has: router.get("/trainer/user-workout/:userId", protect, getUserWorkouts);
     const res = await api.get(`/trainer/user-workout/${assignment.user._id}`);
-    console.log("✅ Workouts response:", res.data);
     return res.data?.workouts || [];
   } catch (err) {
-    console.error("❌ Fetch user workouts error:", err.message);
-    console.error("📋 Error response:", err.response?.status, err.response?.data);
-    console.error("🔗 Requested URL:", `/trainer/user-workout/${assignment.user._id}`);
+    console.error("❌ Fetch user workouts error:", err);
     return [];
   }
 };
@@ -126,6 +118,7 @@ const selectAssignment = async (assignment) => {
         startDate: new Date().toISOString(),
         exercises: exercises.map((ex) => ({
           name: ex.name,
+          category: ex.category.toUpperCase(),
           sets: Number(ex.sets) || 0,
           reps: Number(ex.reps) || 0,
           duration: ex.duration,
@@ -135,7 +128,7 @@ const selectAssignment = async (assignment) => {
 
       console.log(" CREATE WORKOUT PAYLOAD:", payload);
 
-      await api.post("/workout/create-workouts", payload);
+      await api.post("/work/create-workouts", payload);
 
       alert("Workout created successfully ✅");
       setShowModal(false);
