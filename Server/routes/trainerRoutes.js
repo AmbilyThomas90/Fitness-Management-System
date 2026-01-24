@@ -11,7 +11,7 @@ import {
 import { getTrainerUsersFullDetails,approveTrainerAssignment} from "../controllers/appointmentController.js";
 import {getUserWorkoutsForTrainer} from "../controllers/workoutController.js";
 import {getUserNutritionForTrainer} from "../controllers/nutritionController.js";
-import { getTrainerEarnings } from "../controllers/tr ";
+import { getTrainerEarnings } from "../controllers/trainerEarningsController.js";
 
 const router = express.Router();
 

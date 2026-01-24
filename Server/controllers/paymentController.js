@@ -1,8 +1,6 @@
 import Payment from "../models/Payment.js";
 import Subscription from "../models/Subscription.js";
 import Plan from "../models/Plan.js";
-import TrainerAssignment from "../models/TrainerAssignment.js";
-
 
 // users payment 
 
@@ -51,63 +49,7 @@ export const getMyPayments = async (req, res) => {
     });
   }
 };
-
-// Trainer Earnings
-// ================= TRAINER EARNINGS =================
-export const getTrainerEarnings = async (req, res) => {
-  try {
-    const trainerId = req.user._id;
-
-    // 1️⃣ Approved assignments
-    const approvedAssignments = await TrainerAssignment.find({
-      trainer: trainerId,
-      status: "approved",
-    }).select("user");
-
-    const approvedUserIds = approvedAssignments.map(a => a.user);
-
-    if (!approvedUserIds.length) {
-      return res.json({
-        totalEarnings: 0,
-        earnings: [],
-      });
-    }
-
-    // 2️⃣ Successful payments from approved users
-    const payments = await Payment.find({
-      user: { $in: approvedUserIds },
-      status: "success",
-    })
-      .populate("user", "name email")
-      .populate("plan", "name");
-
-    // 3️⃣ Total earnings
-    const totalEarnings = payments.reduce(
-      (sum, p) => sum + p.trainerEarning,
-      0
-    );
-
-    res.status(200).json({
-      totalEarnings,
-      earnings: payments.map(p => ({
-        user: p.user,
-        planName: p.planName,
-        trainerEarning: p.trainerEarning,
-        paymentMethod: p.paymentMethod,
-        date: p.createdAt,
-      })),
-    });
-  } catch (error) {
-    console.error("Trainer earnings error:", error);
-    res.status(500).json({
-      message: "Failed to fetch trainer earnings",
-    });
-  }
-};
-
-
 // export const getMyPayments = async (req, res) => {
-
 //   try {
 //     const userId = req.user._id || req.user.id;
 

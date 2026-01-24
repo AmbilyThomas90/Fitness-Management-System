@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import api from "../../api/api";
 
 const TrainerEarnings = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({
+    totalEarnings: 0,
+    earnings: [],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEarnings = async () => {
       try {
         const res = await api.get("/trainer/earnings");
-        setData(res.data);
+        setData(res.data || { totalEarnings: 0, earnings: [] });
       } catch (error) {
         console.error("Failed to load earnings", error);
       } finally {
@@ -20,23 +23,14 @@ const TrainerEarnings = () => {
     fetchEarnings();
   }, []);
 
-  if (loading) {
-    return <p className="text-center mt-10">Loading earnings...</p>;
-  }
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-3xl font-bold text-gray-900">
-        💰 Trainer Earnings
-      </h2>
+    <div>
+      <h2>₹{data.totalEarnings}</h2>
 
-      {/* Total */}
-      <div className="bg-green-100 p-4 rounded-xl">
-        <p className="text-sm text-gray-600">Total Earnings</p>
-        <p className="text-2xl font-bold text-green-700">
-          ₹{data.totalEarnings.toLocaleString()}
-        </p>
-      </div>
+
+
 
       {/* Earnings List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
