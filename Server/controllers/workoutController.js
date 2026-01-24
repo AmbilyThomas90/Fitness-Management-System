@@ -7,23 +7,52 @@ import Plan from "../models/Plan.js";
 
 /**
  * Create workout for a user---By Triner
- * POST /api/trainer/workouts
+ * POST /api/workout/create-workouts
  */
 export const createWorkout = async (req, res) => {
   try {
     console.log("📥 Incoming body:", req.body);
+    console.log("📥 User ID from token:", req.user.id);
 
     const trainer = await Trainer.findOne({ user: req.user.id });
     if (!trainer) {
-      return res.status(404).json({ message: "Trainer not found" });
+      return res.status(404).json({ message: "Trainer profile not found. Please create your trainer profile first." });
     }
 
     const { userId, goalId, category, startDate, exercises } = req.body;
 
+    // Validation
     if (!userId || !goalId || !exercises?.length) {
       return res.status(400).json({
-        message: "Missing required fields",
+        message: "Missing required fields: userId, goalId, and exercises are required",
+        received: { userId, goalId, exercisesCount: exercises?.length }
       });
+    }
+
+    if (!category) {
+      return res.status(400).json({
+        message: "Category is required (e.g., GENERAL, STRENGTH, CARDIO)"
+      });
+    }
+
+    // Validate category
+    const validCategories = ["GENERAL","STRENGTH", "CARDIO", "CORE", "FLEXIBILITY", "BALANCE", "FUNCTIONAL", "RECOVERY"];
+    if (!validCategories.includes(category)) {
+      return res.status(400).json({
+        message: `Invalid category. Must be one of: ${validCategories.join(", ")}`
+      });
+    }
+
+    // Validate userId exists
+    const userExists = await User.findById(userId);
+    if (!userExists) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Validate goalId exists
+    const goalExists = await Goal.findById(goalId);
+    if (!goalExists) {
+      return res.status(404).json({ message: "Goal not found" });
     }
 
     const workout = await Workout.create({
@@ -35,10 +64,11 @@ export const createWorkout = async (req, res) => {
       exercises,
     });
 
-    console.log(" Workout created:", workout._id);
+    console.log("✅ Workout created:", workout._id);
 
     res.status(201).json({
       success: true,
+      message: "Workout created successfully",
       workout,
     });
   } catch (error) {

@@ -118,7 +118,6 @@ const selectAssignment = async (assignment) => {
         startDate: new Date().toISOString(),
         exercises: exercises.map((ex) => ({
           name: ex.name,
-          category: ex.category.toUpperCase(),
           sets: Number(ex.sets) || 0,
           reps: Number(ex.reps) || 0,
           duration: ex.duration,
