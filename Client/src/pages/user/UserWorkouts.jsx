@@ -54,15 +54,19 @@ await api.patch(`/user/work/${workoutId}/status`, { status: newStatus });
 
   return (
     <div className="p-6 space-y-6 bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-        <span className="text-4xl">🏋️</span> My Workouts
-      </h2>
-<Link
-  to="/exercise"
-  className="font-semibold hover:text-blue-600 transition"
->
-  
-</Link>
+     <div className="mb-6">
+  <h2 className="text-3xl font-bold text-gray-900 flex items-center">
+    <Link
+      to="/exercise"
+      className="text-sm font-semibold hover:text-blue-600 transition mr-auto"
+    >
+      ← Exercise
+    </Link>
+
+    <span className="text-4xl mr-2">🏋️</span>
+    My Workouts
+  </h2>
+</div>
       {workouts.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg italic">
