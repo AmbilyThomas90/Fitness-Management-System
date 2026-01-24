@@ -88,7 +88,7 @@ export default function Exercise() {
      onClick={() => navigate(-1)}
       className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-orange-500 hover:text-blue-700 transition mb-4 sm:mb-6"
     >
-      ← Back to Home
+      ← Back 
     </button>
 
     {/* Page Title */}
