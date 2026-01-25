@@ -106,7 +106,7 @@ const TrainerDashboard = () => {
       {/* ===================== */}
       {/* DASHBOARD ACTION CARDS */}
       {/* ===================== */}
-      <div className="mb-4 sm:mb-6 mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-1">
+      <div className="mb-4 sm:mb-6 mx-auto max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-1">
 
         {[
           { to: "profile", label: "Update Profile" },
@@ -118,10 +118,10 @@ const TrainerDashboard = () => {
           { to: "trainer-feedback", label: "Feedback" },
           { to: "trainer-earnings", label: "Earnings" },
         ].map((item) => (
-          <Link
+           <Link
             key={item.to}
             to={item.to}
-            className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm
+            className="group rounded-xl border border-gray-200 bg-gray-200 p-4 shadow-sm
                    transition-all hover:-translate-y-0.5 hover:shadow-md
                    focus:outline-none focus:ring-2 focus:ring-blue-500"
           >

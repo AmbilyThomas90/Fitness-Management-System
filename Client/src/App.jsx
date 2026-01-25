@@ -58,15 +58,6 @@ import TrainerFeedback from "./pages/trainer/TrainerFeedback";
 import TrainerUserProgress from "./pages/trainer/TrainerApprovedUsersProgress";
 import TrainerEarnings from "./pages/trainer/TrainerEarnings";
 
-// import Progress from "./pages/user/Progress";
-// import Workouts from "./pages/user/Workouts";
-// import Nutrition from "./pages/user/Nutrition";
-// import UserTrainers from "./pages/user/Trainers";
-// import Bookings from "./pages/user/Bookings";
-// import Messages from "./pages/user/Messages";
-// import UserPayments from "./pages/user/Payments";
-// import Feedback from "./pages/user/Feedback";
-/* PROTECTED ROUTE */
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Sidebar from "./pages/user/Sidebar";
 
@@ -115,7 +106,10 @@ function App() {
 
           <Route path="/trainer" element={<TrainerLayout />}>
   <Route path="dashboard" element={<TrainerDashboard />}>
-    <Route index element={<p>Select an option above</p>} />
+  <Route index element={
+    <p className="text-gray-800 dark:text-gray-100 text-lg font-semibold">
+      "Your Clients Are Counting on You!"  </p>} />
+
     <Route path="profile" element={<TrainerProfile />} />
     <Route path="trainer-users" element={<TrainerUsers />} />
     <Route path="users-approve" element={<TrainerUsersApprove />} />
@@ -129,12 +123,6 @@ function App() {
   </Route>
 </Route>
 
-{/*
-<Route path="/trainer/users" element={<TrainerUsers />} />
-<Route path="/trainer/assign-plan" element={<AssignPlan />} />
-<Route path="/trainer/progress" element={<TrainerProgress />} />
-<Route path="/trainer/suggestions" element={<TrainerSuggestions />} />
- */}
 
 
        {/* ================= USER DASHBOARD ================= */}
@@ -189,80 +177,3 @@ export default App;
 
 
 
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// import Home from "./pages/Home";
-// import Login from "./pages/Login";
-// import ForgotPassword from "./pages/ForgotPassword";
-// import Register from "./pages/Register";
-
-// import AdminDashboard from "./pages/admin/AdminDashboard";
-// import TrainerDashboard from "./pages/trainer/TrainerDashboard";
-// import UserDashboard from "./pages/user/UserDashboard";
-
-// import ProtectedRoute from "./routes/ProtectedRoute";
-
-// // admin pages
-// import DashboardHome from "./pages/admin/DashboardHome";
-// import Users from "./pages/admin/Users";
-// import Trainers from "./pages/admin/Trainers";
-// import Plans from "./pages/admin/Plans";
-// import Payments from "./pages/admin/Payments";
-// import Analytics from "./pages/admin/Analytics";
-// import PlanDetail from "./pages/admin/PlanDetail";
-
-// function App() {
-  
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         {/* Public */}
-//         <Route path="/" element={<Home />} />
-//         <Route path="/login" element={<Login />} />
-//         <Route path="/forgot-password" element={<ForgotPassword />} />
-//         <Route path="/register" element={<Register />} />
-
-//         {/* ADMIN DASHBOARD */}
-//         <Route
-//           path="/admin/dashboard"
-//           element={
-//             <ProtectedRoute allowedRole="admin">
-//               <AdminDashboard />
-//             </ProtectedRoute>
-//           }
-//         >
-//           <Route index element={<DashboardHome />} />
-//           <Route path="users" element={<Users />} />
-//           <Route path="trainers" element={<Trainers />} />
-//           <Route path="plans" element={<Plans />} />
-//             <Route path="plans/:id" element={<PlanDetail />} />
-//           <Route path="payments" element={<Payments />} />
-//           <Route path="analytics" element={<Analytics />} />
-        
-//         </Route>
-
-//         {/* TRAINER DASHBOARD */}
-//         <Route
-//           path="/trainer/dashboard/*"
-//           element={
-//             <ProtectedRoute allowedRole="trainer">
-//               <TrainerDashboard />
-//             </ProtectedRoute>
-//           }
-//         />
-
-//         {/* USER DASHBOARD */}
-//         <Route
-//           path="/user/dashboard/*"
-//           element={
-//             <ProtectedRoute allowedRole="user">
-//               <UserDashboard />
-//             </ProtectedRoute>
-//           }
-//         />
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
-// export default App;
