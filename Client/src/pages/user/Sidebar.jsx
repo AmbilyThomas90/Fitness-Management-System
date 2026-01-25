@@ -54,11 +54,11 @@ const Sidebar = ({ role = "user" }) => {
   "
 >
   {/* Logo / Branding */}
-  <div className="flex items-center justify-center p-4 sm:p-6 border-b border-gray-700">
+  {/* <div className="flex items-center justify-center p-4 sm:p-6 border-b border-gray-700">
     <span className="text-xl sm:text-2xl font-bold tracking-wide">
-      Fit<span className="text-blue-500">Hub</span>
+     
     </span>
-  </div>
+  </div> */}
 
   {/* Navigation Menu */}
   <nav className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-1.5">
