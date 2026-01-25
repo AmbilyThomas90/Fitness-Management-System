@@ -61,7 +61,9 @@ return (
       <div className="rounded-lg bg-indigo-50 dark:bg-indigo-900/40 p-2 ring-1 ring-indigo-100 dark:ring-indigo-800">
         <Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
       </div>
-      <h2 className="text-xl sm:text-2xl font-semibold text-slate-200 dark:text-slate-100">
+      <h2 className="text-xl sm:text-2xl font-semibold
+      text-gray-800 dark:text-gray-100
+      mb-6 text-center sm:text-left">
         Assigned Users
       </h2>
     </div>

@@ -122,7 +122,8 @@ const TrainerUserNutrition = () => {
 
   // ================= UI =================
   return (
-<div className="min-h-screen bg-slate-900 px-3 sm:px-6 lg:px-8 py-5 space-y-6">
+<div className="min-h-screen bg-gray-50 dark:bg-slate-900
+                px-3 sm:px-6 lg:px-8 py-5 space-y-6">
   
   {/* ===== APPROVED USERS ===== */}
   <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
