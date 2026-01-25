@@ -41,13 +41,13 @@ const TrainerApprovedUsersProgress = () => {
   if (errorMsg) return <div className="p-6 text-red-500">{errorMsg}</div>;
 
   return (
-<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-  <h2 className="text-2xl sm:text-3xl font-extrabold mb-8 text-gray-100 border-b border-gray-700 pb-3">
+<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-[#0f172a] rounded-2xl">
+  <h2 className="text-2xl sm:text-3xl font-extrabold mb-8 text-white border-b border-gray-700 pb-3">
     Approved Users Progress
   </h2>
 
   {progress.length === 0 ? (
-    <div className="bg-gray-800 p-8 sm:p-10 rounded-xl text-center text-gray-400 shadow-sm">
+    <div className="bg-[#020617] p-8 sm:p-10 rounded-xl text-center text-gray-400 border border-gray-800">
       No progress records submitted by your assigned users yet.
     </div>
   ) : (
@@ -55,7 +55,7 @@ const TrainerApprovedUsersProgress = () => {
       {progress.map((item) => (
         <div
           key={item._id}
-          className="bg-gray-800 border border-gray-700 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-lg transition-shadow duration-300"
+          className="bg-[#020617] border border-gray-800 rounded-2xl p-5 sm:p-6 hover:border-indigo-500 transition"
         >
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
@@ -68,18 +68,18 @@ const TrainerApprovedUsersProgress = () => {
               </p>
             </div>
 
-            <span className="w-fit bg-indigo-900/30 text-indigo-200 text-xs font-medium px-3 py-1 rounded-full uppercase">
+            <span className="w-fit bg-indigo-500/10 text-indigo-400 text-xs font-medium px-3 py-1 rounded-full uppercase">
               Goal: {item.goalType}
             </span>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-700 p-4 rounded-lg mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#0f172a] p-4 rounded-lg mb-4 border border-gray-800">
             <div>
               <p className="text-xs text-gray-400 uppercase font-semibold tracking-wide">
                 Current Value
               </p>
-              <p className="text-xl sm:text-2xl font-bold text-gray-100">
+              <p className="text-xl sm:text-2xl font-bold text-white">
                 {item.currentValue}
               </p>
             </div>
@@ -98,7 +98,7 @@ const TrainerApprovedUsersProgress = () => {
 
           {/* Note */}
           {item.note && (
-            <div className="mt-3 text-sm text-gray-300 italic border-l-4 border-indigo-600 pl-4">
+            <div className="mt-3 text-sm text-gray-300 italic border-l-4 border-indigo-500 pl-4">
               “{item.note}”
             </div>
           )}

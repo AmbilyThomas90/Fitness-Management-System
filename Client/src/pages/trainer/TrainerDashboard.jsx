@@ -106,7 +106,8 @@ const TrainerDashboard = () => {
       {/* ===================== */}
       {/* DASHBOARD ACTION CARDS */}
       {/* ===================== */}
-      <div className="mb-8 sm:mb-10 mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-1">
+      <div className="mb-4 sm:mb-6 mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-1">
+
         {[
           { to: "profile", label: "Update Profile" },
           { to: "users-approve", label: "Clients Approvals" },

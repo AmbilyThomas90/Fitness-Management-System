@@ -58,12 +58,10 @@ return (
   {/* Header */}
   <div className="flex flex-col sm:flex-row sm:items-center gap-3">
     <div className="flex items-center gap-3">
-      <div className="rounded-lg bg-indigo-50 dark:bg-indigo-900/40 p-2 ring-1 ring-indigo-100 dark:ring-indigo-800">
-        <Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+      <div className="rounded-lg bg-indigo-900/40 p-2 ring-1 ring-indigo-800">
+        <Users className="h-5 w-5 text-indigo-400" />
       </div>
-      <h2 className="text-xl sm:text-2xl font-semibold
-      text-gray-800 dark:text-gray-100
-      mb-6 text-center sm:text-left">
+      <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
         Assigned Users
       </h2>
     </div>
@@ -71,86 +69,82 @@ return (
 
   {assignments.length === 0 ? (
     /* Empty State */
-    <div className="rounded-xl border border-dashed
-      bg-slate-50 dark:bg-slate-900
-      border-slate-200 dark:border-slate-700
-      p-8 sm:p-10 text-center">
-      <Users className="mx-auto mb-3 h-8 w-8 text-slate-400 dark:text-slate-500" />
-      <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+    <div className="rounded-xl border border-dashed border-gray-700 bg-[#020617] p-8 sm:p-10 text-center">
+      <Users className="mx-auto mb-3 h-8 w-8 text-gray-500" />
+      <p className="text-sm font-medium text-gray-300">
         No users assigned yet
       </p>
-      <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+      <p className="mt-1 text-xs text-gray-500">
         Assigned users will appear here once available
       </p>
     </div>
   ) : (
     <>
       {/* ================= DESKTOP TABLE ================= */}
-      <div className="hidden lg:block overflow-x-auto rounded-xl
-        border border-slate-200 dark:border-slate-700
-        bg-white dark:bg-slate-900 shadow-sm">
+      <div className="hidden lg:block overflow-x-auto rounded-xl border border-gray-800 bg-[#020617]">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-100 dark:bg-slate-800
-            text-xs font-semibold uppercase
-            text-slate-600 dark:text-slate-300">
+          <thead className="bg-gray-900/60 text-xs font-semibold uppercase text-gray-400">
             <tr>
-              <th className="px-4 py-3 text-left">User</th>
-              <th className="px-4 py-3 text-left">Email</th>
-              <th className="px-4 py-3 text-left">Phone</th>
-              <th className="px-4 py-3 text-left">Age</th>
-              <th className="px-4 py-3 text-left">Gender</th>
-              <th className="px-4 py-3 text-left">Health</th>
-              <th className="px-4 py-3 text-left">Goal</th>
-              <th className="px-4 py-3 text-left">Plan</th>
-              <th className="px-4 py-3 text-left">Time Slot</th>
-              <th className="px-4 py-3 text-left">Status</th>
-              <th className="px-4 py-3 text-left">Assigned</th>
+              {[
+                "User","Email","Phone","Age","Gender",
+                "Health","Goal","Plan","Time Slot","Status","Assigned"
+              ].map(h => (
+                <th key={h} className="px-4 py-3 text-left">
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+          <tbody className="divide-y divide-gray-800">
             {assignments.map((item) => (
               <tr
                 key={item._id}
-                className="hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                className="hover:bg-gray-900/40 transition"
               >
-                <td className="px-4 py-3 font-medium text-slate-800 dark:text-slate-100">
+                <td className="px-4 py-3 font-medium text-gray-100">
                   {item.user?.name || "-"}
                 </td>
-                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                <td className="px-4 py-3 text-gray-400">
                   {item.user?.email || "-"}
                 </td>
-                <td className="px-4 py-3">{item.userProfile?.phoneNumber || "-"}</td>
-                <td className="px-4 py-3">{item.userProfile?.age || "-"}</td>
-                <td className="px-4 py-3 capitalize">
+                <td className="px-4 py-3 text-gray-300">
+                  {item.userProfile?.phoneNumber || "-"}
+                </td>
+                <td className="px-4 py-3 text-gray-300">
+                  {item.userProfile?.age || "-"}
+                </td>
+                <td className="px-4 py-3 capitalize text-gray-300">
                   {item.userProfile?.gender || "-"}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 text-gray-300">
                   {item.userProfile?.healthCondition || "-"}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 text-gray-300">
                   {item.goal?.goalType || "-"}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 text-gray-300">
                   {item.plan?.planName || "-"}
                 </td>
-                <td className="px-4 py-3">{item.timeSlot}</td>
+                <td className="px-4 py-3 text-gray-300">
+                  {item.timeSlot}
+                </td>
                 <td className="px-4 py-3">
                   <span
                     className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                       item.status === "approved"
-                        ? "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200"
+                        ? "bg-emerald-900/40 text-emerald-400"
                         : item.status === "completed"
-                        ? "bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-200"
+                        ? "bg-sky-900/40 text-sky-400"
                         : item.status === "rejected"
-                        ? "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200"
-                        : "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200"
+                        ? "bg-rose-900/40 text-rose-400"
+                        : "bg-amber-900/40 text-amber-400"
                     }`}
                   >
                     {item.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
+                <td className="px-4 py-3 text-gray-500">
                   {new Date(item.assignDate).toLocaleDateString()}
                 </td>
               </tr>
@@ -159,40 +153,37 @@ return (
         </table>
       </div>
 
-      {/* ================= MOBILE / TABLET CARD VIEW ================= */}
+      {/* ================= MOBILE / TABLET ================= */}
       <div className="grid gap-4 lg:hidden">
         {assignments.map((item) => (
           <div
             key={item._id}
-            className="rounded-xl border
-              border-slate-200 dark:border-slate-700
-              bg-white dark:bg-slate-900
-              p-4 shadow-sm space-y-2"
+            className="rounded-xl border border-gray-800 bg-[#020617] p-4 space-y-2"
           >
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100">
+              <h3 className="font-semibold text-gray-100">
                 {item.user?.name || "-"}
               </h3>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
                   item.status === "approved"
-                    ? "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200"
+                    ? "bg-emerald-900/40 text-emerald-400"
                     : item.status === "completed"
-                    ? "bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-200"
+                    ? "bg-sky-900/40 text-sky-400"
                     : item.status === "rejected"
-                    ? "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200"
-                    : "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200"
+                    ? "bg-rose-900/40 text-rose-400"
+                    : "bg-amber-900/40 text-amber-400"
                 }`}
               >
                 {item.status}
               </span>
             </div>
 
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-gray-400">
               {item.user?.email}
             </p>
 
-            <div className="grid grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300">
+            <div className="grid grid-cols-2 gap-2 text-sm text-gray-300">
               <p><span className="font-medium">Phone:</span> {item.userProfile?.phoneNumber || "-"}</p>
               <p><span className="font-medium">Age:</span> {item.userProfile?.age || "-"}</p>
               <p><span className="font-medium">Gender:</span> {item.userProfile?.gender || "-"}</p>
@@ -201,7 +192,7 @@ return (
               <p><span className="font-medium">Time:</span> {item.timeSlot}</p>
             </div>
 
-            <p className="text-xs text-slate-400 dark:text-slate-500">
+            <p className="text-xs text-gray-500">
               Assigned on {new Date(item.assignDate).toLocaleDateString()}
             </p>
           </div>

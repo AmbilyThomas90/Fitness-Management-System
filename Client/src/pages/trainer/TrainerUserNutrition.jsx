@@ -122,17 +122,16 @@ const TrainerUserNutrition = () => {
 
   // ================= UI =================
   return (
-<div className="min-h-screen bg-gray-50 dark:bg-slate-900
-                px-3 sm:px-6 lg:px-8 py-5 space-y-6">
-  
+<div className="min-h-screen bg-[#020617] px-3 sm:px-6 lg:px-8 py-5 space-y-6">
+
   {/* ===== APPROVED USERS ===== */}
-  <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
-    <h2 className="text-base sm:text-xl font-semibold mb-4">
+  <div className="bg-[#020617] border border-gray-800 rounded-2xl p-4 sm:p-6">
+    <h2 className="text-base sm:text-xl font-semibold mb-4 text-gray-100">
       👥 Approved Users
     </h2>
 
     {assignments.length === 0 ? (
-      <p className="text-gray-500 text-sm">No approved users</p>
+      <p className="text-gray-400 text-sm">No approved users</p>
     ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {assignments.map((a) => (
@@ -142,17 +141,17 @@ const TrainerUserNutrition = () => {
             className={`cursor-pointer border rounded-xl p-4 transition-all
               ${
                 selectedAssignmentId === a._id
-                  ? "border-green-600 bg-green-50"
-                  : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                  ? "border-green-500 bg-green-900/20"
+                  : "border-gray-700 hover:border-gray-500 hover:bg-gray-800/40"
               }`}
           >
-            <p className="font-semibold text-sm sm:text-base truncate">
+            <p className="font-semibold text-sm sm:text-base truncate text-gray-100">
               {a.user?.name}
             </p>
-            <p className="text-xs sm:text-sm text-gray-500 break-all">
+            <p className="text-xs sm:text-sm text-gray-400 break-all">
               {a.user?.email}
             </p>
-            <p className="text-xs text-green-600 mt-1">
+            <p className="text-xs text-green-400 mt-1">
               Goal: {a.goal?.goalType || "Not Assigned"}
             </p>
           </div>
@@ -162,64 +161,57 @@ const TrainerUserNutrition = () => {
   </div>
 
   {/* ===== USER PROFILE ===== */}
-  <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="bg-[#020617] border border-gray-800 rounded-2xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
     <div>
-      <h2 className="text-sm sm:text-lg font-semibold mb-4 flex items-center gap-2">
-        <User className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+      <h2 className="text-sm sm:text-lg font-semibold mb-4 flex items-center gap-2 text-gray-100">
+        <User className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
         User Information
       </h2>
 
       <div className="space-y-2 text-xs sm:text-sm">
-        <div className="flex justify-between gap-2">
-          <span className="text-gray-500">Name</span>
-          <span className="font-medium text-right">{user.name || "-"}</span>
-        </div>
-        <div className="flex justify-between gap-2">
-          <span className="text-gray-500">Email</span>
-          <span className="font-medium text-right break-all">
-            {user.email || "-"}
-          </span>
-        </div>
-        <div className="flex justify-between gap-2">
-          <span className="text-gray-500">Phone</span>
-          <span className="font-medium text-right">
-            {userProfile.phoneNumber || "-"}
-          </span>
-        </div>
-        <div className="flex justify-between gap-2">
-          <span className="text-gray-500">Health</span>
-          <span className="font-medium text-right">
-            {userProfile.healthCondition || "-"}
-          </span>
-        </div>
+        {[
+          ["Name", user.name],
+          ["Email", user.email],
+          ["Phone", userProfile.phoneNumber],
+          ["Health", userProfile.healthCondition],
+        ].map(([label, value]) => (
+          <div key={label} className="flex justify-between gap-2">
+            <span className="text-gray-400">{label}</span>
+            <span className="font-medium text-gray-200 text-right break-all">
+              {value || "-"}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
 
     <div>
-      <h2 className="text-sm sm:text-lg font-semibold mb-4 flex items-center gap-2">
-        <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+      <h2 className="text-sm sm:text-lg font-semibold mb-4 flex items-center gap-2 text-gray-100">
+        <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
         Body Metrics
       </h2>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 p-3 sm:p-4 rounded-xl text-center">
-          <p className="text-xs text-gray-500">Weight</p>
-          <p className="text-lg sm:text-xl font-bold">
-            {userProfile.weight || "-"} kg
-          </p>
-        </div>
-        <div className="bg-gray-50 p-3 sm:p-4 rounded-xl text-center">
-          <p className="text-xs text-gray-500">Height</p>
-          <p className="text-lg sm:text-xl font-bold">
-            {userProfile.height || "-"} cm
-          </p>
-        </div>
+        {[
+          ["Weight", `${userProfile.weight || "-"} kg`],
+          ["Height", `${userProfile.height || "-"} cm`],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="bg-gray-900/60 border border-gray-700 p-3 sm:p-4 rounded-xl text-center"
+          >
+            <p className="text-xs text-gray-400">{label}</p>
+            <p className="text-lg sm:text-xl font-bold text-gray-100">
+              {value}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   </div>
 
   {/* ===== GOAL ===== */}
-  <div className="bg-green-700 text-white p-5 sm:p-6 rounded-2xl text-center">
+  <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-5 sm:p-6 rounded-2xl text-center">
     <h3 className="text-sm sm:text-base opacity-90">Fitness Goal</h3>
     <p className="text-xl sm:text-2xl font-bold mt-1">
       {goal.goalType || "-"}
@@ -227,9 +219,9 @@ const TrainerUserNutrition = () => {
   </div>
 
   {/* ===== NUTRITION PLAN ===== */}
-  <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
+  <div className="bg-[#020617] border border-gray-800 rounded-2xl p-4 sm:p-6">
     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
-      <h3 className="text-base sm:text-xl font-semibold">
+      <h3 className="text-base sm:text-xl font-semibold text-gray-100">
         Nutrition Plan
       </h3>
       <button
@@ -242,8 +234,8 @@ const TrainerUserNutrition = () => {
 
     {nutritionList.length > 0 ? (
       <div className="overflow-x-auto">
-        <table className="w-full text-xs sm:text-sm border rounded-lg overflow-hidden">
-          <thead className="bg-gray-50">
+        <table className="w-full text-xs sm:text-sm border border-gray-800 rounded-lg overflow-hidden">
+          <thead className="bg-gray-900/60 text-gray-300">
             <tr>
               <th className="px-4 py-2 text-left">Meal</th>
               <th className="text-center">Calories</th>
@@ -254,7 +246,7 @@ const TrainerUserNutrition = () => {
           </thead>
           <tbody>
             {nutritionList.map((n) => (
-              <tr key={n._id} className="border-t">
+              <tr key={n._id} className="border-t border-gray-800 text-gray-200">
                 <td className="px-4 py-2 font-medium">{n.meal}</td>
                 <td className="text-center">{n.calories}</td>
                 <td className="text-center">{n.protein}</td>
@@ -274,9 +266,11 @@ const TrainerUserNutrition = () => {
 
   {/* ===== MODAL ===== */}
   {showModal && (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4 z-50">
-      <div className="bg-white rounded-xl p-5 sm:p-6 w-full max-w-lg space-y-3">
-        <h2 className="text-lg font-semibold">Add Nutrition</h2>
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center px-4 z-50">
+      <div className="bg-[#020617] border border-gray-800 rounded-xl p-5 sm:p-6 w-full max-w-lg space-y-3">
+        <h2 className="text-lg font-semibold text-gray-100">
+          Add Nutrition
+        </h2>
 
         {["meal", "calories", "protein", "carbs", "fats"].map((f) =>
           f === "meal" ? (
@@ -285,7 +279,7 @@ const TrainerUserNutrition = () => {
               name="meal"
               value={nutritionForm.meal}
               onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full bg-[#020617] border border-gray-700 p-2 rounded text-sm text-gray-200 focus:ring-2 focus:ring-green-500"
             >
               <option value="">Select Meal</option>
               <option value="BREAKFAST">Breakfast</option>
@@ -301,7 +295,7 @@ const TrainerUserNutrition = () => {
               value={nutritionForm[f]}
               onChange={handleChange}
               placeholder={f.toUpperCase()}
-              className="w-full border border-gray-300 p-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full bg-[#020617] border border-gray-700 p-2 rounded text-sm text-gray-200 focus:ring-2 focus:ring-green-500"
             />
           )
         )}
@@ -309,7 +303,7 @@ const TrainerUserNutrition = () => {
         <div className="flex justify-end gap-3 pt-2">
           <button
             onClick={() => setShowModal(false)}
-            className="text-sm text-gray-600 hover:underline"
+            className="text-sm text-gray-400 hover:underline"
           >
             Cancel
           </button>
@@ -324,8 +318,6 @@ const TrainerUserNutrition = () => {
     </div>
   )}
 </div>
-
-
   );
 };
 

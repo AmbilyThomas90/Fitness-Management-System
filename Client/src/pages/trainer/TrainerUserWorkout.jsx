@@ -170,7 +170,7 @@ const validWorkouts = Array.isArray(workouts)
  <div className="min-h-screen bg-gray-900 px-4 sm:px-6 py-6 space-y-6">
 
   {/* ===== APPROVED USERS LIST ===== */}
-  <div className="bg-gray-800 rounded-2xl shadow-md p-5 sm:p-6">
+  <div className="bg-gray-900 rounded-2xl shadow-md p-5 sm:p-6">
     <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-100">
       👥 Approved Users
     </h2>
@@ -215,7 +215,7 @@ const validWorkouts = Array.isArray(workouts)
   </div>
 
   {/* ===== USER PROFILE ===== */}
-  <div className="bg-gray-800 rounded-2xl shadow-lg border border-gray-700 p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div className="bg-gray-900 rounded-2xl shadow-lg border border-gray-700 p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
 
     {/* USER INFO */}
     <div>
@@ -291,7 +291,7 @@ const validWorkouts = Array.isArray(workouts)
   </div>
 
   {/* WORKOUT SECTION */}
-  <div className="bg-gray-800 rounded-2xl shadow-md p-6">
+  <div className="bg-gray-900 rounded-2xl shadow-md p-6">
     <div className="flex justify-between items-center mb-4">
       <h3 className="text-xl font-semibold text-gray-100">🏋️ Workout Plan</h3>
       <button
@@ -338,8 +338,8 @@ const validWorkouts = Array.isArray(workouts)
 
   {/* ADD WORKOUT MODAL */}
   {showModal && (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-gray-800 rounded-xl p-6 w-full max-w-2xl space-y-4 text-gray-200">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/10 z-50">
+      <div className="bg-gray-900 rounded-xl p-6 w-full max-w-2xl space-y-4 text-gray-200">
         <h2 className="text-xl font-semibold text-gray-100">Add Workout</h2>
 
         {exercises.map((ex, idx) => (
