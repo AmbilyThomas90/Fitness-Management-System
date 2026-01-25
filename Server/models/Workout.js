@@ -5,63 +5,60 @@ const workoutSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
     trainer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Trainer",
-      required: true
+      required: true,
     },
     plan: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Plan"
+      ref: "Plan",
     },
-
     goal: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Goal",
-      required: true
+      required: true,
     },
-
     startDate: {
       type: Date,
-      required: true
+      required: true,
     },
+    endDate: Date,
 
-    endDate: {
-      type: Date
-    },
-category: {
-  type: String,
-  enum: ["GENERAL","STRENGTH", "CARDIO", "CORE", "FLEXIBILITY", "BALANCE", "FUNCTIONAL", "RECOVERY"],
-  required: true
-},
     exercises: [
       {
         name: {
           type: String,
-          required: true
+          required: true,
         },
-        sets: {
-          type: Number
+        category: {
+          type: String,
+          enum: [
+            "GENERAL",
+            "STRENGTH",
+            "CARDIO",
+            "CORE",
+            "FLEXIBILITY",
+            "BALANCE",
+            "FUNCTIONAL",
+            "RECOVERY",
+          ],
+          required: true,
         },
-        reps: {
-          type: Number
-        },
-        duration: {
-          type: String // "30 mins"
-        },
-        rest: {
-          type: String // "60 sec"
-        }
-      }
+        sets: Number,
+        reps: Number,
+        duration: String,
+        rest: String,
+      },
     ],
 
     status: {
       type: String,
-      enum: ["active", "completed"],
-      default: "active"
-    }
+      enum: ["ACTIVE", "COMPLETED"],
+      default: "ACTIVE",
+    },
   },
   { timestamps: true }
 );

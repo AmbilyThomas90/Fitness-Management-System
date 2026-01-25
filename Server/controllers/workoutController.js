@@ -16,52 +16,71 @@ export const createWorkout = async (req, res) => {
 
     const trainer = await Trainer.findOne({ user: req.user._id });
     if (!trainer) {
-      return res.status(404).json({ message: "Trainer profile not found. Please create your trainer profile first." });
-    }
-
-    const { userId, goalId, category, startDate, exercises } = req.body;
-
-    // Validation
-    if (!userId || !goalId || !exercises?.length) {
-      return res.status(400).json({
-        message: "Missing required fields: userId, goalId, and exercises are required",
-        received: { userId, goalId, exercisesCount: exercises?.length }
+      return res.status(404).json({
+        message: "Trainer profile not found. Please create your trainer profile first.",
       });
     }
 
-    if (!category) {
+    const { userId, goalId, startDate, exercises } = req.body;
+
+    // ================= VALIDATION =================
+    if (!userId || !goalId || !Array.isArray(exercises) || exercises.length === 0) {
       return res.status(400).json({
-        message: "Category is required (e.g., GENERAL, STRENGTH, CARDIO)"
+        message: "userId, goalId, and exercises are required",
       });
     }
 
-    // Validate category
-    const validCategories = ["GENERAL","STRENGTH", "CARDIO", "CORE", "FLEXIBILITY", "BALANCE", "FUNCTIONAL", "RECOVERY"];
-    if (!validCategories.includes(category)) {
-      return res.status(400).json({
-        message: `Invalid category. Must be one of: ${validCategories.join(", ")}`
-      });
+    const validCategories = [
+      "GENERAL",
+      "STRENGTH",
+      "CARDIO",
+      "CORE",
+      "FLEXIBILITY",
+      "BALANCE",
+      "FUNCTIONAL",
+      "RECOVERY",
+    ];
+
+    // Validate exercises
+    for (const ex of exercises) {
+      if (!ex.name || !ex.category) {
+        return res.status(400).json({
+          message: "Each exercise must have a name and category",
+        });
+      }
+
+      if (!validCategories.includes(ex.category)) {
+        return res.status(400).json({
+          message: `Invalid category "${ex.category}". Allowed: ${validCategories.join(", ")}`,
+        });
+      }
     }
 
-    // Validate userId exists
+    // Validate user & goal
     const userExists = await User.findById(userId);
     if (!userExists) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Validate goalId exists
     const goalExists = await Goal.findById(goalId);
     if (!goalExists) {
       return res.status(404).json({ message: "Goal not found" });
     }
 
+    // ================= CREATE WORKOUT =================
     const workout = await Workout.create({
       trainer: trainer._id,
       user: userId,
       goal: goalId,
-      category,
-      startDate,
-      exercises,
+      startDate: startDate || new Date(),
+      exercises: exercises.map((ex) => ({
+        name: ex.name.trim(),
+        category: ex.category.toUpperCase(), // ✅ STORED CORRECTLY
+        sets: Number(ex.sets) || 0,
+        reps: Number(ex.reps) || 0,
+        duration: ex.duration,
+        rest: ex.rest,
+      })),
     });
 
     console.log("✅ Workout created:", workout._id);

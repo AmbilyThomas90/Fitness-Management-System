@@ -95,53 +95,54 @@ const selectAssignment = async (assignment) => {
 
   // ================= CREATE WORKOUT =================
   const handleCreateWorkout = async () => {
-    const userId = pageData?.user?._id;
-    const goalId = pageData?.goal?._id;
+  const userId = pageData?.user?._id;
+  const goalId = pageData?.goal?._id;
 
-    if (!userId || !goalId) {
-      alert("Please select a user with a goal");
-      return;
-    }
+  if (!userId || !goalId) {
+    alert("Please select a user with a goal");
+    return;
+  }
 
-    if (!exercises.length || exercises.some((e) => !e.name || !e.category)) {
-      alert("Fill all exercise names and categories");
-      return;
-    }
+  if (!exercises.length || exercises.some((e) => !e.name || !e.category)) {
+    alert("Fill all exercise names and categories");
+    return;
+  }
 
-    setSaving(true);
+  setSaving(true);
 
-    try {
-      const payload = {
-        userId,
-        goalId,
-        category: "GENERAL",
-        startDate: new Date().toISOString(),
-        exercises: exercises.map((ex) => ({
-          name: ex.name,
-          category: ex.category.toUpperCase(),
-          sets: Number(ex.sets) || 0,
-          reps: Number(ex.reps) || 0,
-          duration: ex.duration,
-          rest: ex.rest,
-        })),
-      };
+  try {
+    const payload = {
+      userId,
+      goalId,
+      category: exercises[0].category.toUpperCase(), // <-- use selected category
+      startDate: new Date().toISOString(),
+      exercises: exercises.map((ex) => ({
+        name: ex.name,
+        category: ex.category.toUpperCase(),
+        sets: Number(ex.sets) || 0,
+        reps: Number(ex.reps) || 0,
+        duration: ex.duration,
+        rest: ex.rest,
+      })),
+    };
 
-      console.log(" CREATE WORKOUT PAYLOAD:", payload);
+    console.log(" CREATE WORKOUT PAYLOAD:", payload);
 
-      await api.post("/work/create-workouts", payload);
+    await api.post("/work/create-workouts", payload);
 
-      alert("Workout created successfully ✅");
-      setShowModal(false);
-      setExercises([{ category: "GENERAL", name: "", sets: "", reps: "", duration: "", rest: "" }]);
-      fetchTrainerUsers();
-      refreshWorkouts?.();
-    } catch (err) {
-      console.error("❌ Create workout error:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Failed to create workout");
-    } finally {
-      setSaving(false);
-    }
-  };
+    alert("Workout created successfully ✅");
+    setShowModal(false);
+    setExercises([{ category: "GENERAL", name: "", sets: "", reps: "", duration: "", rest: "" }]);
+    fetchTrainerUsers();
+    refreshWorkouts?.();
+  } catch (err) {
+    console.error("❌ Create workout error:", err.response?.data || err.message);
+    alert(err.response?.data?.message || "Failed to create workout");
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   // ================= LOADING / ERROR =================
 
@@ -354,6 +355,7 @@ const validWorkouts = Array.isArray(workouts)
               value={ex.category}
               onChange={(e) => handleChange(idx, "category", e.target.value)}
             >
+              <option value="GENERAL">General</option>
               <option value="STRENGTH">Strength</option>
               <option value="CARDIO">Cardio</option>
               <option value="CORE">Core</option>
