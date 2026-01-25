@@ -47,7 +47,6 @@ router.get(
   authorizeRole("trainer"),
   getUserNutritionForTrainer
 );
-
 // Trainer Earnings -->by triner
 router.get("/earnings", protect, authorizeRole("trainer"), getTrainerEarnings);
 // Trainer dashboard

@@ -99,20 +99,6 @@ export const getMyPayments = async (req, res) => {
 //   }
 // };
 
-// Trainer Earnings
-export const getTrainerEarnings = async (req, res) => {
-  const payments = await Payment.find({
-    trainer: req.user.id,
-    status: "paid"
-  });
-
-  const totalEarnings = payments.reduce(
-    (sum, p) => sum + p.trainerEarning,
-    0
-  );
-
-  res.json({ totalEarnings, payments });
-};
 
 /* =======================
    ADMIN Paymentdetails

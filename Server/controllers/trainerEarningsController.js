@@ -1,51 +1,87 @@
 import TrainerAssignment from "../models/TrainerAssignment.js";
+import Trainer from "../models/Trainer.js";
 import Payment from "../models/Payment.js";
 
+/* =======================
+   GET TRAINER EARNING details
+======================= */
 export const getTrainerEarnings = async (req, res) => {
   try {
-    const trainerId = req.user._id; // from auth middleware
+    // 1️⃣ Logged-in trainer USER id
+    const trainerUserId = req.user._id;
+    console.log("➡️ Trainer User ID:", trainerUserId);
 
-    // 1️⃣ Get approved assignments for trainer
-    const approvedAssignments = await TrainerAssignment.find({
-      trainer: trainerId,
-      status: "approved",
-    }).select("user");
+    // 2️⃣ Find Trainer profile
+    const trainer = await Trainer.findOne({ user: trainerUserId });
 
-    const approvedUserIds = approvedAssignments.map(a => a.user);
-
-    if (approvedUserIds.length === 0) {
-      return res.json({
-        totalEarnings: 0,
-        earnings: [],
+    if (!trainer) {
+      return res.status(404).json({
+        message: "Trainer profile not found",
       });
     }
 
-    // 2️⃣ Fetch successful payments from approved users
+    console.log("✅ Trainer Profile ID:", trainer._id);
+
+    // 3️⃣ Get approved assignments
+    const approvedAssignments = await TrainerAssignment.find({
+      trainer: trainer._id,
+      status: "approved",
+    }).select("user");
+
+    console.log("✅ Approved Assignments Count:", approvedAssignments.length);
+
+    if (!approvedAssignments.length) {
+      return res.status(200).json({
+        totalEarnings: 0,
+        payments: [],
+      });
+    }
+
+    // 4️⃣ Extract approved user IDs
+    const approvedUserIds = approvedAssignments.map(a => a.user);
+    console.log("👤 Approved User IDs:", approvedUserIds);
+
+    // 5️⃣ Fetch successful payments
     const payments = await Payment.find({
       user: { $in: approvedUserIds },
       status: "success",
     })
       .populate("user", "name email")
-      .populate("plan", "name");
+      .populate("plan", "planName planAmount") // fallback for old data
+      .sort({ createdAt: -1 });
 
-    // 3️⃣ Calculate total earnings
-    const totalEarnings = payments.reduce(
+    console.log("💳 Payments Count:", payments.length);
+
+    // 6️⃣ Normalize payments (snapshot first, fallback to plan)
+    const formattedPayments = payments.map(p => ({
+      _id: p._id,
+      user: p.user,
+      planName: p.planName || p.plan?.planName || "N/A",
+      planAmount: p.planAmount || p.plan?.planAmount || 0,
+      trainerEarning: p.trainerEarning || 0,
+      paymentMethod: p.paymentMethod,
+      createdAt: p.createdAt,
+    }));
+
+    // 7️⃣ Calculate total earnings
+    const totalEarnings = formattedPayments.reduce(
       (sum, p) => sum + p.trainerEarning,
       0
     );
 
-    res.json({
+    console.log("🏆 Total Trainer Earnings:", totalEarnings);
+
+    return res.status(200).json({
       totalEarnings,
-      earnings: payments.map(p => ({
-        user: p.user,
-        planName: p.planName,
-        amount: p.trainerEarning,
-        paymentMethod: p.paymentMethod,
-        date: p.createdAt,
-      })),
+      payments: formattedPayments,
     });
   } catch (error) {
-    console.error("Trainer earnings error:", error);
-    res.status(500).json({ message: "Failed to fetch trainer earnings" });
+    console.error("❌ Trainer earnings error:", error);
+    return res.status(500).json({
+      message: "Failed to fetch trainer earnings",
+    });
   }
 };
+
+
+
