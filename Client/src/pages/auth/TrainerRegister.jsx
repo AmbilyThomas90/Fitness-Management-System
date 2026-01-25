@@ -10,8 +10,9 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
     experience: "",
     specialization: "",
   });
-  
+
   const [profileImage, setProfileImage] = useState(null);
+  const [preview, setPreview] = useState(""); // ✅ added
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,26 +21,24 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  //  Image validation handler
+  // ✅ Image validation handler (FIXED)
   const handleImageChange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  //  Allow ALL image types
-  if (!file.type.startsWith("image/")) {
-    setError("Only image files are allowed.");
-    setImage(null);
-    setPreview("");
-    e.target.value = null;
-    return;
-  }
+    // Allow only image files
+    if (!file.type.startsWith("image/")) {
+      setError("Only image files are allowed.");
+      setProfileImage(null);
+      setPreview("");
+      e.target.value = null;
+      return;
+    }
 
-  //  Valid image
-  setError("");
-  setImage(file);
-  setPreview(URL.createObjectURL(file));
-};
-
+    setError("");
+    setProfileImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,24 +47,18 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
 
     setLoading(true);
     try {
-      // Create a single FormData object to send EVERYTHING at once
       const data = new FormData();
-      
-      // Append basic auth fields
+
       data.append("name", formData.name);
       data.append("email", formData.email);
       data.append("password", formData.password);
-      data.append("role", "trainer"); // Tell backend this is a trainer
+      data.append("role", "trainer");
 
-      // Append the "missing" trainer fields
       data.append("phoneNumber", formData.phoneNumber);
       data.append("experience", formData.experience);
       data.append("specialization", formData.specialization);
-      
-      // Append the image file
       data.append("profileImage", profileImage);
 
-      // Send ONE request to the register endpoint
       await api.post("/auth/register", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -82,30 +75,24 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
   };
 
   return (
-    
-    // Overlay
     <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] px-4"
-      // clicking on overlay closes modal
       onClick={closeModal}
     >
-      {/* Modal Card */}
       <div
         className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 relative animate-fadeIn"
-        // stop propagation so clicking inside card does not close
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
         <button
           type="button"
-          onClick={() => closeModal()} //  make sure it's a function call
+          onClick={closeModal}
           className="absolute top-3 right-4 text-2xl text-gray-400 hover:text-black"
         >
           ✕
         </button>
 
         <h2 className="text-2xl font-bold text-center mb-1">
-          Create  Account
+          Create Account
         </h2>
         <p className="text-center text-gray-500 text-sm mb-4">
           Join as a professional fitness trainer
@@ -116,7 +103,6 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-3">
-          {/* Name */}
           <input
             className="w-full border p-2 rounded"
             name="name"
@@ -125,11 +111,11 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
             required
             onChange={handleChange}
           />
-          {/* Email*/}
-          <input
+
+        <input
         name="email"
         type="email"
-        placeholder="📧 your email"
+   placeholder="📧 your email"
         value={formData.email}
         onChange={handleChange}
         required
@@ -142,23 +128,18 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
                    transition
                    invalid:border-red-500 invalid:ring-red-500"
       />
-         
-      {/* Password */}
-      <input
-        name="password"
-        type="password"
-         placeholder="🔒 your password"
-        value={formData.password}
-        onChange={handleChange}
-        minLength={6}
-        required
-        className="w-full rounded-lg border border-gray-300
-                   px-4 py-2.5 text-sm
-                   focus:outline-none focus:ring-2
-                   focus:ring-indigo-500 focus:border-indigo-500
-                   transition
-                   invalid:border-red-500 invalid:ring-red-500"
-      />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="🔒 your password"
+            value={formData.password}
+            onChange={handleChange}
+            minLength={6}
+            required
+            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm"
+          />
+
           <input
             className="w-full border p-2 rounded"
             name="phoneNumber"
@@ -167,6 +148,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
             required
             onChange={handleChange}
           />
+
           <input
             className="w-full border p-2 rounded"
             name="experience"
@@ -176,6 +158,7 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
             required
             onChange={handleChange}
           />
+
           <select
             className="w-full border p-2 rounded"
             name="specialization"
@@ -189,10 +172,20 @@ const TrainerRegister = ({ isModal = true, closeModal, switchView }) => {
             <option value="yoga and endurance">Yoga and Endurance</option>
             <option value="flexibility">Flexibility</option>
           </select>
-         <div className="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-lg">
-            <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Profile Picture</label>
-            <input type="file" accept="image/*" required onChange={handleImageChange} className="text-sm w-full" />
+
+          <div className="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-lg">
+            <label className="block text-xs font-bold text-gray-400 uppercase mb-2">
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              required
+              onChange={handleImageChange}
+              className="text-sm w-full"
+            />
           </div>
+
           <button
             type="submit"
             disabled={loading}

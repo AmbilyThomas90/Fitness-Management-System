@@ -70,7 +70,7 @@ const PlanSubscription = () => {
         key: "rzp_test_S0UHDUsxK2zjHN", // Your actual Razorpay Test Key
         amount: order.amount,
         currency: order.currency,
-        name: "Fit Hub",
+        name: "Smart Fitness Suite",
         image: "https://your-domain.com/fithub-logo.png",
         description: `Buying ${plan.planName} (${planType})`,
         order_id: order.id, // Links this checkout to your backend order

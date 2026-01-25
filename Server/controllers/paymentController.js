@@ -6,7 +6,7 @@ import Plan from "../models/Plan.js";
 
 export const getMyPayments = async (req, res) => {
   try {
-    // 1️⃣ Find active subscription
+    //  Find active subscription
     const subscription = await Subscription.findOne({
       user: req.user._id,
       status: "active",
@@ -20,13 +20,13 @@ export const getMyPayments = async (req, res) => {
       });
     }
 
-    // 2️⃣ Find latest payment for this subscription
+    //  Find latest payment for this subscription
     const payment = await Payment.findOne({
       user: req.user._id,
       subscription: subscription._id,
     }).sort({ createdAt: -1 });
 
-    // 3️⃣ Send combined response
+    //  Send combined response
     res.status(200).json({
       success: true,
       subscription,
