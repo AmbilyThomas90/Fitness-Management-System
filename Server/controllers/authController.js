@@ -83,7 +83,7 @@ export const login = async (req, res) => {
 
     let trainerStatus = null;
 
-    // ✅ CHECK TRAINER STATUS
+    //  CHECK TRAINER STATUS
     if (user.role === "trainer") {
       const trainer = await Trainer.findOne({ user: user._id });
 

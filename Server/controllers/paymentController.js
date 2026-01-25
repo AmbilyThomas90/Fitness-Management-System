@@ -163,21 +163,3 @@ export const adminAllPayments = async (req, res) => {
 
 
 
-//  create Payment
-//export const makePayment = async (req, res) => {
-//   const { trainerId, planId, amount } = req.body;
-
-//   const platformFee = amount * 0.2; // 20% commission
-//   const trainerEarning = amount - platformFee;
-
-//   const payment = await Payment.create({
-//     user: req.user.id,
-//     trainer: trainerId,
-//     plan: planId,
-//     amount,
-//     platformFee,
-//     trainerEarning
-//   });
-
-//   res.status(201).json(payment);
-// };

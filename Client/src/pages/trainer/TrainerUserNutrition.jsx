@@ -122,8 +122,8 @@ const TrainerUserNutrition = () => {
 
   // ================= UI =================
   return (
-   <div className="min-h-screen bg-gray-50 px-3 sm:px-6 lg:px-8 py-5 space-y-6">
-
+<div className="min-h-screen bg-slate-900 px-3 sm:px-6 lg:px-8 py-5 space-y-6">
+  
   {/* ===== APPROVED USERS ===== */}
   <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
     <h2 className="text-base sm:text-xl font-semibold mb-4">
@@ -289,8 +289,8 @@ const TrainerUserNutrition = () => {
               <option value="">Select Meal</option>
               <option value="BREAKFAST">Breakfast</option>
               <option value="LUNCH">Lunch</option>
-               <option value="SNACK">Snack</option>
-              <option value="DINNER">Dinner</option>     
+              <option value="SNACK">Snack</option>
+              <option value="DINNER">Dinner</option>
             </select>
           ) : (
             <input
@@ -323,6 +323,7 @@ const TrainerUserNutrition = () => {
     </div>
   )}
 </div>
+
 
   );
 };

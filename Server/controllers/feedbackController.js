@@ -59,11 +59,11 @@ export const getApprovedUsersFeedback = async (req, res) => {
   try {
     console.log("📥 getApprovedUsersFeedback HIT");
 
-    // 1️⃣ User ID from JWT
+    //  User ID from JWT
     const userId = req.user.id;
     console.log("👤 User ID from token:", userId);
 
-    // 2️⃣ Find Trainer PROFILE using User ID
+    //  Find Trainer PROFILE using User ID
     const trainerProfile = await Trainer.findOne({ user: userId }).lean();
 
     if (!trainerProfile) {
@@ -81,7 +81,7 @@ export const getApprovedUsersFeedback = async (req, res) => {
       trainerProfileId.toString()
     );
 
-    // 3️⃣ Fetch APPROVED assignments for this trainer profile
+    //  Fetch APPROVED assignments for this trainer profile
     const approvedAssignments = await TrainerAssignment.find({
       trainer: trainerProfileId,
       status: "approved",
@@ -102,11 +102,11 @@ export const getApprovedUsersFeedback = async (req, res) => {
       });
     }
 
-    // 4️⃣ Extract approved User IDs
+    //  Extract approved User IDs
     const approvedUserIds = approvedAssignments.map(a => a.user);
     console.log("🆔 Approved user IDs:", approvedUserIds);
 
-    // 5️⃣ Fetch feedback for approved users only
+    //  Fetch feedback for approved users only
     const feedbacks = await Feedback.find({
       user: { $in: approvedUserIds },
     })

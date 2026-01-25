@@ -23,7 +23,7 @@ const TrainerUsers = () => {
   useEffect(() => {
     fetchTrainerUsers();
   }, []);
-
+// Fetch assigned users for the trainer
   const fetchTrainerUsers = async () => {
     try {
       const res = await api.get("/trainer-assignment/my-users");
@@ -51,17 +51,17 @@ const TrainerUsers = () => {
       </p>
     );
   }
-
-  return (
+return (
    
 <div className="space-y-6">
+
   {/* Header */}
   <div className="flex flex-col sm:flex-row sm:items-center gap-3">
     <div className="flex items-center gap-3">
-      <div className="rounded-lg bg-indigo-50 p-2 ring-1 ring-indigo-100">
-        <Users className="h-5 w-5 text-indigo-600" />
+      <div className="rounded-lg bg-indigo-50 dark:bg-indigo-900/40 p-2 ring-1 ring-indigo-100 dark:ring-indigo-800">
+        <Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
       </div>
-      <h2 className="text-xl sm:text-2xl font-semibold text-slate-800">
+      <h2 className="text-xl sm:text-2xl font-semibold text-slate-200 dark:text-slate-100">
         Assigned Users
       </h2>
     </div>
@@ -69,21 +69,28 @@ const TrainerUsers = () => {
 
   {assignments.length === 0 ? (
     /* Empty State */
-    <div className="rounded-xl border border-dashed bg-slate-50 p-8 sm:p-10 text-center">
-      <Users className="mx-auto mb-3 h-8 w-8 text-slate-400" />
-      <p className="text-sm font-medium text-slate-600">
+    <div className="rounded-xl border border-dashed
+      bg-slate-50 dark:bg-slate-900
+      border-slate-200 dark:border-slate-700
+      p-8 sm:p-10 text-center">
+      <Users className="mx-auto mb-3 h-8 w-8 text-slate-400 dark:text-slate-500" />
+      <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
         No users assigned yet
       </p>
-      <p className="mt-1 text-xs text-slate-400">
+      <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
         Assigned users will appear here once available
       </p>
     </div>
   ) : (
     <>
       {/* ================= DESKTOP TABLE ================= */}
-      <div className="hidden lg:block overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="hidden lg:block overflow-x-auto rounded-xl
+        border border-slate-200 dark:border-slate-700
+        bg-white dark:bg-slate-900 shadow-sm">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-100 text-xs font-semibold uppercase text-slate-600">
+          <thead className="bg-slate-100 dark:bg-slate-800
+            text-xs font-semibold uppercase
+            text-slate-600 dark:text-slate-300">
             <tr>
               <th className="px-4 py-3 text-left">User</th>
               <th className="px-4 py-3 text-left">Email</th>
@@ -99,21 +106,20 @@ const TrainerUsers = () => {
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {assignments.map((item) => (
-              <tr key={item._id} className="hover:bg-slate-50 transition">
-                <td className="px-4 py-3 font-medium text-slate-800">
+              <tr
+                key={item._id}
+                className="hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+              >
+                <td className="px-4 py-3 font-medium text-slate-800 dark:text-slate-100">
                   {item.user?.name || "-"}
                 </td>
-                <td className="px-4 py-3 text-slate-600">
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
                   {item.user?.email || "-"}
                 </td>
-                <td className="px-4 py-3">
-                  {item.userProfile?.phoneNumber || "-"}
-                </td>
-                <td className="px-4 py-3">
-                  {item.userProfile?.age || "-"}
-                </td>
+                <td className="px-4 py-3">{item.userProfile?.phoneNumber || "-"}</td>
+                <td className="px-4 py-3">{item.userProfile?.age || "-"}</td>
                 <td className="px-4 py-3 capitalize">
                   {item.userProfile?.gender || "-"}
                 </td>
@@ -131,18 +137,18 @@ const TrainerUsers = () => {
                   <span
                     className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                       item.status === "approved"
-                        ? "bg-emerald-100 text-emerald-700"
+                        ? "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200"
                         : item.status === "completed"
-                        ? "bg-sky-100 text-sky-700"
+                        ? "bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-200"
                         : item.status === "rejected"
-                        ? "bg-rose-100 text-rose-700"
-                        : "bg-amber-100 text-amber-700"
+                        ? "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200"
+                        : "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200"
                     }`}
                   >
                     {item.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-slate-500">
+                <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
                   {new Date(item.assignDate).toLocaleDateString()}
                 </td>
               </tr>
@@ -156,30 +162,35 @@ const TrainerUsers = () => {
         {assignments.map((item) => (
           <div
             key={item._id}
-            className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm space-y-2"
+            className="rounded-xl border
+              border-slate-200 dark:border-slate-700
+              bg-white dark:bg-slate-900
+              p-4 shadow-sm space-y-2"
           >
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-slate-800">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100">
                 {item.user?.name || "-"}
               </h3>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
                   item.status === "approved"
-                    ? "bg-emerald-100 text-emerald-700"
+                    ? "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200"
                     : item.status === "completed"
-                    ? "bg-sky-100 text-sky-700"
+                    ? "bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-200"
                     : item.status === "rejected"
-                    ? "bg-rose-100 text-rose-700"
-                    : "bg-amber-100 text-amber-700"
+                    ? "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200"
+                    : "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200"
                 }`}
               >
                 {item.status}
               </span>
             </div>
 
-            <p className="text-xs text-slate-500">{item.user?.email}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {item.user?.email}
+            </p>
 
-            <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="grid grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300">
               <p><span className="font-medium">Phone:</span> {item.userProfile?.phoneNumber || "-"}</p>
               <p><span className="font-medium">Age:</span> {item.userProfile?.age || "-"}</p>
               <p><span className="font-medium">Gender:</span> {item.userProfile?.gender || "-"}</p>
@@ -188,7 +199,7 @@ const TrainerUsers = () => {
               <p><span className="font-medium">Time:</span> {item.timeSlot}</p>
             </div>
 
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 dark:text-slate-500">
               Assigned on {new Date(item.assignDate).toLocaleDateString()}
             </p>
           </div>
@@ -197,9 +208,6 @@ const TrainerUsers = () => {
     </>
   )}
 </div>
-
-
-
   );
 };
 

@@ -116,11 +116,22 @@ const TrainerProfile = () => {
   if (!trainer) return <p className="p-6">Profile not found</p>;
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-gray-50 to-blue-50 px-4 sm:px-6 py-6 flex justify-center items-start">
-  <div className="w-full max-w-4xl rounded-2xl bg-white shadow-xl border border-gray-100 overflow-hidden">
-
+<div
+  className="min-h-screen 
+  bg-gradient-to-br 
+  from-slate-900 via-gray-900 to-indigo-900 
+  dark:from-black dark:via-slate-900 dark:to-indigo-950
+  px-4 sm:px-6 py-6 
+  flex justify-center items-start"
+>
+  <div
+    className="w-full max-w-4xl rounded-2xl 
+    bg-white dark:bg-slate-900 
+    shadow-xl border border-gray-100 dark:border-slate-700 
+    overflow-hidden"
+  >
     {/* ================= HEADER ================= */}
-    <div className="bg-indigo-500 px-4 sm:px-8 py-5 sm:py-6">
+    <div className="bg-indigo-500 dark:bg-indigo-600 px-4 sm:px-8 py-5 sm:py-6">
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-center">
         Trainer Profile
       </h2>
@@ -133,7 +144,7 @@ const TrainerProfile = () => {
         {/* ================= IMAGE UPLOAD ================= */}
         <div className="flex flex-col items-center md:w-1/3 gap-4">
           <div className="relative">
-              <img
+            <img
               src={
                 preview
                   ? preview
@@ -142,7 +153,10 @@ const TrainerProfile = () => {
                   : "https://via.placeholder.com/150"
               }
               alt="Trainer"
-              className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-md"
+              className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 
+              rounded-full object-cover 
+              border-4 border-white dark:border-slate-700 
+              shadow-md"
               onError={(e) => {
                 e.target.src = "https://via.placeholder.com/150";
               }}
@@ -160,7 +174,10 @@ const TrainerProfile = () => {
               />
               <label
                 htmlFor="profileImage"
-                className="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-xs sm:text-sm font-medium text-white shadow hover:bg-indigo-700 transition"
+                className="cursor-pointer rounded-lg 
+                bg-indigo-600 hover:bg-indigo-700 
+                px-4 py-2 text-xs sm:text-sm 
+                font-medium text-white shadow transition"
               >
                 Select Profile Image
               </label>
@@ -176,30 +193,38 @@ const TrainerProfile = () => {
 
         {/* ================= INFO ================= */}
         <div className="md:w-2/3 space-y-5">
-
-          <p className="text-gray-800 text-sm sm:text-base">
+          <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-base">
             <span className="font-semibold">Name:</span>{" "}
             {trainer.user?.name}
           </p>
 
-          <p className="text-gray-800 text-sm sm:text-base break-all">
+          <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-base break-all">
             <span className="font-semibold">Email:</span>{" "}
             {trainer.user?.email}
           </p>
 
           {/* Phone */}
           <div>
-            <p className="text-sm text-gray-500 mb-1">Phone Number</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              Phone Number
+            </p>
             {isEditing ? (
               <input
                 value={form.phoneNumber}
                 onChange={(e) =>
                   setForm({ ...form, phoneNumber: e.target.value })
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
+                className="w-full rounded-lg 
+                border border-gray-300 dark:border-slate-600 
+                bg-white dark:bg-slate-800 
+                text-gray-800 dark:text-gray-100 
+                px-3 py-2 text-sm 
+                focus:border-indigo-500 
+                focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-400 
+                focus:outline-none"
               />
             ) : (
-              <p className="text-gray-800 text-sm sm:text-base">
+              <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-base">
                 {trainer.phoneNumber}
               </p>
             )}
@@ -207,14 +232,23 @@ const TrainerProfile = () => {
 
           {/* Specialization */}
           <div>
-            <p className="text-sm text-gray-500 mb-1">Specialization</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              Specialization
+            </p>
             {isEditing ? (
               <select
                 value={form.specialization}
                 onChange={(e) =>
                   setForm({ ...form, specialization: e.target.value })
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
+                className="w-full rounded-lg 
+                border border-gray-300 dark:border-slate-600 
+                bg-white dark:bg-slate-800 
+                text-gray-800 dark:text-gray-100 
+                px-3 py-2 text-sm 
+                focus:border-indigo-500 
+                focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-400 
+                focus:outline-none"
               >
                 <option value="">Select</option>
                 <option value="weight_loss">Weight Loss</option>
@@ -223,7 +257,7 @@ const TrainerProfile = () => {
                 <option value="flexibility">Flexibility</option>
               </select>
             ) : (
-              <p className="text-gray-800 capitalize text-sm sm:text-base">
+              <p className="text-gray-800 dark:text-gray-200 capitalize text-sm sm:text-base">
                 {trainer.specialization}
               </p>
             )}
@@ -231,7 +265,9 @@ const TrainerProfile = () => {
 
           {/* Experience */}
           <div>
-            <p className="text-sm text-gray-500 mb-1">Experience</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              Experience
+            </p>
             {isEditing ? (
               <input
                 type="number"
@@ -239,10 +275,17 @@ const TrainerProfile = () => {
                 onChange={(e) =>
                   setForm({ ...form, experience: e.target.value })
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none"
+                className="w-full rounded-lg 
+                border border-gray-300 dark:border-slate-600 
+                bg-white dark:bg-slate-800 
+                text-gray-800 dark:text-gray-100 
+                px-3 py-2 text-sm 
+                focus:border-indigo-500 
+                focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-400 
+                focus:outline-none"
               />
             ) : (
-              <p className="text-gray-800 text-sm sm:text-base">
+              <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-base">
                 {trainer.experience} years
               </p>
             )}
@@ -256,7 +299,8 @@ const TrainerProfile = () => {
           <>
             <button
               onClick={handleSave}
-              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 transition"
+              className="rounded-lg bg-blue-600 hover:bg-blue-700 
+              px-6 py-2 text-sm font-medium text-white shadow transition"
             >
               Save
             </button>
@@ -267,7 +311,11 @@ const TrainerProfile = () => {
                 setPreview(null);
                 setError("");
               }}
-              className="rounded-lg border border-gray-300 px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+              className="rounded-lg 
+              border border-gray-300 dark:border-slate-600 
+              px-6 py-2 text-sm font-medium 
+              text-gray-700 dark:text-gray-200 
+              hover:bg-gray-100 dark:hover:bg-slate-800 transition"
             >
               Cancel
             </button>
@@ -275,7 +323,8 @@ const TrainerProfile = () => {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 transition"
+            className="rounded-lg bg-blue-600 hover:bg-blue-700 
+            px-6 py-2 text-sm font-medium text-white shadow transition"
           >
             Edit Profile
           </button>
@@ -284,6 +333,7 @@ const TrainerProfile = () => {
     </div>
   </div>
 </div>
+
 
 
   );

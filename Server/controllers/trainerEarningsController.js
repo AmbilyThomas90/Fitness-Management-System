@@ -7,11 +7,11 @@ import Payment from "../models/Payment.js";
 ======================= */
 export const getTrainerEarnings = async (req, res) => {
   try {
-    // 1️⃣ Logged-in trainer USER id
+    //  Logged-in trainer USER id
     const trainerUserId = req.user._id;
     console.log("➡️ Trainer User ID:", trainerUserId);
 
-    // 2️⃣ Find Trainer profile
+    //  Find Trainer profile
     const trainer = await Trainer.findOne({ user: trainerUserId });
 
     if (!trainer) {
@@ -22,7 +22,7 @@ export const getTrainerEarnings = async (req, res) => {
 
     console.log("✅ Trainer Profile ID:", trainer._id);
 
-    // 3️⃣ Get approved assignments
+    //  Get approved assignments
     const approvedAssignments = await TrainerAssignment.find({
       trainer: trainer._id,
       status: "approved",
@@ -37,11 +37,11 @@ export const getTrainerEarnings = async (req, res) => {
       });
     }
 
-    // 4️⃣ Extract approved user IDs
+    //  Extract approved user IDs
     const approvedUserIds = approvedAssignments.map(a => a.user);
     console.log("👤 Approved User IDs:", approvedUserIds);
 
-    // 5️⃣ Fetch successful payments
+    //  Fetch successful payments
     const payments = await Payment.find({
       user: { $in: approvedUserIds },
       status: "success",
@@ -52,7 +52,7 @@ export const getTrainerEarnings = async (req, res) => {
 
     console.log("💳 Payments Count:", payments.length);
 
-    // 6️⃣ Normalize payments (snapshot first, fallback to plan)
+    //  Normalize payments (snapshot first, fallback to plan)
     const formattedPayments = payments.map(p => ({
       _id: p._id,
       user: p.user,
@@ -63,7 +63,7 @@ export const getTrainerEarnings = async (req, res) => {
       createdAt: p.createdAt,
     }));
 
-    // 7️⃣ Calculate total earnings
+    //  Calculate total earnings
     const totalEarnings = formattedPayments.reduce(
       (sum, p) => sum + p.trainerEarning,
       0

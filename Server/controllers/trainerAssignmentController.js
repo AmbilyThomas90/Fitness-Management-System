@@ -65,8 +65,7 @@ export const assignTrainer = async (req, res) => {
         message: "You already have an active trainer"
       });
     }
-
-    // =====================
+ // =====================
     //  Create assignment 
     // =====================
     const assignment = await TrainerAssignment.create({
@@ -93,7 +92,6 @@ export const assignTrainer = async (req, res) => {
     });
   }
 };
-
 
 // Get all users assigned to logged-in trainer---->Trainer
 // Triner approved users  // view all Users approved by trainer  and trainer'sClient
