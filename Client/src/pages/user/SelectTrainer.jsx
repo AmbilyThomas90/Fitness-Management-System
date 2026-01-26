@@ -88,9 +88,52 @@ const SelectTrainer = () => {
 
   {/* Trainer List */}
   {trainers.length === 0 ? (
-    <div className="flex items-center justify-center min-h-[200px]">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6
+  bg-gradient-to-br from-[#020617] via-[#020617] to-[#020617]
+  p-6 rounded-2xl"
+>
+  {trainers.map((trainer) => (
+    <div
+      key={trainer._id}
+      onClick={() => setSelectedTrainer(trainer)}
+      className={`cursor-pointer transition-all duration-300 rounded-2xl p-4 border
+        bg-[#0B0F1A]
+        ${
+          selectedTrainer?._id === trainer._id
+            ? "border-blue-500 ring-2 ring-blue-500/30 shadow-xl"
+            : "border-gray-800 hover:border-gray-700 hover:shadow-xl"
+        }`}
+    >
+      {/* IMAGE */}
+      <div className="overflow-hidden rounded-xl bg-gray-800">
+        <img
+          src={
+            trainer.profileImage
+              ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+              : "/default-avatar.png"
+          }
+          alt={trainer.user?.name || "Trainer"}
+          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+        />
+      </div>
+
+      {/* CONTENT */}
+      <h3 className="font-semibold mt-4 text-gray-100 text-lg truncate">
+        {trainer.user?.name || "Trainer"}
+      </h3>
+
+      <p className="text-sm text-gray-400 mt-1">
+        <span className="text-gray-300 font-medium">Specialization:</span>{" "}
+        {trainer.specialization || "N/A"}
+      </p>
+
+      <p className="text-sm text-gray-400">
+        <span className="text-gray-300 font-medium">Experience:</span>{" "}
+        {trainer.experience || 0} yrs
+      </p>
     </div>
+  ))}
+</div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {trainers.map((trainer) => (
