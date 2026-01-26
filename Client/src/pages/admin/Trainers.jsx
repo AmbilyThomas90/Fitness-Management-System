@@ -19,13 +19,12 @@ const Trainers = () => {
 
   const fetchTrainers = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await api.get("/admin/trainers", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setTrainers(res.data.trainers);
+      const res = await api.get("/admin/trainers");
+      console.log("Trainers Response:", res.data);
+      setTrainers(res.data.trainers || []);
     } catch (error) {
       console.error("Failed to load trainers", error);
+      alert("Error loading trainers");
     } finally {
       setLoading(false);
     }
@@ -33,12 +32,7 @@ const Trainers = () => {
 
   const updateStatus = async (trainerId, status) => {
     try {
-      const token = localStorage.getItem("token");
-      await api.patch(
-        `/admin/trainers/${trainerId}/status`,
-        { status },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.patch(`/admin/trainers/${trainerId}/status`, { status });
 
       // Update UI instantly
       setTrainers((prev) =>
@@ -70,12 +64,17 @@ return (
 
   {/* Trainer List */}
   <div className="space-y-3">
-    {trainers.map((trainer) => {
-      const avatarSrc = trainer?.profileImage
-        ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
-        : "/default-avatar.png";
+    {trainers.length === 0 ? (
+      <p className="text-gray-500 text-center py-8">No trainers found</p>
+    ) : (
+      trainers.map((trainer) => {
+        const avatarSrc = trainer?.profileImage
+          ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+          : "/default-avatar.png";
 
-      return (
+        console.log("Trainer Image URL:", avatarSrc, "ProfileImage:", trainer.profileImage);
+
+        return (
         <div
           key={trainer._id}
           className="
@@ -154,7 +153,8 @@ return (
           </div>
         </div>
       );
-    })}
+      })
+    )}
   </div>
 </div>
 

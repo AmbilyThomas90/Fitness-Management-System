@@ -139,12 +139,12 @@ const TrainerProfile = () => {
                   ? preview
                   : trainer.profileImage
                   ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
-                  : "https://via.placeholder.com/150"
+                  : "/default-avatar.png"
               }
               alt="Trainer"
               className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-gray-700 shadow-md"
               onError={(e) => {
-                e.target.src = "https://via.placeholder.com/150";
+                e.target.src = "/default-avatar.png";
               }}
             />
           </div>
