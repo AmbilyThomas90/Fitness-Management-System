@@ -168,20 +168,36 @@ const TrainerUserNutrition = () => {
         User Information
       </h2>
 
-      <div className="space-y-2 text-xs sm:text-sm">
+     <div className="space-y-2 text-sm text-gray-300">
         {[
           ["Name", user.name],
-          ["Email", user.email],
-          ["Phone", userProfile.phoneNumber],
-          ["Health", userProfile.healthCondition],
+          ["Gender", userProfile.gender],
+          ["Health Condition", userProfile.healthCondition],
+          ["Fitness Level", userProfile.fitnessLevel],
         ].map(([label, value]) => (
-          <div key={label} className="flex justify-between gap-2">
-            <span className="text-gray-400">{label}</span>
-            <span className="font-medium text-gray-200 text-right break-all">
-              {value || "-"}
-            </span>
+          <div key={label} className="flex justify-between gap-3">
+            <span className="text-gray-100">{label}</span>
+            <span className="font-medium text-right">{value || "-"}</span>
           </div>
         ))}
+
+        <div className="flex justify-between gap-3 items-center">
+          <span className="flex items-center gap-1 text-gray-100">
+            <Mail className="w-4 h-4" /> Email
+          </span>
+          <span className="font-medium truncate max-w-[200px] text-gray-200">
+            {user.email || "-"}
+          </span>
+        </div>
+
+        <div className="flex justify-between gap-3 items-center">
+          <span className="flex items-center gap-1 text-gray-100">
+            <Phone className="w-4 h-4" /> Phone
+          </span>
+          <span className="font-medium text-gray-200">
+            {userProfile.phoneNumber || "-"}
+          </span>
+        </div>
       </div>
     </div>
 
