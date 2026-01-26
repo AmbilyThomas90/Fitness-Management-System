@@ -68,9 +68,9 @@ return (
       <p className="text-gray-500 text-center py-8">No trainers found</p>
     ) : (
       trainers.map((trainer) => {
-        const avatarSrc = trainer?.profileImage
-          ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
-          : "/default-avatar.png";
+       const avatarSrc = trainer?.profileImage
+  ? `${import.meta.env.VITE_API_URL}/uploads/${trainer.profileImage}`
+  : "/default-avatar.png";
 
         console.log("Trainer Image URL:", avatarSrc, "ProfileImage:", trainer.profileImage);
 
