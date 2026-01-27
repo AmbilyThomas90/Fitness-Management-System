@@ -89,15 +89,13 @@ return (
         >
           {/* Trainer Info */}
           <div className="flex items-start md:items-center gap-3">
-            <img
-              src={avatarSrc}
-              alt={trainer?.user?.name || "Trainer"}
-        className="w-16 h-20 sm:w-20 sm:h-25 rounded-full object-cover object-center border"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/default-avatar.png";
-              }}
-            />
+          <img
+  src={`${import.meta.env.VITE_API_URL}/uploads/${trainer.profileImage}`}
+  onError={(e) => {
+    e.currentTarget.src = "/default-avatar.png";
+  }}
+/>
+
 
             <div className="flex flex-col gap-1 text-sm sm:text-base">
               <p className="font-semibold text-gray-900 dark:text-white">
