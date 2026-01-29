@@ -19,12 +19,13 @@ const Trainers = () => {
 
   const fetchTrainers = async () => {
     try {
-      const res = await api.get("/admin/trainers");
-      console.log("Trainers Response:", res.data);
-      setTrainers(res.data.trainers || []);
+      const token = localStorage.getItem("token");
+      const res = await api.get("/admin/trainers", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTrainers(res.data.trainers);
     } catch (error) {
       console.error("Failed to load trainers", error);
-      alert("Error loading trainers");
     } finally {
       setLoading(false);
     }
@@ -32,7 +33,12 @@ const Trainers = () => {
 
   const updateStatus = async (trainerId, status) => {
     try {
-      await api.patch(`/admin/trainers/${trainerId}/status`, { status });
+      const token = localStorage.getItem("token");
+      await api.patch(
+        `/admin/trainers/${trainerId}/status`,
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       // Update UI instantly
       setTrainers((prev) =>
@@ -64,17 +70,12 @@ return (
 
   {/* Trainer List */}
   <div className="space-y-3">
-    {trainers.length === 0 ? (
-      <p className="text-gray-500 text-center py-8">No trainers found</p>
-    ) : (
-      trainers.map((trainer) => {
-       const avatarSrc = trainer?.profileImage
-  ? `${import.meta.env.VITE_API_URL}/uploads/${trainer.profileImage}`
-  : "/default-avatar.png";
+    {trainers.map((trainer) => {
+      const avatarSrc = trainer?.profileImage
+        ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
+        : "/default-avatar.png";
 
-        console.log("Trainer Image URL:", avatarSrc, "ProfileImage:", trainer.profileImage);
-
-        return (
+      return (
         <div
           key={trainer._id}
           className="
@@ -89,15 +90,15 @@ return (
         >
           {/* Trainer Info */}
           <div className="flex items-start md:items-center gap-3">
-           <img
-          src={
-            trainer.profileImage
-              ? `${BACKEND_URL}/uploads/${trainer.profileImage}`
-              : "/default-avatar.png"
-          }
-          alt={trainer.user?.name || "Trainer"}
-          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-        />
+            <img
+              src={avatarSrc}
+              alt={trainer?.user?.name || "Trainer"}
+        className="w-16 h-20 sm:w-20 sm:h-25 rounded-full object-cover object-center border"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/default-avatar.png";
+              }}
+            />
 
             <div className="flex flex-col gap-1 text-sm sm:text-base">
               <p className="font-semibold text-gray-900 dark:text-white">
@@ -153,8 +154,7 @@ return (
           </div>
         </div>
       );
-      })
-    )}
+    })}
   </div>
 </div>
 
