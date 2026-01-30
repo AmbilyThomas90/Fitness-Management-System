@@ -15,7 +15,7 @@ import Exercise from "./pages/public/Exercise";
 
 /*Plan */
 import ViewPlans from "./components/PlanForm";
-import PlanDetailsView  from "./components/PlanDetails";
+import PlanDetailsView from "./components/PlanDetails";
 
 
 
@@ -40,7 +40,7 @@ import Goals from "./pages/user/Goals";
 import Progress from "./pages/user/ProgressTracker";
 import PlanSubscription from "./pages/user/PlanSubscription";
 import MySubscription from "./pages/user/MySubscription";
-import SelectTrainer  from "./pages/user/SelectTrainer";
+import SelectTrainer from "./pages/user/SelectTrainer";
 import MyPayment from "./pages/user/UserPaymentDetails";
 import Workouts from "./pages/user/UserWorkouts";
 import Nutrition from "./pages/user/UserNutrition";
@@ -50,7 +50,7 @@ import Feedback from "./pages/user/UserFeedback";
 import TrainerLayout from "./pages/trainer/TrainerLayout";
 import TrainerDashboard from "./pages/trainer/TrainerDashboard";   /* DASHBOARDS */
 import TrainerProfile from "./pages/trainer/TrainerProfile"; // Trainer Profile
- import TrainerUsers from "./pages/trainer/TrainerUsers";
+import TrainerUsers from "./pages/trainer/TrainerUsers";
 import TrainerUsersApprove from "./pages/trainer/TrainerUsersApprove";
 import TrainerUsersWorkout from "./pages/trainer/TrainerUserWorkout";
 import TrainerUsersNutrition from "./pages/trainer/TrainerUserNutrition";
@@ -64,7 +64,7 @@ import Sidebar from "./pages/user/Sidebar";
 function App() {
   return (
     <BrowserRouter>
-   
+
 
       <Routes>
         {/* ================= PUBLIC ROUTES ================= */}
@@ -72,17 +72,17 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/register" element={<Register />} /> */}
         <Route path="/register" element={<UserRegister />} />
-<Route path="/trainer-register" element={<TrainerRegister />} />
+        <Route path="/trainer-register" element={<TrainerRegister />} />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
-         {/* Public plans */}
-         <Route path="plancard" element={< PlanCard />} />
-         {/* <Route path="/plans/:id" element={<PlanDetailsView />} /> */}
-         <Route path="/about" element={<About />} />
-         <Route path="/contact" element={<Contact />} />
-         <Route path="/exercise" element={<Exercise />} />
-     
-               
+        {/* Public plans */}
+        <Route path="plancard" element={< PlanCard />} />
+        {/* <Route path="/plans/:id" element={<PlanDetailsView />} /> */}
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/exercise" element={<Exercise />} />
+
+
 
         {/* ================= ADMIN DASHBOARD ================= */}
         <Route
@@ -98,75 +98,64 @@ function App() {
           <Route path="trainers" element={<Trainers />} />
           <Route path="plans" element={<Plans />} />
           {/* <Route path="plans/:id" element={<PlanDetail />} /> */}
-      <Route path="adminpayments" element={<AdminPayments />} />
+          <Route path="adminpayments" element={<AdminPayments />} />
           <Route path="analytics" element={<Analytics />} />
         </Route>
 
         {/* ================= TRAINER DASHBOARD ================= */}
 
-          <Route path="/trainer" element={<TrainerLayout />}>
-  <Route path="dashboard" element={<TrainerDashboard />}>
-  <Route index element={
-    <p className="text-gray-800 dark:text-gray-100 text-lg font-semibold">
-      "Your Clients Are Counting on You!"  </p>} />
+        <Route path="/trainer" element={<TrainerLayout />}>
+          <Route path="dashboard" element={<TrainerDashboard />}>
+            <Route index element={
+              <p className="text-gray-800 dark:text-gray-100 text-lg font-semibold">
+                "Your Clients Are Counting on You!"  </p>} />
 
-    <Route path="profile" element={<TrainerProfile />} />
-    <Route path="trainer-users" element={<TrainerUsers />} />
-    <Route path="users-approve" element={<TrainerUsersApprove />} />
-    <Route path="workout" element={<TrainerUsersWorkout />} />
-    <Route path="nutrition" element={<TrainerUsersNutrition />} />
-    <Route path="trainer-feedback" element={<TrainerFeedback />} />
-    <Route path="user-progress" element={<TrainerUserProgress />} />
-    <Route path="trainer-earnings" element={<TrainerEarnings />} />
+            <Route path="profile" element={<TrainerProfile />} />
+            <Route path="trainer-users" element={<TrainerUsers />} />
+            <Route path="users-approve" element={<TrainerUsersApprove />} />
+            <Route path="workout" element={<TrainerUsersWorkout />} />
+            <Route path="nutrition" element={<TrainerUsersNutrition />} />
+            <Route path="trainer-feedback" element={<TrainerFeedback />} />
+            <Route path="user-progress" element={<TrainerUserProgress />} />
+            <Route path="trainer-earnings" element={<TrainerEarnings />} />
 
-    {/* etc */}
-  </Route>
-</Route>
-
+          </Route>
+        </Route>
 
 
-       {/* ================= USER DASHBOARD ================= */}
-<Route
-  path="/user"
-  element={
-    <ProtectedRoute allowedRole="user">
-      <UserLayout /> 
-    </ProtectedRoute>
-  }
->
-  {/* Default /user/ dashboard */}
-  <Route index element={<UserHome />} />
-  <Route path="dashboard" element={<UserHome />} />
 
-  {/* User pages */}
-  <Route path="profile" element={<Profile />} />
-  
-  {/* Plan Flow - Nested inside /user */}
-  <Route path="planview" element={<ViewPlans />} />
-  
-  {/* FIX: Ensure this matches your navigate(`/user/planview/${id}`) call */}
-  <Route path="planview/:id" element={<PlanDetailsView />} />
-  
-  <Route path="plan-subscription/:id" element={<PlanSubscription />} />
-  <Route path="my-subscription" element={<MySubscription />} />
-  <Route path="goals" element={<Goals />} />
-  <Route path="progress" element={<Progress />} />
-  <Route path="select-trainer" element={<SelectTrainer />} />
-   <Route path="workouts" element={<Workouts />} />
-  <Route path="nutrition" element={<Nutrition />} />
-   <Route path="payments" element={<MyPayment />} />
-     <Route path="feedback" element={<Feedback />} />
-</Route>
-  {/* Future pages */}
-  {/*
- 
+        {/* ================= USER DASHBOARD ================= */}
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute allowedRole="user">
+             <UserLayout /> 
+              </ProtectedRoute>
+          }
+        >
+          {/* Default /user/ dashboard */}
+          <Route index element={<UserHome />} />
+          <Route path="dashboard" element={<UserHome />} />
 
-  <Route path="trainers" element={<Trainers />} />
-  <Route path="messages" element={<Messages />} />
- 
+          {/* User pages */}
+          <Route path="profile" element={<Profile />} />
 
-  */}
+          {/* Plan Flow - Nested inside /user */}
+          <Route path="planview" element={<ViewPlans />} />
 
+          {/* FIX: Ensure this matches your navigate(`/user/planview/${id}`) call */}
+          <Route path="planview/:id" element={<PlanDetailsView />} />
+
+          <Route path="plan-subscription/:id" element={<PlanSubscription />} />
+          <Route path="my-subscription" element={<MySubscription />} />
+          <Route path="goals" element={<Goals />} />
+          <Route path="progress" element={<Progress />} />
+          <Route path="select-trainer" element={<SelectTrainer />} />
+          <Route path="workouts" element={<Workouts />} />
+          <Route path="nutrition" element={<Nutrition />} />
+          <Route path="payments" element={<MyPayment />} />
+          <Route path="feedback" element={<Feedback />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>

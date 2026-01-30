@@ -1,45 +1,60 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "../../components/Navbar";
 
 const AdminDashboard = () => {
+  // Mobile sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex flex-col">
+      
+      {/* Navbar */}
+      <Navbar onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
 
-  {/* Global Navbar */}
-  <Navbar />
+      {/* Layout */}
+      <div className="flex flex-1 overflow-hidden relative">
 
-  {/* Main content area */}
-  <div className="flex flex-1 overflow-hidden">
+        {/* Mobile backdrop */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
 
-    {/* Sidebar */}
-    <aside className="
-        hidden md:block
-        w-64
-        bg-white dark:bg-slate-800
-        border-r border-gray-200 dark:border-slate-700
-        h-full
-        flex-shrink-0
-      "
-    >
-      <Sidebar />
-    </aside>
+        {/* Sidebar */}
+        <aside
+          className={`
+            bg-white dark:bg-slate-800
+            border-r border-gray-200 dark:border-slate-700
+            overflow-y-auto flex-shrink-0
 
-    {/* Mobile Sidebar (optional drawer) */}
-    {/* You can add a toggle for small screens here if needed */}
+            fixed inset-y-0 left-0 z-50 w-64
+            transform transition-transform duration-300 ease-in-out
+            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
 
-    {/* Main Content */}
-    <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
-      <Outlet />
-    </main>
+            md:relative md:translate-x-0 md:flex
+          `}
+        >
+          <Sidebar />
+        </aside>
 
-  </div>
-</div>
+        {/* Main content */}
+        <main className="flex-1 overflow-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto w-full">
+            <Outlet />
+          </div>
+        </main>
 
+      </div>
+    </div>
   );
 };
 
 export default AdminDashboard;
+
 
 // import React from "react";
 // import { useNavigate } from "react-router-dom";
