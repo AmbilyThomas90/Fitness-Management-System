@@ -78,7 +78,20 @@ return (
               <h3 className="text-2xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
                 {plan.planName}
               </h3>
+{/* ⭐ Star Rating (UI only – no logic change) */}
+        <div className="mt-2 flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <span
+              key={index}
+              className="text-yellow-400 text-lg"
+            >
+              ★
+            </span>
+          ))}
+          <span className="ml-2 text-sm text-gray-500">(Top Rated)</span>
+        </div>
 
+        {/* Pricing */}
               <div className="mt-6 space-y-3">
                 <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
                   <span className="text-gray-500 text-sm">Monthly</span>
